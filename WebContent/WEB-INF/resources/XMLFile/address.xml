@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Addresses>
+	<Address add_line_1="19/B,Metro Plaza">
+	<add_line_2>Park Street,Kolkata</add_line_2>
+	<state>West Bengal</state>
+	</Address>
+	<Address add_line_1="401,Victoria Enclave">
+	<add_line_2>Shilparamam,Hyderabad</add_line_2>
+	<state>Andhra Pradesh</state>
+	</Address>
+	<Address add_line_1="230,New Complex">
+	<add_line_2>Camac Street,Kolkata</add_line_2>
+	<state>West Bengal</state>
+	</Address>
+</Addresses>

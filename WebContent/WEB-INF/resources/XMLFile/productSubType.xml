@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ProductSubTypes>
+	<ProductSubType subtypeName="Sony">
+	<typeName>Home Theater</typeName>
+	</ProductSubType>
+	<ProductSubType subtypeName="HP">
+	<typeName>Laptop</typeName>
+	</ProductSubType>
+	<ProductSubType subtypeName="Mi">
+	<typeName>Smart Phone</typeName>
+	</ProductSubType>
+	<ProductSubType subtypeName="Samsung">
+	<typeName>Smart Phone</typeName>
+	</ProductSubType>
+</ProductSubTypes>

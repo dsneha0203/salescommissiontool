@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<Imports>
+	<Import importDate="31/03/2016">
+		<importedBy>John</importedBy>
+		<orderCounts>3</orderCounts>
+		<status>new</status>
+		<orders>
+			<order orderDate="27/03/2016">
+				<salesRep>Harry</salesRep>
+				<admin>Tom</admin>
+				<supportEngineer>Jerry</supportEngineer>
+				<customer>HP</customer>
+				<orderTotal>7</orderTotal>
+				<orderLineItems>
+					<orderLineItem product="Envy">
+						<quantity>5</quantity>
+						<rate>80000</rate>
+						<discountPercentage>5</discountPercentage>
+						<dutyPercentage>8</dutyPercentage>
+						<subtotal>350000</subtotal>
+					</orderLineItem>
+					<orderLineItem product="Pavillion">
+						<quantity>5</quantity>
+						<rate>20000</rate>
+						<discountPercentage>5</discountPercentage>
+						<dutyPercentage>3</dutyPercentage>
+						<subtotal>95000</subtotal>
+					</orderLineItem>
+				</orderLineItems>
+			</order>
+			<order orderDate="28/03/2016">
+				<salesRep>Ram</salesRep>
+				<admin>Potter</admin>
+				<supportEngineer>Rocky</supportEngineer>
+				<customer>Mobile Store</customer>
+				<orderTotal>11</orderTotal>
+				<orderLineItems>
+					<orderLineItem product="Galaxy Grand 2">
+						<quantity>5</quantity>
+						<rate>80000</rate>
+						<discountPercentage>2</discountPercentage>
+						<dutyPercentage>4</dutyPercentage>
+						<subtotal>350000</subtotal>
+					</orderLineItem>
+					<orderLineItem product="Xiomi Note 4G">
+						<quantity>5</quantity>
+						<rate>10000</rate>
+						<discountPercentage>5</discountPercentage>
+						<dutyPercentage>8</dutyPercentage>
+						<subtotal>45000</subtotal>
+					</orderLineItem>
+				</orderLineItems>
+			</order>
+			<order orderDate="15/09/2015">
+				<salesRep>Harry</salesRep>
+				<admin>Tom</admin>
+				<supportEngineer>Jackson</supportEngineer>
+				<customer>Mobile Store</customer>
+				<orderTotal>7</orderTotal>
+				<orderLineItems>
+					<orderLineItem product="Xiomi Note 4G">
+						<quantity>5</quantity>
+						<rate>10000</rate>
+						<discountPercentage>4</discountPercentage>
+						<dutyPercentage>4</dutyPercentage>
+						<subtotal>350000</subtotal>
+					</orderLineItem>
+					<orderLineItem product="Galaxy Grand 2">
+						<quantity>5</quantity>
+						<rate>20000</rate>
+						<discountPercentage>5</discountPercentage>
+						<dutyPercentage>3</dutyPercentage>
+						<subtotal>100000</subtotal>
+					</orderLineItem>
+				</orderLineItems>
+			</order>  
+		</orders>
+	</Import>
+<!--  	<Import importDate="18/09/2015">
+		<importedBy>Smith</importedBy>
+		<orderCounts>4</orderCounts>
+		<status>new</status>
+		<orders>
+			<order orderDate="15/09/2015">
+				<salesRep>Harry</salesRep>
+				<admin>Tom</admin>
+				<supportEngineer>Jerry</supportEngineer>
+				<customer>Intel Corporation</customer>
+				<orderTotal>7</orderTotal>
+				<orderLineItems>
+					<orderLineItem product="Envy">
+						<quantity>5</quantity>
+						<rate>80000</rate>
+						<discountPercentage>4</discountPercentage>
+						<dutyPercentage>4</dutyPercentage>
+						<subtotal>350000</subtotal>
+					</orderLineItem>
+					<orderLineItem product="Galaxy Grand 2">
+						<quantity>5</quantity>
+						<rate>20000</rate>
+						<discountPercentage>5</discountPercentage>
+						<dutyPercentage>3</dutyPercentage>
+						<subtotal>95000</subtotal>
+					</orderLineItem>
+				</orderLineItems>
+			</order>
+			<order orderDate="14/09/2015">
+				<salesRep>Ram</salesRep>
+				<admin>Potter</admin>
+				<supportEngineer>Rocky</supportEngineer>
+				<customer>Microsoft</customer>
+				<orderTotal>11</orderTotal>
+				<orderLineItems>
+					<orderLineItem product="Pavillion">
+						<quantity>5</quantity>
+						<rate>40000</rate>
+						<discountPercentage>4</discountPercentage>
+						<dutyPercentage>4</dutyPercentage>
+						<subtotal>150000</subtotal>
+					</orderLineItem>
+					<orderLineItem product="Galaxy Grand 2">
+						<quantity>5</quantity>
+						<rate>20000</rate>
+						<discountPercentage>5</discountPercentage>
+						<dutyPercentage>3</dutyPercentage>
+						<subtotal>95000</subtotal>
+					</orderLineItem>
+				</orderLineItems>
+			</order>
+		</orders>
+	</Import>
+  	<Import importDate="14/04/2015">
+		<importedBy>Tom</importedBy>
+		<orderCounts>6</orderCounts>
+		<status>verified</status>
+	</Import>
+	<Import importDate="31/08/2015">
+		<importedBy>Jerry</importedBy>
+		<orderCounts>8</orderCounts>
+		<status>verified</status>
+	</Import> -->
+</Imports>
