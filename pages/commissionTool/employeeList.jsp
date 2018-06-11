@@ -78,7 +78,10 @@
 						<th data-field="EmployeeName">Employee Name</th>
 						<th data-field="Salary">Salary</th>
 						<th data-field="StartDate">Start Date</th>
-						<th data-field="TerminationDate">terminationDate</th>
+						<th data-field="TerminationDate">Termination Date</th>
+						<th data-field="Role">Role</th>
+						<th data-field="ManagerId">Manager ID</th>
+						<th data-field="ManagerName">Manager Name</th>  
 					</tr>
 				</thead>
 
@@ -90,7 +93,12 @@
 						<td>${emp.salary}</td>
 						<td>${emp.startDate}</td>
 						<td>${emp.terminationDate}</td>
-						
+						<c:set var="role" value="roleName${emp.id}"/>
+						<td>${requestScope[role]}</td>
+						<c:set var="managerId" value="managerId${emp.id}"/>
+						<td><a href="/CommissionTool/empDetails/${requestScope[managerId]}">${requestScope[managerId]}</a></td>
+						<c:set var="managerName" value="managerName${emp.id}"/>
+						<td>${requestScope[managerName]}</td>
 					</tr>
 
 				</c:forEach>

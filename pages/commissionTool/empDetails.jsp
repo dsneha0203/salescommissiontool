@@ -130,7 +130,7 @@ function enable_btn_manager(val){
 					</tr>
 					<tr>
 						<td>Termination date:</td>
-						<td></td>
+						<td>${emp.terminationDate}</td>
 					</tr>
 					<tr>
 					<tr>

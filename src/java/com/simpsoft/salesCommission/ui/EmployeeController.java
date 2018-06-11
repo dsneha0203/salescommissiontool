@@ -1,16 +1,31 @@
 package com.simpsoft.salesCommission.ui;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +69,38 @@ public class EmployeeController {
 	@RequestMapping(value = "/employeeList", method = RequestMethod.GET)
 	public String simpleRule(ModelMap model, HttpSession session, HttpServletRequest request) {
 		List<Employee> emp = employeeApi.listEmployees();
+		for (Employee employee : emp) {
+			long empId = employee.getId();
+			System.out.println("EMP ID: "+empId);
+			String empName = employee.getEmployeeName();
+			System.out.println("EMP NAME: "+empName);
+			
+			Employee emp1 = employeeApi.getEmployee(empId);
+			
+			request.getSession().setAttribute("empDetailsId", empId);
+			
+			List<EmployeeManagerMap> manager = emp1.getEmployeeManagerMap();
+			List<EmployeeRoleMap> role = emp1.getEmployeeRoleMap();
+			for (Iterator iterator = role.iterator(); iterator.hasNext();) {
+				EmployeeRoleMap empRoleMap = (EmployeeRoleMap) iterator.next();
+				Role role1 = empRoleMap.getRole();
+				String roleName = role1.getRoleName();
+				model.addAttribute("roleName"+empId, roleName);
+				
+			}
+
+			for (Iterator iterator = manager.iterator(); iterator.hasNext();) {
+				EmployeeManagerMap managerMap = (EmployeeManagerMap) iterator.next();
+				Employee managerName = managerMap.getManager();
+				String mName = managerName.getEmployeeName();
+				long managerId = managerName.getId();
+				model.addAttribute("managerName"+empId, mName);
+				model.addAttribute("managerId"+empId, managerId);
+			}
+		}
+		
 		model.addAttribute("empList", emp);
+		
 		System.out.println(".......servlet running.......");
 		return "employeeList";
 	}
