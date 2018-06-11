@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.simpsoft.salesCommission.app.model.Employee;
+import com.simpsoft.salesCommission.app.model.EmployeeManagerMap;
 import com.simpsoft.salesCommission.app.model.EmployeeRoleMap;
 import com.simpsoft.salesCommission.app.model.Role;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
@@ -205,6 +206,33 @@ public class EmployeeAPI {
 		}
 	}
 	
+	//employee manager map
+	public void createEmployeeManagerMap(String managerName, long empID) {
+		Employee manager = searchEmployee(managerName);
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			Employee emp =	(Employee) session.get(Employee.class, empID);
+			List<EmployeeManagerMap> empMgrMapList =emp.getEmployeeManagerMap();
+			EmployeeManagerMap empMgrMap = new EmployeeManagerMap();
+			empMgrMap.setManager(manager);
+			Calendar cal = Calendar.getInstance();
+			empMgrMap.setStartDate(cal.getTime());
+			empMgrMap.setEndDate(null);
+			empMgrMapList.add(empMgrMap);
+			emp.setEmployeeManagerMap(empMgrMapList);
+			session.save(emp);
+				tx.commit();
+
+		}catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
 	
 	public void setEndDate(Date endDate, long empID) {
 		

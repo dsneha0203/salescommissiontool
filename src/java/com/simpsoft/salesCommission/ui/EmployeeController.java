@@ -170,6 +170,7 @@ public class EmployeeController {
 		model.addAttribute("currentManager", employeeUi.getCurrentManager());
 		String currentmanager = employeeUi.getCurrentManager();
 		long empId = id;
+		employeeApi.createEmployeeManagerMap(currentmanager, empId);
 		return "redirect:/empDetails/{id}";
 
 	}

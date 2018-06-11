@@ -11,6 +11,7 @@
 
 
 <style>
+
 table {
 	width: 750px;
 	border: 1px solid #AAA;
@@ -25,8 +26,13 @@ table td, table th {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
+#btn_save_role , #btn_save_manager{
+	cursor: pointer;
+	
+}
 </style>
 		<script>
+		
 function openWindow1(){
 	window.open('/CommissionTool/selectRole' , '' , 'width=1000,height=500,scrollbars=yes');
 	popup.focus();
@@ -90,7 +96,19 @@ $(document)
 
 
 
+function enable_btn_role(val){
+	
+	if(val != ""){
+	document.getElementById("btn_save_role").style.visibilty='visible';
+	}
+}
 
+function enable_btn_manager(val){
+	
+	if(val != ""){
+	document.getElementById("btn_save_manager").style.visibilty='visible';
+	}
+}
 
 
 </script>
@@ -122,20 +140,18 @@ $(document)
 					<tr>
 						<td>Change current role to</td>
 						<td><form action="/CommissionTool/submitNewRole/${sessionScope.empDetailsId}"  method="post">
-						<input type="text" name="selectRole" id="txtName" readonly="readonly">
-						<button type="button" class="btn btn-default"
-								onClick="openWindow1();">
+						<input type="text" name="selectRole" id="roleName" required>
+						<button type="button" class="btn btn-default" onClick="openWindow1();" >
 								<img src="../resources/image/search1.png" alt="Tutorials Point"
 									width="30" height="31" border="0" />
 							</button>
-							&nbsp;<input type="submit" value="Save">
+							&nbsp;<input type="submit" value="Save" id="btn_save_role"  >
 							</form></td>
 					</tr>
 					<tr>
 						<td>Show History</td>
 						<td>
-							<button type="button" class="btn btn-default"
-								onClick="openWindow2()">
+							<button type="button" class="btn btn-default" onClick="openWindow2()">
 								<img src="../resources/image/backhistory.png" alt="Tutorials Point"
 									width="28" height="35" border="0" />
 							</button>
@@ -149,13 +165,13 @@ $(document)
 					<tr>
 						<td>Change current manager to</td>
 						<td><form action="/CommissionTool/submitCurrentManager/${sessionScope.empDetailsId}"  method="post">
-						<input type="text" name="currentManager" id="managerId"> 
+						<input type="text" name="currentManager" id="managerId" required> 
 						<button type="button" class="btn btn-default"
-								onClick="openWindow4();">
+								onClick="openWindow4();" >
 								<img src="../resources/image/search1.png" alt="Tutorials Point"
 									width="30" height="31" border="0" />
 							</button>
-							&nbsp;<input type="submit" value="Save"></form>
+							&nbsp;<input type="submit" value="Save" id="btn_save_manager" ></form>
 							</td>
 					</tr>
 					<tr>
