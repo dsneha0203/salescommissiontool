@@ -211,9 +211,9 @@ overflow-y: scroll;
 						</td>
 						<td>
 							<form id="form1" action="/CommissionTool/searchemp" method="post">
-								Selected Employee <input type="text" name="EmployeeName"
+								Selected Employee: <input type="text" name="EmployeeName"
 									id="text1" name="for_radio1[]" class="radio1" disabled="true"
-									size="11"
+									size="11" required
 									<c:forEach items="${empList}"
 													var="emp">value="${emp.employeeName }"</c:forEach> />
 								<input type="submit" value="check" />
@@ -226,8 +226,8 @@ overflow-y: scroll;
 								<label for="radio2"><input type="radio" name="test1"
 									value="radio2" />Role </label><br> Select Role :<select
 									name="roleName" class="radio2" name="for_radio2[]"
-									disabled="true" style="width: 140px; height: 1.5em;">
-									<option value="-1">${rlelist.roleName}</option>
+									disabled="true" style="width: 140px; height: 1.5em;" required>
+									 <option value="">Choose role</option> 
 									<c:forEach items="${listRole}" var="role">
 										<option value="${role.roleName}">
 											<c:out value="${role.roleName}" />

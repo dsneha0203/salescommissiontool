@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -187,9 +189,31 @@ public class EmployeeAPI {
 			tx = session.beginTransaction();
 		Employee emp =	(Employee) session.get(Employee.class, empID);
 		List<EmployeeRoleMap> empRolMapList = emp.getEmployeeRoleMap();
+		
+		//check if the employee with id empID already has a role
+		// if so then set the end date of the previous role to current timestamp
+		// before assigning a new role to him/her
+		
+		if(empRolMapList != null) {
+			for (Iterator iterator = empRolMapList.iterator(); iterator.hasNext();) {
+				EmployeeRoleMap empOldRoleMap = (EmployeeRoleMap) iterator.next();
+//				Role role1 = empOldRoleMap.getRole();
+//				String oldRoleName = role1.getRoleName();
+				Calendar cal = Calendar.getInstance();
+				empOldRoleMap.setEndDate(cal.getTime());
+						
+			}	
+		}
+		
+		
+		//create a new employee role map 
 		EmployeeRoleMap empRolMap = new EmployeeRoleMap();
 		empRolMap.setRole(role);
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();	
+		
+		// set start date to current timestamp and end date to null while creating
+		// a new employee role map
+		
 		empRolMap.setStartDate(cal.getTime());
 		empRolMap.setEndDate(null);
 		empRolMapList.add(empRolMap);
@@ -235,7 +259,7 @@ public class EmployeeAPI {
 	}
 	
 	public void setEndDate(Date endDate, long empID) {
-		
+		System.out.println("-----IN EMP API SET END DATE METHOD---");
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		try {
@@ -249,16 +273,21 @@ public class EmployeeAPI {
 			empRoleMap.setRole(erm.getRole());
 			empRoleMap.setId(erm.getId());
 			empRoleMap.setStartDate(erm.getStartDate());
-
+			Date startDate= erm.getStartDate();
 			Date enddate = erm.getEndDate();
+			System.out.println("START DATE= "+startDate);
+			System.out.println("END DATE= "+enddate);
 		if(enddate == null)
 		{
 			empRoleMap.setEndDate(endDate);
 		}
 		
-		else
+		else if(enddate.after(startDate) )
 		{
-			empRoleMap.setEndDate(erm.getEndDate());
+			empRoleMap.setEndDate(enddate);
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "The end date cannot be earlier than the start date", null,JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		newEmpRolMapList.add(empRoleMap);

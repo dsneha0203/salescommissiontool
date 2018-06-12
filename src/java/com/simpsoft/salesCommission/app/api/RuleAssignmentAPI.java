@@ -354,7 +354,11 @@ public class RuleAssignmentAPI {
 		} finally {
 			session.close();
 		}
+		if(ruleAssignment != null) {
 		return ruleAssignment;
+		}else {
+			return null;
+		}
 	}
 	
 	/**

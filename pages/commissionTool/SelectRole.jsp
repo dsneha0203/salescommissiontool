@@ -36,7 +36,7 @@
 <script type="text/javascript">
     function SetName() {
         if (window.opener != null && !window.opener.closed) {
-            var txtName = window.opener.document.getElementById("txtName");
+            var txtName = window.opener.document.getElementById("roleName");
             txtName.value = document.getElementById("ddlNames").value;
         }
         window.close();

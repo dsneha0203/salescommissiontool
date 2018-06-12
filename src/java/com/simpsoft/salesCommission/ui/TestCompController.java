@@ -55,108 +55,6 @@ public class TestCompController {
 	
 	
 	
-	@RequestMapping(value = "/compPlanAsg", method = RequestMethod.GET)
-	public ModelAndView list_Rules(ModelMap model, HttpServletRequest request, HttpSession session,
-			SessionStatus status) {
-		model.addAttribute("listRole", roleApi.listOfRoles());
-		model.addAttribute("listRules", ruleApi.listOfRules());
-		model.addAttribute("listfrequency", ruleAssApi.listOfFrequency());
-		model.addAttribute("targetlist", empApi.listOfTargetDefinitions());
-
-		if (session.getAttribute("ruleListContainer") == null)
-			session.setAttribute("ruleListContainer", getDummyRuleListContainer());
-		model.addAttribute("ruleListContainer", (RuleListContainer) session.getAttribute("ruleListContainer"));
-
-		/*---------------------------Finding compensation assignment for role------------------------------*/
-
-		RoleUI object = (RoleUI) request.getSession().getAttribute("roleName");
-		if (object != null) {
-			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object.getRoleName());
-
-			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
-			ArrayList<RuleAssignmentDetails> rl1 = new ArrayList<RuleAssignmentDetails>();
-			ArrayList<Role> rleName = new ArrayList<Role>();
-			model.addAttribute("assObj", rAssdtail);
-			List<RuleAssignmentParameter> parameterList = new ArrayList<RuleAssignmentParameter>();
-
-			Iterator<RuleAssignmentDetails> it1 = ptr1.iterator();
-			while (it1.hasNext()) {
-				Role roleasign = roleApi.searchRoleByName(object.getRoleName());
-				model.addAttribute("rlelist", roleasign);
-				System.out.println("The Value Is" + roleasign);
-				RuleAssignmentDetails rp = (RuleAssignmentDetails) it1.next();
-				List<RuleAssignmentParameter> ptr2 = rp.getRuleAssignmentParameter();
-				System.out.println(rp.getRule().getRuleName());
-				System.out.println(rp.getRule().getId());
-				rl1.add(rp);
-			}
-			model.addAttribute("List2", rl1);
-			status.setComplete();
-			session.removeAttribute("roleName");
-			//return new ModelAndView("CompPlan");
-			return new ModelAndView("compPlanAssignment");
-		}
-
-		/*-----------------------------------Finding compensation assignment for Employee------------------------------------*/
-		EmployeeUI object1 = (EmployeeUI) request.getSession().getAttribute("EmployeeName");
-
-		if (object1 != null) {
-			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object1.getEmployeeName());
-			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
-
-			ArrayList<Employee> empName = new ArrayList<Employee>();
-			model.addAttribute("assObj1", rAssdtail);
-			ArrayList<RuleAssignmentDetails> rl1 = new ArrayList<RuleAssignmentDetails>();
-
-			Iterator<RuleAssignmentDetails> it1 = ptr1.iterator();
-			while (it1.hasNext()) {
-				List<Employee> rasd = empApi.searchEmployeesByName(object1.getEmployeeName());
-				List<Employee> ptr = empApi.listEmployees();
-				Iterator<Employee> it3 = rasd.iterator();
-				while (it3.hasNext()) {
-					Employee e = (Employee) it3.next();
-					System.out.println(e.getEmployeeName());
-					empName.add(e);
-				}
-				RuleAssignmentDetails rp = (RuleAssignmentDetails) it1.next();
-				List<RuleAssignmentParameter> ptr2 = rp.getRuleAssignmentParameter();
-				System.out.println(rp.getRule().getRuleName());
-				System.out.println(rp.getRule().getId());
-				rl1.add(rp);
-			}
-			model.addAttribute("List2", rl1);
-			model.addAttribute("empList", empName);
-			status.setComplete();
-			session.removeAttribute("EmployeeName");
-			//return new ModelAndView("CompPlan");
-			return new ModelAndView("compPlanAssignment");
-		}
-		/*-----------------------------------creating table for compensation plan against ruleId------------------------------------*/
-		AddRuleUI object2 = (AddRuleUI) request.getSession().getAttribute("Id");
-		if (object2 != null) {
-			Rule rul = ruleApi.getRule(object2.getId());
-			ArrayList<Rule> rl1 = new ArrayList<Rule>();
-			List<RuleParameter> ptr2 = rul.getRuleParameter();
-			Iterator it = ptr2.iterator();
-			while (it.hasNext()) {
-				RuleParameter r = (RuleParameter) it.next();
-				System.out.println(r.getParameterName());
-				System.out.println(r.getParameterValue());
-			}
-			rl1.add(rul);
-			model.addAttribute("ruleList", rl1);
-			status.setComplete();
-			session.removeAttribute("Id");
-			//return new ModelAndView("CompPlan");
-			return new ModelAndView("compPlanAssignment");
-
-		}
-		//return new ModelAndView("CompPlan");
-		return new ModelAndView("compPlanAssignment");
-	}
-	/* ---------------------------- end of compPlanAsg -------------------------------------------------- */
-
-	
 	
 	
 	
@@ -179,8 +77,9 @@ public class TestCompController {
 		RoleUI object = (RoleUI) request.getSession().getAttribute("roleName");
 		if (object != null) {
 			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object.getRoleName());
-
+			if(rAssdtail != null) {
 			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
+			if(ptr1 != null) {
 			ArrayList<RuleAssignmentDetails> rl1 = new ArrayList<RuleAssignmentDetails>();
 			ArrayList<Role> rleName = new ArrayList<Role>();
 			model.addAttribute("assObj", rAssdtail);
@@ -199,8 +98,13 @@ public class TestCompController {
 			}
 			model.addAttribute("List2", rl1);
 			status.setComplete();
-			session.removeAttribute("roleName");
+			//session.removeAttribute("roleName");
 			return new ModelAndView("CompPlan");
+			}
+			}else {
+				return new ModelAndView("CompPlan");
+			}
+			
 			
 		}
 
@@ -209,8 +113,9 @@ public class TestCompController {
 
 		if (object1 != null) {
 			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object1.getEmployeeName());
+			if(rAssdtail != null) {
 			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
-
+			if(ptr1 != null) {
 			ArrayList<Employee> empName = new ArrayList<Employee>();
 			model.addAttribute("assObj1", rAssdtail);
 			ArrayList<RuleAssignmentDetails> rl1 = new ArrayList<RuleAssignmentDetails>();
@@ -236,7 +141,10 @@ public class TestCompController {
 			status.setComplete();
 			session.removeAttribute("EmployeeName");
 			return new ModelAndView("CompPlan");
-			
+			}
+			}else {
+				return new ModelAndView("CompPlan");
+			}
 		}
 		/*-----------------------------------creating table for compensation plan against ruleId------------------------------------*/
 		AddRuleUI object2 = (AddRuleUI) request.getSession().getAttribute("Id");

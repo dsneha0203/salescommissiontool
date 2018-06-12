@@ -163,16 +163,24 @@ public class EmployeeController {
 		return "SetEndDate";
 	}
 
-	@RequestMapping(value = "/submitEndDate/{id}", method = RequestMethod.POST)
-	public String SetEndDtae(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model) {
+	 @RequestMapping(value = "/submitEndDate/{id}", method = RequestMethod.POST)
+	public String SetEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model) {
 
 		model.addAttribute("setDate", ruleUI.getSetDate());
 		Date endDate = ruleUI.getSetDate();
+		System.out.println("====CALLING SET END DATE METHOD OF EMP API====");
 		employeeApi.setEndDate(endDate, id);
 
 		return "redirect:/showAllRoles/{id}";
 
 	}
+	
+//	@RequestMapping(value = "/submitenddate/{id}", method = RequestMethod.POST)
+//	public String setEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model) {
+//		System.out.println("====CALLING SET END DATE METHOD OF EMP API====");
+//		
+//		return "redirect:/showAllRoles/{id}";
+//	}
 
 	@RequestMapping("/selectRole")
 	public String SelectRole(ModelMap model, HttpSession session, HttpServletRequest request) {
