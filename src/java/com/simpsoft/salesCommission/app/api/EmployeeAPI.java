@@ -1,5 +1,7 @@
 package com.simpsoft.salesCommission.app.api;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -259,44 +261,61 @@ public class EmployeeAPI {
 	}
 	
 	public void setEndDate(Date endDate, long empID) {
-		System.out.println("-----IN EMP API SET END DATE METHOD---");
+		logger.debug("_______________________________________________________________");
+		logger.debug("=====IN EMP API SET END DATE METHOD===");
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-		Employee emp =	(Employee) session.get(Employee.class, empID);
-		List<EmployeeRoleMap> empRolMapList = emp.getEmployeeRoleMap();
-		List<EmployeeRoleMap> newEmpRolMapList = new ArrayList<>();
-		for (Iterator iterator = empRolMapList.iterator(); iterator.hasNext();) {
-			EmployeeRoleMap erm = (EmployeeRoleMap) iterator.next();
-			EmployeeRoleMap empRoleMap = new EmployeeRoleMap();
-			empRoleMap.setRole(erm.getRole());
-			empRoleMap.setId(erm.getId());
-			empRoleMap.setStartDate(erm.getStartDate());
-			Date startDate= erm.getStartDate();
-			Date enddate = erm.getEndDate();
-			System.out.println("START DATE= "+startDate);
-			System.out.println("END DATE= "+enddate);
+			Employee emp =	(Employee) session.get(Employee.class, empID);
+			List<EmployeeRoleMap> empRolMapList = emp.getEmployeeRoleMap();
+			List<EmployeeRoleMap> newEmpRolMapList = new ArrayList<>();
+			for (Iterator iterator = empRolMapList.iterator(); iterator.hasNext();) {
+				EmployeeRoleMap erm = (EmployeeRoleMap) iterator.next();
+				EmployeeRoleMap empRoleMap = new EmployeeRoleMap();
+				
+				empRoleMap.setRole(erm.getRole());
+				empRoleMap.setId(erm.getId());
+				empRoleMap.setStartDate(erm.getStartDate());
+				Date startDate= erm.getStartDate();
+				Date enddate = erm.getEndDate();
+				
+				logger.debug("FOR ROLE= "+erm.getRole().getRoleName());
+				logger.debug("START DATE= "+startDate);
+				logger.debug("END DATE CURRENT= "+enddate);				
+				logger.debug("END DATE TO BE ASSIGNED = "+endDate);
+				
 		if(enddate == null)
-		{
-			empRoleMap.setEndDate(endDate);
-		}
+				{
+					 if(endDate.after(startDate) )
+					{
+						empRoleMap.setEndDate(endDate);			
+						logger.debug("NEW END DATE ASSIGNED TO ROLE= "+erm.getRole().getRoleName());
+						 
+					}
+					 else {
+							JOptionPane.showMessageDialog(null, "The end date cannot be earlier than the start date", null,JOptionPane.WARNING_MESSAGE);
+							empRoleMap.setEndDate(null);
+							
+						}
+					
+							 
+				}else {
+					empRoleMap.setEndDate(enddate);		
+				}
 		
-		else if(enddate.after(startDate) )
-		{
-			empRoleMap.setEndDate(enddate);
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "The end date cannot be earlier than the start date", null,JOptionPane.INFORMATION_MESSAGE);
-		}
-		
-		newEmpRolMapList.add(empRoleMap);
-		}
-		emp.setEmployeeRoleMap(newEmpRolMapList);
-		session.merge(emp);
+			newEmpRolMapList.add(empRoleMap); 
+			for (EmployeeRoleMap employeeRoleMap : newEmpRolMapList) {
+				logger.debug("ROLE NAME= "+employeeRoleMap.getRole().getRoleName());
+				logger.debug("ROLE START DATE= "+employeeRoleMap.getStartDate());
+				logger.debug("ROLE END DATE= "+employeeRoleMap.getEndDate());
+			}
+			} 
+			
+			emp.setEmployeeRoleMap(newEmpRolMapList);
+			session.merge(emp);
 			tx.commit();
-
-		} catch (HibernateException e) {
+		}catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();

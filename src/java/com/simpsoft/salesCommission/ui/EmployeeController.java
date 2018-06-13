@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -163,24 +164,28 @@ public class EmployeeController {
 		return "SetEndDate";
 	}
 
-	 @RequestMapping(value = "/submitEndDate/{id}", method = RequestMethod.POST)
-	public String SetEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model) {
-
-		model.addAttribute("setDate", ruleUI.getSetDate());
-		Date endDate = ruleUI.getSetDate();
-		System.out.println("====CALLING SET END DATE METHOD OF EMP API====");
-		employeeApi.setEndDate(endDate, id);
-
-		return "redirect:/showAllRoles/{id}";
-
-	}
-	
-//	@RequestMapping(value = "/submitenddate/{id}", method = RequestMethod.POST)
-//	public String setEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model) {
+//	 @RequestMapping(value = "/submitEndDate/{id}", method = RequestMethod.POST)
+//	public String SetEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model) {
+//
+//		model.addAttribute("setDate", ruleUI.getSetDate());
+//		Date endDate = ruleUI.getSetDate();
 //		System.out.println("====CALLING SET END DATE METHOD OF EMP API====");
-//		
+//		employeeApi.setEndDate(endDate, id);
+//
 //		return "redirect:/showAllRoles/{id}";
+//
 //	}
+	
+	@RequestMapping(value = "/submitenddate/{id}", method = RequestMethod.POST)
+	public String setEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model){
+		logger.debug("_______________________________________________________________");
+		logger.debug("====CALLING SET END DATE METHOD OF EMP API====");
+		logger.debug("ruleUI.getSetDate()= "+ruleUI.getSetDate());
+		Date endDate = ruleUI.getSetDate();
+		logger.debug("====CALLING SET END DATE METHOD OF EMP API====");
+		employeeApi.setEndDate(endDate, id);
+		return "redirect:/showAllRoles/{id}";
+	}
 
 	@RequestMapping("/selectRole")
 	public String SelectRole(ModelMap model, HttpSession session, HttpServletRequest request) {

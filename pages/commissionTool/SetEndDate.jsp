@@ -23,7 +23,7 @@
 	
 	
 	
-	<form action="/CommissionTool/submitEndDate/${sessionScope.empDetailsId}"  method="post">
+	<form action="/CommissionTool/submitenddate/${sessionScope.empDetailsId}"  method="post">
 	
 	<br/><br/><br/><div align="center">
 	
