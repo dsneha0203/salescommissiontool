@@ -30,6 +30,15 @@
 	<property name="package.file" value="${dest.dir}/${package.name}" />
 	<!-- put java doc in this folder during build -->
 	<property name="docs.dir" value="doc" />
+	
+	
+	
+	<!-- Change the following properties accordingly. -->
+	  <property name="db.username" value="root"/>
+	  <property name="db.password" value=""/>
+	  <property name="db.name" value="salescommission"/><!-- The name of the database to backup. -->
+	  <property name="mysql" value="C:\xampp\mysql\bin\mysql"/><!-- Path to mysql program. -->
+	  <property name="mysqladmin" value="C:\xampp\mysql\bin\mysqladmin"/><!-- Path to mysqladmin program. -->
 
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -180,7 +189,7 @@
 	</target>
 
 	<!-- Calling Java Main -->
-	<target name="callJava" depends="compile, package">
+	<target name="callJava" depends="restore_db,compile, package">
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForAggregateFunction"  fork="true"
 			           failonerror="true">
 					<arg value="-h"/>
@@ -297,4 +306,43 @@
 														</java> 
 	</target>
 
+	
+	
+	
+	 <!-- ***************************************
+	  Restore MySQL database 
+	  **************************************** -->  
+	  <target name="restore_db">
+	    <!-- Clean up the database by deleting and then creating it. -->
+	    <antcall target="delete_db"/>
+	    <antcall target="create_db"/>
+	  	</target>
+	  
+	 
+	  
+	 
+	   
+	 
+	  <target name="delete_db">
+	    <exec executable="${mysqladmin}">
+	      <arg value="--user=${db.username}"/>
+	      <arg value="--password=${db.password}"/>
+	      <arg value="--force"/>
+	      <arg value="drop"/>
+	      <arg value="${db.name}"/>
+	    </exec>
+	  </target>
+	 
+	  <target name="create_db">
+	    <exec executable="${mysqladmin}">
+	      <arg value="--user=${db.username}"/>
+	      <arg value="--password=${db.password}"/>
+	      <arg value="--force"/>
+	      <arg value="create"/>
+	      <arg value="${db.name}"/>
+	    </exec>
+	  </target>
+	
+	
+	
 </project>

@@ -100,13 +100,13 @@ public class TestCompController {
 			status.setComplete();
 			//session.removeAttribute("roleName");
 			return new ModelAndView("CompPlan");
-			}
-			}else {
+					}
+				}else {
 				return new ModelAndView("CompPlan");
+					}
+			
+			
 			}
-			
-			
-		}
 
 		/*-----------------------------------Finding compensation assignment for Employee------------------------------------*/
 		EmployeeUI object1 = (EmployeeUI) request.getSession().getAttribute("EmployeeName");
