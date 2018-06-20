@@ -44,6 +44,7 @@ list-style-type: none;
 				<c:forEach items="${roleList}" var="role">
 				
 					<c:if test="${role.reportsTo == null }">
+					<c:set var="count" value="0"/>
 					<li>
 					<span class="Collapsable"><c:forEach begin="0" end="${count}" step="1">&nbsp;&nbsp;</c:forEach>- &nbsp;<a href='/CommissionTool/roleDetails/${role.id}'>${role.roleName}</a></span><br>
 					

@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
@@ -27,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +52,15 @@ import com.simpsoft.salesCommission.app.UImodel.TargetUI;
 import com.simpsoft.salesCommission.app.api.EmployeeAPI;
 import com.simpsoft.salesCommission.app.api.RoleAPI;
 import com.simpsoft.salesCommission.app.api.RuleAPI;
+import com.simpsoft.salesCommission.app.api.RuleAssignmentAPI;
 import com.simpsoft.salesCommission.app.model.Employee;
 import com.simpsoft.salesCommission.app.model.EmployeeManagerMap;
 import com.simpsoft.salesCommission.app.model.EmployeeRoleMap;
+import com.simpsoft.salesCommission.app.model.Frequency;
 import com.simpsoft.salesCommission.app.model.OfficeLocation;
 import com.simpsoft.salesCommission.app.model.Role;
+import com.simpsoft.salesCommission.app.model.Target;
+import com.simpsoft.salesCommission.app.model.TargetDefinition;
 
 @Controller
 public class EmployeeController {
@@ -64,6 +72,9 @@ public class EmployeeController {
 
 	@Autowired
 	private RoleAPI roleApi;
+	
+	@Autowired
+	private RuleAssignmentAPI ruleAssApi;
 
 	private static final Logger logger = Logger.getLogger(EmployeeController.class);
 
@@ -133,12 +144,93 @@ public class EmployeeController {
 			String mName = managerName.getEmployeeName();
 			request1.getSession().setAttribute("managerName", mName);
 		}
+		
+		
+		List<Target> target = emp.getTarget();
+		//List<Target> targetList = new ArrayList<Target>();
+		for (Iterator iterator = target.iterator(); iterator.hasNext();) {
+			Target targetObj = (Target) iterator.next();
+			System.out.println(targetObj.getStartDate());
+		}
+			model.addAttribute("targetDetails", target);
+			model.addAttribute("listfrequency", ruleAssApi.listOfFrequency());
+			logger.debug("LIST FREQUENCY IN EMPLOYEE DETAILS: ");
+			for (Iterator iterator = ruleAssApi.listOfFrequency().iterator(); iterator.hasNext();) {
+				Frequency frequency = (Frequency) iterator.next();
+				logger.debug( frequency.getFrequencyName());
+
+			}
 
 		model.addAttribute("targetDefinition", employeeApi.listOfTargetDefinitions());
 		model.addAttribute("roleMap", role);
 		model.addAttribute("managerMap", manager);
 		model.addAttribute("targetDefinition", employeeApi.listOfTargetDefinitions());
+		model.addAttribute("listfrequency", ruleAssApi.listOfFrequency());
+		return "empDetails";
+	}
+	
+	
+	
+	@RequestMapping("/empDetailsCurrentTargets/{id}")
+	public String EmployeeDetailsCurrentTargets(@PathVariable("id") int id, Employee employee, ModelMap model,
+			HttpServletRequest request1, HttpSession session2, HttpServletResponse response)
+					throws ServletException, IOException {
 
+		session2.setAttribute("targetListContainer", getDummytargetListContainer1());
+		HttpSession session1 = request1.getSession(false);
+		if (session1 != null)
+			session1.invalidate();
+		Employee emp = employeeApi.getEmployee(id);
+		request1.getSession().setAttribute("empDetailsId", id);
+		model.addAttribute("emp", emp);
+		List<EmployeeManagerMap> manager = emp.getEmployeeManagerMap();
+		List<EmployeeRoleMap> role = emp.getEmployeeRoleMap();
+		for (Iterator iterator = role.iterator(); iterator.hasNext();) {
+			EmployeeRoleMap empRoleMap = (EmployeeRoleMap) iterator.next();
+			Role role1 = empRoleMap.getRole();
+			String roleName = role1.getRoleName();
+			request1.getSession().setAttribute("roleName", roleName);
+		}
+
+		for (Iterator iterator = manager.iterator(); iterator.hasNext();) {
+			EmployeeManagerMap managerMap = (EmployeeManagerMap) iterator.next();
+			Employee managerName = managerMap.getManager();
+			String mName = managerName.getEmployeeName();
+			request1.getSession().setAttribute("managerName", mName);
+		}
+		
+		//get current date/time
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Calendar cal = Calendar.getInstance();
+				
+				
+				
+				List<Target> target = emp.getTarget();
+				List<Target> currentTargets = new ArrayList<Target>();
+				logger.debug("CURRENT DATE/TIME= "+dateFormat.format(cal.getTime()));
+				logger.debug("------CURRENT TARGETS FOR EMPLOYEE= "+emp.getEmployeeName()+"-----");
+				
+				for (Iterator iterator = target.iterator(); iterator.hasNext();) {
+					Target targetObj = (Target) iterator.next();
+					logger.debug("START DATE= "+targetObj.getStartDate());
+					logger.debug("END DATE= "+targetObj.getTerminationDate());
+					if(targetObj.getTerminationDate().after(cal.getTime())) {
+						logger.debug("ADDING TARGET '"+targetObj.getTargetDefinition().getDisplayName() +"' TO LIST");
+						currentTargets.add(targetObj);
+						logger.debug("ADDED TARGET '"+targetObj.getTargetDefinition().getDisplayName() +"' TO LIST");
+					}else {
+						logger.debug(targetObj.getTargetDefinition().getDisplayName()+ "IS OLD TARGET. NOT ADDED");
+					}
+					
+				}
+				
+					model.addAttribute("targetDetails", currentTargets);
+
+		
+		model.addAttribute("roleMap", role);
+		model.addAttribute("managerMap", manager);
+		model.addAttribute("targetDefinition", employeeApi.listOfTargetDefinitions());
+		model.addAttribute("listfrequency", ruleAssApi.listOfFrequency());
 		return "empDetails";
 	}
 
@@ -164,17 +256,6 @@ public class EmployeeController {
 		return "SetEndDate";
 	}
 
-//	 @RequestMapping(value = "/submitEndDate/{id}", method = RequestMethod.POST)
-//	public String SetEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model) {
-//
-//		model.addAttribute("setDate", ruleUI.getSetDate());
-//		Date endDate = ruleUI.getSetDate();
-//		System.out.println("====CALLING SET END DATE METHOD OF EMP API====");
-//		employeeApi.setEndDate(endDate, id);
-//
-//		return "redirect:/showAllRoles/{id}";
-//
-//	}
 	
 	@RequestMapping(value = "/submitenddate/{id}", method = RequestMethod.POST)
 	public String setEndDate(@PathVariable("id") int id, RuleUI ruleUI, ModelMap model){
@@ -242,6 +323,72 @@ public class EmployeeController {
 
 		return "empManagerDetails";
 
+	}
+	
+	
+	
+	@RequestMapping(value = "/submitEmpDetails/{id}", method = RequestMethod.POST)
+	public String SubmitEmpDetails(@PathVariable("id") Long id,@ModelAttribute("SpringWeb") TargetUI targetUI, RoleUI roleUI,
+			TargetListContainer targetListContainer, HttpSession session, ModelMap model)
+					throws java.text.ParseException {
+
+		for (TargetUI T : targetListContainer.getTargetList()) {
+			logger.debug("TARGET NAME: " + T.getTargetName());
+			logger.debug("START DATE: " + T.getStartDate());
+			logger.debug("TERMINATION DATE: " + T.getTerminationDate());
+			logger.debug("VALUE: " + T.getValue());
+		}
+
+		model.addAttribute("empName",employeeApi.getEmployee(id).getEmployeeName());
+		logger.debug("************* EMPLOYEE NAME= " + employeeApi.getEmployee(id).getEmployeeName());
+		
+		
+		
+		
+		
+		
+
+		//Role role = roleApi.searchRoleByName(roleUI.getRoleName());
+		
+		Employee emp= employeeApi.searchEmployee(employeeApi.getEmployee(id).getEmployeeName());
+		logger.debug("EMP ID= "+emp.getId()+",EMP NAME= "+emp.getEmployeeName());
+		List<TargetUI> ptr = targetListContainer.getTargetList();
+		
+		List<Target> ptr1 = new ArrayList<>();
+		for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
+			TargetUI targetUi = (TargetUI) iterator.next();
+			Target target = new Target();
+			TargetDefinition targetDeff = employeeApi.searchTargetDefinition(targetUi.getTargetName());
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String dateInString1 = targetUi.getStartDate();
+			String dateInString2 = targetUi.getTerminationDate();
+
+			try {
+
+				Date date1 = formatter.parse(dateInString1);
+				Date date2 = formatter.parse(dateInString2);
+				if(date2.before(date1)) {
+					JOptionPane.showMessageDialog(null, 
+                            "The termination date cannot be earlier than the start date", 
+                            "Cannot add target", 
+                            JOptionPane.WARNING_MESSAGE);
+					continue;
+				}
+				target.setStartDate(date1);
+				target.setTerminationDate(date2);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			target.setTargetDefinition(targetDeff);
+			target.setValue(targetUi.getValue());
+			logger.debug("TARGET TO BE ADDED= "+target.getTargetDefinition().getDisplayName());
+			ptr1.add(target);
+		}
+		emp.setTarget(ptr1);
+		employeeApi.editEmployee(emp);
+
+		return "redirect:/empDetails/{id}";
 	}
 
 }

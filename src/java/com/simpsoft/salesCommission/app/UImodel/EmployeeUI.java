@@ -3,6 +3,8 @@ package com.simpsoft.salesCommission.app.UImodel;
 public class EmployeeUI {
 	
 	private String employeeName;
+	private String currentManager;
+	
 	public String getCurrentManager() {
 		return currentManager;
 	}
@@ -11,7 +13,7 @@ public class EmployeeUI {
 		this.currentManager = currentManager;
 	}
 
-	private String currentManager;
+	
 
 	public String getEmployeeName() {
 		return employeeName;

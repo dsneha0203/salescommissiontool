@@ -226,7 +226,7 @@ var count = "1";
 									<tr class="ruleParameter defaultRow">
 										<td>Parameter Name&nbsp;<input type="text"
 											name="personList1[].parameterName" value="" /></td>
-										<td>&nbsp;&nbsp;Parameter Value&nbsp;<input type="text"
+										<td>&nbsp;&nbsp;Parameter Value&nbsp;<input type="number"
 											name="personList1[].parameterValue" value="" /></td>
 
 										<td><a href="#" class="removePerson">Remove</a></td>
@@ -248,23 +248,57 @@ var count = "1";
 			<td>
 			<table>
 			<tr>
-				<td><input type="radio" name="compensationType" value="Fixed">Fixed</td>
+				<td><input type="radio" name="compensationType" id="compensationTypeFixed"
+				 value="Fixed" onchange="enableFixed()">Fixed</td>
 				<td>
-					<input type="text" size="20" name="fixedCompValue" value="0"></input>
+					<input type="number" size="20" 
+					id="fixedCompValue"
+					name="fixedCompValue" value="0" disabled></input>
 				</td>
 			</tr>
 			<tr>
-				<td valign="top"><input type="radio" name="compensationType" value="Variable">Variable&nbsp;
+				<td valign="top"><input type="radio" name="compensationType" 
+				id="compensationTypeVariable" value="Variable" onchange="enableVariable()">Variable&nbsp;
 				</td>
 				<td>
-					Apply formula <input type="text" size="20" name="compensationFormula"><br/><br/>
-					&nbsp;&nbsp;&nbsp;Parameters <input type="text" size="20" name="compensationParameter">
+					Apply formula <input type="text" size="20" name="compensationFormula"
+					id="compensationFormula" disabled><br/><br/>
+					&nbsp;&nbsp;&nbsp;Parameters <input type="text" size="20" name="compensationParameter"
+					id="compensationParameter" disabled>
 				</td>
 			</tr>
 			</table>
 			</td></tr>
 			
 			</table>
+			
+				<script>
+							function enableFixed(){
+								
+								var rad_fixed = document.getElementById("compensationTypeFixed");
+								
+								if(rad_fixed.checked){
+								document.getElementById("fixedCompValue").disabled=false;
+								document.getElementById("compensationFormula").disabled=true;
+								document.getElementById("compensationParameter").disabled=true;	
+								
+								}		
+							}
+							function enableVariable(){
+								
+							
+								var rad_variable = document.getElementById("compensationTypeVariable");
+								
+							
+								
+								if(rad_variable.checked){
+									document.getElementById("fixedCompValue").disabled=true;
+									document.getElementById("compensationFormula").disabled=false;
+									document.getElementById("compensationParameter").disabled=false;	
+								}
+							}
+						</script>
+			
 			<br/><div align="center">
 			<input type="submit" value="Submit" />
 			<a href="/CommissionTool/ruleList"> <input type="button"

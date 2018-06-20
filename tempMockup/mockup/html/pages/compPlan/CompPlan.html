@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class=" js no-touch" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your page description here">
+    <meta name="author" content="">
+    <!-- css -->
+    <link href="../../../css/menu.css" rel="stylesheet">
+    <link href="../../../css/SalesCommission.css" rel="stylesheet">
+<script src="../../../js/jquery-2.1.4.min.js"></script>
+<script src="../../../js/custom.js"></script>
+<script src="../../../js/SalesCommission.js"></script>
+<script>
+$(window).load(function(){
+		execJS();
+	});
+	$(document).ready(function() {
+		});
+</script>
+<title>Sales Commissioning Tool</title>
+</head>
+<body>
+
+	<div style="background:#999; font-size:22px; text-align:center; line-height:50px; color:#FFF; font-weight:bold;">
+		Sales Commission Tool
+    </div>
+	<!-- start header -->
+	<header>
+		
+		<div id="headerMenu" class="container">
+				<div class="navbar navbar-static-top">
+					<div class="navigation">
+						<nav>
+						<ul class="nav topnav bold">
+							<li class="dropdown"><a href="#">Master data <i class="icon-angle-down"></i></a>
+							<ul class="dropdown-menu bold">
+								<li><a href="../../pages/employee/EmployeeListComponent.html">Employee</a></li>
+								<li><a href="../../pages/orgStructure/OrgStructure.html">Role</a></li>
+							    <li><a href="../../pages/compRule/CompRule.html">Comp Rule</a></li>
+								<li><a href="../../pages/rollup/RollupRule.html">Credit Split Rule</a></li>
+								</ul>
+							</li>
+							<li class="dropdown">
+							<a href="#">Booking <i class="icon-angle-down"></i></a>
+							<ul style="display: none;" class="dropdown-menu bold">
+								<li><a href="../../pages/orders/OrderManagement.html">Orders/Booking</a></li>
+								
+			
+							</ul>
+							</li>
+							<li class="dropdown">
+							<a href="#">Compensation Plan <i class="icon-angle-down"></i></a>
+							<ul class="dropdown-menu bold">
+								<li><a href="../../pages/compPlan/CompPlan.html">Assign Compensation Plan</a></li>
+								
+							</ul>
+							</li>
+							<li class="dropdown">
+							<a href="#">Compensation <i class="icon-angle-down"></i></a>
+							<ul style="display: none;" class="dropdown-menu bold">
+								<li><a href="../../pages/compReport/CompReport.html">Employee Compensation Report</a></li>
+						
+							</ul>
+							</li>
+							
+						</ul>
+						</nav>
+					</div>
+					<!-- end navigation -->
+				</div>
+		</div>
+	</header>	
+	<!-- end header -->
+				
+
+<div id="menu"></div>
+	<div id="buffer" class="body"></div>
+	<div id="body" class="body" align="center">
+				<h1 align="center">Compensation Plan Assignment</h1>
+		<table>
+			<tr><td>
+				<table>
+					<tr>
+						<td><input type="radio">Employee</input><br>
+						Select Employee : Selected Employee
+						<script>
+							printChooseEmployee();
+						</script>
+						</td>
+						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Or</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td><input type="radio" checked="checked">Role</input><br>
+						Select Role :
+								<select>
+									<option value="volvo">Systems Engineer</option>
+									<option value="saab">Analyst</option>
+									<option value="mercedes" selected="selected">Management support</option>
+								</select>
+						
+						</td>
+					</tr>
+				</table>
+			</td></tr>
+			<tr><td>&nbsp;</td></tr>			
+				</table>
+			
+				<h3>Selected Rule </h3> 
+				<table border="1">
+					<thead>
+						<tr>
+							<td>Rule Id</td>
+							<td>Rule Details</td>
+							<td>Fixed</td>
+							<td>Repeats</td>
+							<td>From</td>
+							<td>To</td>
+							<td>&nbsp;Parameter&nbsp;|&nbsp;&nbsp;Default value|&nbsp;&nbsp;&nbsp;&nbsp;Overwrite</td>
+							
+							
+						</tr>
+					</thead>
+					<tr>
+					<td valign="top"><a href="../../pages/compRule/CompRuleDetailsComposite.html">P001</a>
+						<b>|</b><a href="#">X</a><b>|</b></td>
+					<td valign="top">
+					<table border="0">
+							<tr>
+								<td valign="top">High Performance
+								</td>
+							</tr>
+							<tr>
+							<td valign="top">Compensation rule for high performers
+							</td>
+							</tr>
+						</table></td>
+						<td valign="center"><input type="radio"></td>
+						<td valign="center"><input type="radio"><select>
+									<option value="volvo">Weekly</option>
+									<option value="saab">Fortnightly</option>
+									<option value="mercedes" selected="selected">Monthly</option>
+									<option value="saab">Quarterly</option>
+									<option value="saab">Annually</option>
+								</select></td>
+								<td><input type="text"></input>
+							<script>
+								printChooseCal();
+							</script></td><td><input type="text"></input>
+							<script>
+								printChooseCal();
+							</script></td>
+					<td> 
+						<div>							<table border="1">
+
+								<tr>
+									<td>Param 1</td>
+									<td>10000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+									<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" value=""></input>Or,<br/>
+											<select>
+												<option value="volvo">-None-</option>
+												<option value="volvo" selected="true">Employee Sales Target</option>
+												<option value="saab">Employee Order Count Target</option>
+												<option value="mercedes">Promotional Product Booking Target</option>
+											</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Param 2</td>
+									<td>Direct &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+									<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" value="Travel"></input> Or,<br/>
+											<select>
+												<option value="volvo" selected="true">-None-</option>
+												<option value="volvo">Employee Sales Target</option>
+												<option value="saab">Employee Order Count Target</option>
+												<option value="mercedes">Promotional Product Booking Target</option>
+									</td>
+								</tr>
+							</table>
+</div>
+					</td>	
+					</tr>
+					<tr>
+						<td valign="top"><a href="../../pages/compRule/CompRuleDetailsSimpleRank.html">P002</a>
+					<b>|</b><a href="#">X</a><b>|</b></td>
+						<td valign="top"><table border="0">
+							<tr>
+				
+								<td valign="top">Max Order booking
+								</td>
+							</tr>
+							<tr>
+							<td valign="top">Compensation rule for maximum order booking
+							</td>
+							</tr>
+						</table></td>
+						<td valign="center"><input type="radio"></td>
+						<td valign="center"><input type="radio"><select>
+									<option value="volvo">Weekly</option>
+									<option value="saab">Fortnightly</option>
+									<option value="mercedes">Monthly</option>
+									<option value="saab">Quarterly</option>
+									<option value="saab" selected="selected">Annually</option>
+								</select></td>
+								<td><input type="text"></input>
+							<script>
+								printChooseCal();
+							</script></td><td><input type="text"></input>
+							<script>
+								printChooseCal();
+							</script></td>
+						<td>
+							<div>							<table border="1">
+
+								<tr>
+									<td>Param 1</td>
+									<td>10000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+									<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" value=""></input>Or,<br/>
+											<select>
+												<option value="volvo">-None-</option>
+												<option value="volvo" selected="true">Employee Sales Target</option>
+												<option value="saab">Employee Order Count Target</option>
+												<option value="mercedes">Promotional Product Booking Target</option>
+											</select>
+									</td>
+								</tr>
+								<tr>
+									<td>Param 2</td>
+									<td>Direct &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+									<td>&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" value="Travel"></input> Or,<br/>
+											<select>
+												<option value="volvo" selected="true">-None-</option>
+												<option value="volvo">Employee Sales Target</option>
+												<option value="saab">Employee Order Count Target</option>
+												<option value="mercedes">Promotional Product Booking Target</option>
+									</td>
+								</tr>
+							</table>
+</div>
+						
+						</td>
+					</tr>
+					<div >
+					<tr>
+						<td colspan="4" align="right"> <select><option value = "1">---select rule id----</option>
+									<option value = "2">P001</option>
+									<option value = "1">P002</option>
+									<option value = "1">P003</option>
+									<option value = "1">P004</option>
+							</select>
+						
+							<td colspan="5" align="right"><a href="#">Add new</a></td>
+						</td>
+					</tr>
+					
+					
+				
+				</table>
+			</td></tr>
+		</table>
+		<br><br>
+		<input type="button" value="Update"></input>
+	<script>
+		showCancel();
+	</script>
+	</div>
+	<script>
+		footer();
+		$("#planParameter1").load("components/planParameters.html");
+		$("#planParameter2").load("components/planParameters.html");
+	</script>
+
+
+	</div>
+</body></html>

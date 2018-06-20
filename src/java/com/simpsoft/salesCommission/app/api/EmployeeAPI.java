@@ -384,6 +384,7 @@ public class EmployeeAPI {
 			Employee employee1 = (Employee) session.get(Employee.class, employee.getId());
 			employee1.setId(employee.getId());
 			employee1.setEmployeeName(employee.getEmployeeName());
+			employee1.setTarget(employee.getTarget());
 			session.merge(employee1);
 			logger.debug("EDIT THE EMPLOYEE DETAILS FROM DATABASE" + employee1);
 			tx.commit();

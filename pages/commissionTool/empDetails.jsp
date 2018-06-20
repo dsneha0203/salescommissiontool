@@ -2,13 +2,17 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<head>
-<title>EmployeeDetails</title>
-</head>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <tiles:insertDefinition name="defaultTemplate">
 	<tiles:putAttribute name="body">
 
-
+<head>
+<title>EmployeeDetails</title>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
 
 <style>
 
@@ -111,6 +115,22 @@ function enable_btn_manager(val){
 }
 
 
+function checkDate(){
+	var start= document.getElementById("start").value;
+    var end = document.getElementById("end").value;
+    if(start == ""){
+    	alert("Enter the start date first!");
+    	 document.getElementById("end").value="";
+    }else{
+    if(end<start && end!=""){
+        alert("Termination date cannot be earlier than start date");
+        document.getElementById("end").value="";
+     }
+    }
+	//alert("function called! ");
+}
+
+
 </script>
 
 		
@@ -118,6 +138,7 @@ function enable_btn_manager(val){
 
 
 				<h1 align="center">Employee Details</h1>
+				
 
 				<table>
 					<tr>
@@ -193,16 +214,20 @@ function enable_btn_manager(val){
 							<table>
 								<tr>
 									<td><h3>Set Targets</h3>&nbsp;&nbsp;</td>
-									<td>View&nbsp;&nbsp;<a href="#">All</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-										href="#">Current</a></td>
+									<td>View&nbsp;&nbsp;<a href="/CommissionTool/empDetails/${sessionScope.empDetailsId}">All</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+										href="/CommissionTool/empDetailsCurrentTargets/${sessionScope.empDetailsId}">Current</a></td>
 								</tr>
 							</table>
+							<form:form action="/CommissionTool/submitEmpDetails/${sessionScope.empDetailsId}"
+								modelAttribute="targetListContainer" method="post"
+								id="targetListForm">
 							<table id="targetListForm">
 								<thead>
 									<tr>
-										<td>Target Name</td>
+										<td>Parameter Name</td>
 										<td>Start Date</td>
 										<td>End Date</td>
+										<td>Repeat Frequency</td> 
 										<td>value</td>
 									</tr>
 								</thead>
@@ -221,22 +246,38 @@ function enable_btn_manager(val){
 													</c:forEach>
 											</select></td>
 
-											<td><input type="text" name="targetList[].startDate"
-												value="${target.startDate}" size="8"></td>
-
-											<td><input type="text"
-												name="targetList[].terminationDate"
-												value="${target.terminationDate}" size="8"></td>
-											<td><input type="text" name="targetList[].value"
+										<fmt:formatDate var="startDate" value="${target.startDate}" pattern="yyyy-MM-dd" />
+								<td ><input type="date"  name="targetList[].startDate"  value="${startDate}" 
+								 required></td>
+								
+								 <fmt:formatDate var="endDate" value="${target.terminationDate}" pattern="yyyy-MM-dd" />
+								
+								<td><input type="date"    name="targetList[].terminationDate" 
+									 value= "${endDate}" required></td>				
+													
+											
+										
+											<td>
+										<select name="targetList[].frequency" style="width: 80px;"> 
+											<option value="">--Select--</option>
+										<c:forEach items="${listfrequency}" var="freq">
+											<option value="${freq.frequencyName}" />
+											<c:out value="${freq.frequencyName}" />
+										</c:forEach>
+									</select>
+										</td>   
+										
+											<td><input type="number" name="targetList[].value"
 												value="${target.value}" size="10"></td>
 
 
-											<td><a href="#" class="removePerson">&nbsp;Remove</a></td>
+											<td><a href="#" class="removePerson1">&nbsp;Remove</a></td>
 										</tr>
 									</c:forEach>
 
 									<tr class="person defaultRow">
-										<td><select name="targetList[].targetName">
+										<td><select name="targetList[].targetName" required>
+										<option value=""><c:out value="----Select----" /></option>
 												<c:forEach items="${targetDefinition}" var="tar">
 													<option value="${tar.displayName}">
 														<c:out value="${tar.displayName}" />
@@ -244,12 +285,27 @@ function enable_btn_manager(val){
 												</c:forEach>
 										</select></td>
 
-										<td><input type="text" name="targetList[].startDate"
-											value="" size="8"></td>
-
-										<td><input type="text"
-											name="targetList[].terminationDate" value="" size="8"></td>
-										<td><input type="text" name="targetList[].value"
+																				
+								<td><input type='date' name="targetList[].startDate" 
+								id="start" oninput="checkDate()" required></td> 
+								
+								  
+								  
+								 
+							 <td ><input  type="date"  name="targetList[].terminationDate" 
+							 id="end" oninput="checkDate()"
+							 required></td> 			
+											
+							 	<td>
+										<select name="targetList[].frequency" style="width: 80px;"> 
+											<option value="">--Select--</option>
+										<c:forEach items="${listfrequency}" var="freq">
+											<option value="${freq.frequencyName}" />
+											<c:out value="${freq.frequencyName}" />
+										</c:forEach>
+									</select>
+										</td>  
+										<td><input type="number" name="targetList[].value"
 											value="0" size="10"></td>
 										<td><a href="#" class="removePerson1">Remove</a></td>
 
@@ -267,7 +323,7 @@ function enable_btn_manager(val){
 				<div align="center">
 					<input type="submit" value="Update">
 				</div>
-
+</form:form>
 			</div>
 		
 

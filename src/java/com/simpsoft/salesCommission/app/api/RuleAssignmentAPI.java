@@ -234,7 +234,7 @@ public class RuleAssignmentAPI {
 		List frequencyList = session.createQuery("FROM Frequency").list();
 		for (Iterator iterator = frequencyList.iterator(); iterator.hasNext();) {
 			Frequency frequency = (Frequency) iterator.next();
-			logger.debug("GET THE RULE DETAILS FROM DATABASE" + frequency.getId() + frequency.getFrequencyName());
+			logger.debug("GET THE RULE DETAILS FROM DATABASE= " + frequency.getId() +" "+ frequency.getFrequencyName());
 
 		}
 		return frequencyList;
