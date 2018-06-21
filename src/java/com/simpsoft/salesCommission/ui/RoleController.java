@@ -8,7 +8,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -68,7 +70,32 @@ public class RoleController {
 		List<Role> roleList = roleApi.listOfRoles();
 		model.addAttribute("roleList", roleList);
 		
+		List<String> boss = new ArrayList<>();
+		List<String> reportees = new ArrayList<>();
 
+		for(Role role: roleList) {
+			if(role.getReportsTo()==null) {
+				boss.add(role.getRoleName());
+			}
+			for(Role role1: roleList) {
+				if(role1.getRoleName() != role.getRoleName()) {
+					if( role1.getReportsTo() != null && role1.getReportsTo().getRoleName() == role.getRoleName()) {
+						boss.add(role.getRoleName());
+						
+					}
+					
+				}
+			}
+		}
+		Set<String> hs1 = new LinkedHashSet<>(boss);
+        List<String> bossList = new ArrayList<>(hs1);
+        model.addAttribute("bossList", bossList);
+        
+        
+		logger.debug("---BOSSES----");
+		for(String bossName : bossList) {
+			logger.debug(bossName);
+		}
 		return "orgStructure";
 	}
 
