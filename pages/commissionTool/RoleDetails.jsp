@@ -21,13 +21,16 @@ table {
 	table-layout: auto;
 	border-collapse: collapse;
 }
-
 table td, table th {
 	border: 1px solid #DDD;
 	text-align: left;
 	padding: 5px 15px 5px 15px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
+}
+#btn_search{
+	border:none;
+	background-color: white;
 }
 </style>
 
@@ -36,24 +39,18 @@ table td, table th {
 
 	
 <script type="text/javascript">
-
-
 	
-
 /*-------------------------*/
-
 function rowAdded(rowElement) {
 				//clear the input fields for the row
 				$(rowElement).find("input").val('');
 				//may want to reset <select> options etc
-
 				//in fact you may want to submit the form
 				saveNeeded();
 			}
 function rowRemoved1(rowElement) {
 				saveNeeded();
 			}
-
 function saveNeeded() {
 				$('#submit').css('color', 'red');
 				$('#submit').css('font-weight', 'bold');
@@ -61,12 +58,10 @@ function saveNeeded() {
 					$('#submit').val('!' + $('#submit').val());
 				}
 			}
-
 function beforeSubmit1() {
 				alert('submitting....');
 				return true;
 			}
-
 			$(document)
 					.ready(
 							function() {
@@ -85,28 +80,25 @@ function beforeSubmit1() {
 								};
 								new DynamicListHelper(config);
 							});
-
-
-
-
-
 /*-------------------------*/
 
+			function openWindow1(){
+				window.open('/CommissionTool/selectRole' , '' , 'width=1000,height=500,scrollbars=yes');
+				popup.focus();
+				}
 	</script>
 
 		<h1 align="center">Role Details</h1>
 
 		
 			<div align="center">
-			<form:form action="/CommissionTool/submitRoleDetails/${roleDetails.id}"
-			modelAttribute="targetListContainer" method="post"
-			id="targetListForm">
+			
 			
 				<table>
 					<tr>
 						<td><b>Role Name:</b></td>
-						<td><input type="text" name="roleName"
-							value="${roleDetails.roleName}"></td>
+						<td><input type="hidden" name="roleName"
+							value="${roleDetails.roleName}">${roleDetails.roleName}</td>
 					</tr>
 					<tr>
 						<td><b>Description:</b></td>
@@ -114,7 +106,18 @@ function beforeSubmit1() {
 					</tr>
 					<tr>
 						<td><b>Reports To:</b></td>
-						<td>${roleDetails.reportsTo.roleName}</td>
+						<!--<td>${roleDetails.reportsTo.roleName}</td>  -->
+						<td><form action="/CommissionTool/submitNewRoleReportsTo/${roleDetails.id}"  method="post">
+						<input type="hidden" name="roleName"
+							value="${roleDetails.roleName}">
+						<input type="text" value="${roleDetails.reportsTo.roleName}" id="roleName" name="reportsToRoleName">&nbsp;&nbsp;
+						<button type="button" id="btn_search" onClick="openWindow1();" >
+								<img src="../resources/image/search.png" alt=""
+									width="30" height="31" border="0" />
+						</button>
+						&nbsp;<input type="submit" value="Save" id="btn_save_role"  >
+							</form>
+						</td>
 					</tr>
 					<tr>
 						<td colspan="2">
@@ -126,7 +129,11 @@ function beforeSubmit1() {
 										href="/CommissionTool/roleDetailsCurrentTargets/${roleDetails.id}">Current</a></td>
 								</tr>
 							</table>
-							
+							<form:form action="/CommissionTool/submitRoleDetails/${roleDetails.id}"
+			modelAttribute="targetListContainer" method="post"
+			id="targetListForm">
+			<input type="hidden" name="roleName"
+							value="${roleDetails.roleName}">
 							<table id="target_table">
 								<thead>
 									<tr>

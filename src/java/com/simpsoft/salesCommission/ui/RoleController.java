@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -247,6 +248,37 @@ public class RoleController {
 		role.setTarget(ptr1);
 		roleApi.editRole(role);
 
+		return "redirect:/roleDetails/{id}";
+	}
+	
+	@RequestMapping(value = "/submitNewRoleReportsTo/{id}", method = RequestMethod.POST)
+	public String SubmitRoleReportsTo(@PathVariable("id") Long id,@RequestParam("reportsToRoleName") String reportsToRoleName,RoleUI roleUI, ModelMap model,
+			HttpServletRequest request2, HttpSession session2, HttpServletResponse response)
+					throws ServletException, IOException {
+		logger.debug("************* ROLE NAME= " + roleUI.getRoleName());
+		logger.debug("*************WANTS TO REPORT TO= " + reportsToRoleName);
+		Role role = roleApi.searchRoleByName(roleUI.getRoleName());
+		if(role.getRoleName().equals("CEO")) {
+			JOptionPane.showMessageDialog(null, 
+                    "CEO cannot report to another role!", 
+                    "Cannot execute task", 
+                    JOptionPane.WARNING_MESSAGE);
+			return "redirect:/roleDetails/{id}";
+		}
+		String getReportsToRole= reportsToRoleName;
+		if(role.getRoleName().equals(getReportsToRole)){
+			JOptionPane.showMessageDialog(null, 
+                    "A role cannot report to itself!", 
+                    "Cannot execute task", 
+                    JOptionPane.WARNING_MESSAGE);
+			return "redirect:/roleDetails/{id}";
+		}
+		else {
+		Role reportsToRole =  roleApi.searchRoleByName(getReportsToRole);
+		role.setReportsTo(reportsToRole);
+		roleApi.editRole(role);
+		}
+		model.addAttribute("roleDetails", role);
 		return "redirect:/roleDetails/{id}";
 	}
 

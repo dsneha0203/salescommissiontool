@@ -20,7 +20,7 @@
   <div align="center"><h1>Select Role</h1></div>
    
 <div align="center">
-<b></>Select Role:&nbsp;</b><select name="ddlNames" id="ddlNames">
+<b>Select Role:&nbsp;</b><select name="ddlNames" id="ddlNames">
     <c:forEach items="${roleList}" var="role">
     <option value="${role.roleName}">
 		<c:out value="${role.roleName}" />

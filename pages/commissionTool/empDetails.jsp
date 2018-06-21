@@ -257,15 +257,15 @@ function checkDate(){
 													
 											
 										
-											<td>
-										<select name="targetList[].frequency" style="width: 80px;"> 
+										<td>
+										<select name="" style="width: 80px;"> 
 											<option value="">--Select--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />
 											<c:out value="${freq.frequencyName}" />
 										</c:forEach>
 									</select>
-										</td>   
+										</td>
 										
 											<td><input type="number" name="targetList[].value"
 												value="${target.value}" size="10"></td>
@@ -296,15 +296,17 @@ function checkDate(){
 							 id="end" oninput="checkDate()"
 							 required></td> 			
 											
-							 	<td>
-										<select name="targetList[].frequency" style="width: 80px;"> 
+							 	
+										<td>
+										<select name="" style="width: 80px;"> 
 											<option value="">--Select--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />
 											<c:out value="${freq.frequencyName}" />
 										</c:forEach>
 									</select>
-										</td>  
+										</td>
+										
 										<td><input type="number" name="targetList[].value"
 											value="0" size="10"></td>
 										<td><a href="#" class="removePerson1">Remove</a></td>
