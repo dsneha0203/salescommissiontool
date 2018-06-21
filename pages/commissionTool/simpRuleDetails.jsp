@@ -267,9 +267,14 @@ table td, table th {
 												</option>
 											</c:forEach>
 									</select></td>
-									<td><select name="field"><option
-												VALUE="lineItemTotal">Line Item Total
-											<option value="quantity">Quantity</select></td>
+									<td><select name="fields">
+									<c:forEach
+												items="${listRule2}" var="field">
+												<option value="${field.displayName}">
+													<c:out value="${field.displayName}" />
+												</option>
+											</c:forEach>
+									</select></td>
 							</table></td>
 					</tr>
 

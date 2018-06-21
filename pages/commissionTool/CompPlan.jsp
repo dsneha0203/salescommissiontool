@@ -49,6 +49,12 @@ body {
     background-color: #c7cfd1;
     color: black;
 }
+#check_role{
+display:none;
+}
+#check_emp{
+display:none;
+}
 
 html {
 overflow: -moz-scrollbars-vertical; 
@@ -73,17 +79,31 @@ overflow-y: scroll;
                     $('.'+other_class).prop('disabled',true);
                 });
             });
- });
             
+            $("#emp_rad").click(function(){
+            	$("#check_emp").show(1000);
+            	 $("#check_role").hide(1000);
+             });
+             
+             $("#role_rad").click(function(){
+            	  $("#check_role").show(1000);
+            	 $("#check_emp").hide(1000);
+             });
+ });
+ 
+       
  $('input[type="radio"]').on('click', function() {
 	    var val = $(this).val(),
 	        selectId = $(this).closest('tr').find('select').first();
+	    
 
 	    if ($(this).val() === 'true') {
 	        $(selectId).prop("disabled", false);
+	      
 	    }
 	    else {
 	        $(selectId).prop("disabled", true);
+	       
 	    }
 	});
  
@@ -141,6 +161,8 @@ overflow-y: scroll;
 	        beforeSubmit : beforeSubmit
 	    };
 	    new DynamicListHelper(config);
+	    
+	    
 	});
 	
 	
@@ -195,53 +217,67 @@ overflow-y: scroll;
 		<h2 align="center">Compensation Plan Assignment</h2>
 		<!-- ------------------------------------------This part is for choosing employee or role----------------------------------- -->
 		<div id="header">
-		<tr>
-			<td>
+		
+			
 				 <table>
+				 <tr>
+				 <td>
+				 <label for="radio1"> 
+						<input type="radio" name="test1" value="radio1" id="emp_rad"/><b>Employee</b>
+						</label>
+				 </td>
+				 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				 <td>
+				
+				 <label for="radio2"><input type="radio" name="test1"
+									value="radio2" id="role_rad"/>Role </label>
+				 </td>
+				 </tr>
 					<tr>
 						<td>
-						<label for="radio1"> 
+						<!--  <label for="radio1"> 
 						<input type="radio" name="test1" value="radio1" /><b>Employee</b>
-						</label><br>
+						</label><br>-->
 						 Select Employee :&nbsp;&nbsp; <input type="image" img
 							src="resources/image/search.png"
 							style="height: 30px; width: 30px;" class="radio1"
-							disabled="true" onclick="openWindow()" />
+							disabled onclick="openWindow()" />
 							&nbsp;&nbsp;&nbsp;&nbsp;
 						</td>
 						<td>
 							<form id="form1" action="/CommissionTool/searchemp" method="post">
 								Selected Employee: <input type="text" name="EmployeeName"
-									id="text1" name="for_radio1[]" class="radio1" disabled="true"
+									id="text1" name="for_radio1[]" class="radio1" disabled
 									size="11" required
 									<c:forEach items="${empList}"
 													var="emp">value="${emp.employeeName }"</c:forEach> />
-								<input type="submit" value="check" />
+								<input type="submit" value="check" id="check_emp" />
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Or</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							</form>
 						</td>
 						<td>
 							<form action="/CommissionTool/Submitrole" method="post"
 								model="command">
-								<label for="radio2"><input type="radio" name="test1"
-									value="radio2" />Role </label><br> Select Role :<select
+								<!-- <label for="radio2"><input type="radio" name="test1"
+									value="radio2" />Role </label><br> -->
+									 Select Role :<select
 									name="roleName" class="radio2" name="for_radio2[]"
-									disabled="true" style="width: 140px; height: 1.5em;" required>
+									disabled style="width: 140px; height: 1.5em;" required>
 									 <option value="">Choose role</option> 
 									<c:forEach items="${listRole}" var="role">
 										<option value="${role.roleName}">
 											<c:out value="${role.roleName}" />
 										</option>
 									</c:forEach>
-								</select> <input type="submit" value="check">
+								</select> <input type="submit" value="check" id="check_role" >
 							</form>
 						</td>
 						
 					</tr>
 					
 				</table>
-			</td>
-		</tr>
+			
+		
 		</div>
 
 		<!-- ------------------------------------------This part is for displaying table against Employee/Role----------------------------------- -->

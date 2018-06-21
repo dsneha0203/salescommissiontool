@@ -456,7 +456,8 @@ public class OrderAPI {
 
 			OrderRosterXML orderRoster = (OrderRosterXML) iterator.next();
 			OrderRoster newOrderRoster = new OrderRoster();
-
+			logger.debug("IMPORT DATE= "+orderRoster.getImportDate());
+			
 			newOrderRoster.setImportDate(orderRoster.getImportDate());
 			newOrderRoster.setCountOfOrders(orderRoster.getCountOfOrders());
 			newOrderRoster.setStatus(orderRoster.getStatus());
