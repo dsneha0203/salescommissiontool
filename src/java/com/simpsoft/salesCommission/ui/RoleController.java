@@ -98,6 +98,7 @@ public class RoleController {
 			logger.debug(bossName);
 		}
 		return "orgStructure";
+		
 	}
 
 	@RequestMapping(value = "/roleDetails/{id}", method = RequestMethod.GET)

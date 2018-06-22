@@ -18,7 +18,7 @@ list-style-type: none;
 
 .wrapper{ 
 	overflow-y:auto; 
-    position:relative; 
+    position:relative;
     height: 500px;
     padding-top: 30px;
 }
@@ -33,7 +33,7 @@ list-style-type: none;
     <script src="resources/js/kendo.all.min.js"></script>
   
   <div align="center"><h1>Organization Structure </h1></div>
-   <div class="wrapper" align="center">   
+   <div class="wrapper">   
    
    <table>
    
