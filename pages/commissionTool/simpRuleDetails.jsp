@@ -24,6 +24,9 @@ table td, table th {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
+#row_rank{
+display:none;
+}
 </style>
 
 
@@ -120,6 +123,19 @@ table td, table th {
 									beforeSubmit : beforeSubmit
 								};
 								new DynamicListHelper(config);
+								
+								
+								$("#rad_ind").click(function(){
+					            	$("#row_rank").hide(1000);
+					            	
+					             });
+					             
+					             $("#rad_rank").click(function(){
+					            	  $("#row_rank").show(1000);
+					            	
+					             });
+					             
+					         
 							});
 
 			var count = "1";
@@ -159,6 +175,8 @@ table td, table th {
 					;
 				current.parentElement.removeChild(current);
 			}
+			
+			  
 		</script>
 		<form:form action="/CommissionTool/submitSimpRule" method="post">
 			<!--
@@ -171,7 +189,7 @@ table td, table th {
 
 					<tr>
 						<td><b>Rule Name:</b></td>
-						<td><input type="text" name="ruleName" size=100></td>
+						<td><input type="text" name="ruleName" size=100 required></td>
 					</tr>
 					<tr>
 						<td><b>Description:</b></td>
@@ -199,9 +217,9 @@ table td, table th {
 
 									<tr class="ruleParameter defaultRow">
 										<td>Parameter Name&nbsp;<input type="text"
-											name="personList1[].parameterName" value="" /></td>
+											name="personList1[].parameterName" value=""  required/></td>
 										<td>Parameter Value&nbsp;<input type="number"
-											name="personList1[].parameterValue" value="" /></td>
+											name="personList1[].parameterValue" value="" required/></td>
 
 										<td><a href="#" class="removePerson">Remove</a></td>
 									</tr>
@@ -216,14 +234,20 @@ table td, table th {
 
 					<tr>
 						<td><b>Calculation mode :</b></td>
-						<td><input type="radio" name="calculationMode" value="i">Individual&nbsp;&nbsp;&nbsp;&nbsp;<input
-							type="radio" name="calculationMode" value="r">Rank</td>
+						<td><input type="radio" name="calculationMode" value="i" id="rad_ind" checked>Individual&nbsp;&nbsp;&nbsp;&nbsp;
+						<input type="radio" name="calculationMode" value="r" id="rad_rank">Rank</td>
 					</tr>
+					
+					<tr id="row_rank">
+					<td></td>
+					<td>
+					<table>
 					<tr>
 						<td></td>
-						<td>Within <input type="text" Name="rankCount" value="0"
+						<td>Within <input type="number" Name="rankCount" value="0"
 							size="4">ranks in <input type="radio" Name="rankType"
-							value="Number">number<input type="radio" Name="rankType"
+							value="Number">number &nbsp;&nbsp;
+							<input type="radio" Name="rankType"
 							value="percentage">percentage
 						</td>
 					</tr>
@@ -234,24 +258,44 @@ table td, table th {
 								<tr>
 									<td>Population</td>
 									<td><input type="radio" Name="populationType"
-										value="SameReportingManager">Under same reporting
+										value="SameReportingManager" id="rad_same_mgr">Under same reporting
 										manager</td>
 								</tr>
 								<tr>
 									<td></td>
 									<td><input type="radio" Name="populationType"
-										value="SameRole">Same role</td>
+										value="SameRole" id="rad_same_role">Same role</td>
 								</tr>
 								<tr>
 									<td></td>
 									<td><input type="radio" Name="populationType"
-										value="global upto">Global Upto <input type="text"
-										Name="populationUpto" size="4" value="0"></input> level up</td>
+										value="global upto" id="rad_global">Global Upto <input type="number"
+										Name="populationUpto" id="rad_global_val" value="0" disabled></input> level up</td>
 								</tr>
 							</table>
 						</td>
+						</tr>
+						</table>
+						</td>
+						<script>
+						 $("#rad_global").click(function(){
+			            	  $("#rad_global_val").prop("disabled",false);
+			            	
+			             });
+			             
+			             $("#rad_same_role").click(function(){
+			            	  $("#rad_global_val").prop("disabled",true);
+			            	
+			             });
+			             
+			             $("#rad_same_mgr").click(function(){
+			            	  $("#rad_global_val").prop("disabled",true);
+			            	
+			             });
+						
+						</script>
 					</tr>
-
+					
 					<tr>
 						<td><b>Based on: </b></td>
 						<td><table>
@@ -268,12 +312,15 @@ table td, table th {
 											</c:forEach>
 									</select></td>
 									<td><select name="fields">
-									<c:forEach
+									<!--<c:forEach
 												items="${listRule2}" var="field">
 												<option value="${field.displayName}">
 													<c:out value="${field.displayName}" />
 												</option>
-											</c:forEach>
+											</c:forEach>-->
+											<option
+												VALUE="lineItemTotal">Line Item Total</option>
+											<option value="quantity">Quantity</option>
 									</select></td>
 							</table></td>
 					</tr>
@@ -296,8 +343,12 @@ table td, table th {
 												</c:forEach>
 										</select></td>
 
-										<td>&nbsp;Not&nbsp;<input type="text"
-											name="personList[].condition" value="TRUE" size="2"></td>
+										<td>&nbsp;Not&nbsp;
+										<!-- <input type="text"
+											name="personList[].condition" value="TRUE" size="2"> -->
+											<input type="checkbox" value="TRUE" name="personList[].condition">
+											
+										</td>
 
 										<td>&nbsp;Condition&nbsp;<select
 											name="personList[].conditionValue"><c:forEach
@@ -307,7 +358,7 @@ table td, table th {
 													</option>
 												</c:forEach></select>
 										<td>&nbsp;Value&nbsp;<input type="text"
-											name="personList[].value"></td>
+											name="personList[].value" required></td>
 										<td><a href="#" class="removePerson1">Remove</a></td>
 
 									</tr>
@@ -326,9 +377,9 @@ table td, table th {
 								<tr>
 									<td><input type="radio" name="compensationType"
 										id="compensationTypeFixed"
-										value="Fixed" onchange="enableFixed()">Fixed</td>
+										value="Fixed" checked onchange="enableFixed()">Fixed</td>
 									<td><input type="number" size="20" name="fixedCompValue"
-										value="0" id="fixedCompValue" disabled></input></td>
+										value="0" id="fixedCompValue" required></input></td>
 								</tr>
 								<tr>
 									<td valign="top"><input type="radio"
@@ -356,6 +407,7 @@ table td, table th {
 								
 								if(rad_fixed.checked){
 								document.getElementById("fixedCompValue").disabled=false;
+								document.getElementById("fixedCompValue").required=true;
 								document.getElementById("compensationFormula").disabled=true;
 								document.getElementById("compensationParameter").disabled=true;	
 								
@@ -370,8 +422,11 @@ table td, table th {
 								
 								if(rad_variable.checked){
 									document.getElementById("fixedCompValue").disabled=true;
+									document.getElementById("fixedCompValue").required=false;
 									document.getElementById("compensationFormula").disabled=false;
+									document.getElementById("compensationFormula").required=true;
 									document.getElementById("compensationParameter").disabled=false;	
+									document.getElementById("compensationParameter").required=true;
 								}
 							}
 						</script>

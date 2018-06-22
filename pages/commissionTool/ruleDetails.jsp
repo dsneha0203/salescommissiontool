@@ -173,7 +173,7 @@ var count = "1";
 			<table border="1">
 				<tr>
 						<td><b>Rule Name:</b></td>
-						<td><input type="text" name="ruleName" size=50></td>
+						<td><input type="text" name="ruleName" size=50 required></td>
 					</tr>
 					<tr>
 						<td><b>Description:</b></td>
@@ -225,9 +225,9 @@ var count = "1";
 							<tbody id="personListContainer">
 									<tr class="ruleParameter defaultRow">
 										<td>Parameter Name&nbsp;<input type="text"
-											name="personList1[].parameterName" value="" /></td>
+											name="personList1[].parameterName" value="" required/></td>
 										<td>&nbsp;&nbsp;Parameter Value&nbsp;<input type="number"
-											name="personList1[].parameterValue" value="" /></td>
+											name="personList1[].parameterValue" value="" required/></td>
 
 										<td><a href="#" class="removePerson">Remove</a></td>
 									</tr>
@@ -249,11 +249,11 @@ var count = "1";
 			<table>
 			<tr>
 				<td><input type="radio" name="compensationType" id="compensationTypeFixed"
-				 value="Fixed" onchange="enableFixed()">Fixed</td>
+				 value="Fixed" onchange="enableFixed()" checked>Fixed</td>
 				<td>
 					<input type="number" size="20" 
 					id="fixedCompValue"
-					name="fixedCompValue" value="0" disabled></input>
+					name="fixedCompValue" value="0" required></input>
 				</td>
 			</tr>
 			<tr>
@@ -273,30 +273,34 @@ var count = "1";
 			</table>
 			
 				<script>
-							function enableFixed(){
-								
-								var rad_fixed = document.getElementById("compensationTypeFixed");
-								
-								if(rad_fixed.checked){
-								document.getElementById("fixedCompValue").disabled=false;
-								document.getElementById("compensationFormula").disabled=true;
-								document.getElementById("compensationParameter").disabled=true;	
-								
-								}		
-							}
-							function enableVariable(){
-								
-							
-								var rad_variable = document.getElementById("compensationTypeVariable");
-								
-							
-								
-								if(rad_variable.checked){
-									document.getElementById("fixedCompValue").disabled=true;
-									document.getElementById("compensationFormula").disabled=false;
-									document.getElementById("compensationParameter").disabled=false;	
-								}
-							}
+				function enableFixed(){
+					
+					var rad_fixed = document.getElementById("compensationTypeFixed");
+					
+					if(rad_fixed.checked){
+					document.getElementById("fixedCompValue").disabled=false;
+					document.getElementById("fixedCompValue").required=true;
+					document.getElementById("compensationFormula").disabled=true;
+					document.getElementById("compensationParameter").disabled=true;	
+					
+					}		
+				}
+				function enableVariable(){
+					
+				
+					var rad_variable = document.getElementById("compensationTypeVariable");
+					
+				
+					
+					if(rad_variable.checked){
+						document.getElementById("fixedCompValue").disabled=true;
+						document.getElementById("fixedCompValue").required=false;
+						document.getElementById("compensationFormula").disabled=false;
+						document.getElementById("compensationFormula").required=true;
+						document.getElementById("compensationParameter").disabled=false;	
+						document.getElementById("compensationParameter").required=true;
+					}
+				}
 						</script>
 			
 			<br/><div align="center">
