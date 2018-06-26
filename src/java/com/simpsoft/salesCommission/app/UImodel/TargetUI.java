@@ -1,10 +1,9 @@
 package com.simpsoft.salesCommission.app.UImodel;
 
-import java.sql.Date;
-
 public class TargetUI {
 	
 	private String targetName;
+	private String frequency;
 	private String startDate;
 	private String terminationDate;
 	private int value;
@@ -18,12 +17,14 @@ public TargetUI(){
 	}
 
 
-	public TargetUI(String targetName, String startDate, String terminationDate, String roleName, int value){
+	public TargetUI(String targetName, String startDate, String terminationDate,String frequency, String roleName, int value){
 		
 		this.targetName = targetName;
+		this.frequency=frequency;
 		this.startDate = startDate;
 		this.terminationDate = terminationDate;
 		this.value=value;
+	
 	
 	}
 	
@@ -35,6 +36,15 @@ public TargetUI(){
 	public void setTargetName(String targetName) {
 		this.targetName = targetName;
 	}
+	
+	public String getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
+	
+	
 	public String getStartDate() {
 		return startDate;
 	}

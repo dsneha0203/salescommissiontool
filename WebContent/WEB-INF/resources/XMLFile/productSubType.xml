@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <ProductSubTypes>
-	<ProductSubType subtypeName="Sony">
+	<!-- <ProductSubType subtypeName="Sony">
 	<typeName>Home Theater</typeName>
 	</ProductSubType>
 	<ProductSubType subtypeName="HP">
@@ -11,5 +11,22 @@
 	</ProductSubType>
 	<ProductSubType subtypeName="Samsung">
 	<typeName>Smart Phone</typeName>
+	</ProductSubType> -->
+	
+	<ProductSubType subtypeName="TV">
+	<typeName>Product</typeName>
 	</ProductSubType>
+	
+	<ProductSubType subtypeName="Laptop">
+	<typeName>Service</typeName>
+	</ProductSubType>
+	
+	<ProductSubType subtypeName="Smart Phone">
+	<typeName>Product</typeName>
+	</ProductSubType>
+	
+	<ProductSubType subtypeName="Home Theater">
+	<typeName>Service</typeName>
+	</ProductSubType>
+	
 </ProductSubTypes>

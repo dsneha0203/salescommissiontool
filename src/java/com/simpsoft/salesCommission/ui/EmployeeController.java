@@ -38,6 +38,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -214,7 +215,7 @@ public class EmployeeController {
 					Target targetObj = (Target) iterator.next();
 					logger.debug("START DATE= "+targetObj.getStartDate());
 					logger.debug("END DATE= "+targetObj.getTerminationDate());
-					if(targetObj.getTerminationDate().after(cal.getTime())) {
+					if(targetObj.getTerminationDate().after(cal.getTime()) && targetObj.getStartDate().before(cal.getTime()) ) {
 						logger.debug("ADDING TARGET '"+targetObj.getTargetDefinition().getDisplayName() +"' TO LIST");
 						currentTargets.add(targetObj);
 						logger.debug("ADDED TARGET '"+targetObj.getTargetDefinition().getDisplayName() +"' TO LIST");
@@ -328,7 +329,7 @@ public class EmployeeController {
 	
 	
 	@RequestMapping(value = "/submitEmpDetails/{id}", method = RequestMethod.POST)
-	public String SubmitEmpDetails(@PathVariable("id") Long id,@ModelAttribute("SpringWeb") TargetUI targetUI, RoleUI roleUI,
+	public String SubmitEmpDetails(@PathVariable("id") Long id, RoleUI roleUI,
 			TargetListContainer targetListContainer, HttpSession session, ModelMap model)
 					throws java.text.ParseException {
 
@@ -337,28 +338,25 @@ public class EmployeeController {
 			logger.debug("START DATE: " + T.getStartDate());
 			logger.debug("TERMINATION DATE: " + T.getTerminationDate());
 			logger.debug("VALUE: " + T.getValue());
+			logger.debug("FREQUENCY: " + T.getFrequency());
 		}
 
 		model.addAttribute("empName",employeeApi.getEmployee(id).getEmployeeName());
 		logger.debug("************* EMPLOYEE NAME= " + employeeApi.getEmployee(id).getEmployeeName());
 		
-		
-		
-		
-		
-		
-
 		//Role role = roleApi.searchRoleByName(roleUI.getRoleName());
 		
 		Employee emp= employeeApi.searchEmployee(employeeApi.getEmployee(id).getEmployeeName());
 		logger.debug("EMP ID= "+emp.getId()+",EMP NAME= "+emp.getEmployeeName());
-		List<TargetUI> ptr = targetListContainer.getTargetList();
 		
+		List<TargetUI> ptr = targetListContainer.getTargetList();		
 		List<Target> ptr1 = new ArrayList<>();
 		for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
 			TargetUI targetUi = (TargetUI) iterator.next();
 			Target target = new Target();
 			TargetDefinition targetDeff = employeeApi.searchTargetDefinition(targetUi.getTargetName());
+			
+			Frequency freq= employeeApi.searchFrequency(targetUi.getFrequency());
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			String dateInString1 = targetUi.getStartDate();
 			String dateInString2 = targetUi.getTerminationDate();
@@ -381,12 +379,16 @@ public class EmployeeController {
 			}
 
 			target.setTargetDefinition(targetDeff);
+			target.setFrequency(freq);
+			
 			target.setValue(targetUi.getValue());
 			logger.debug("TARGET TO BE ADDED= "+target.getTargetDefinition().getDisplayName());
+			logger.debug("FREQUENCY FOR TARGET= "+target.getFrequency().getFrequencyName());
 			ptr1.add(target);
 		}
 		emp.setTarget(ptr1);
 		employeeApi.editEmployee(emp);
+		
 
 		return "redirect:/empDetails/{id}";
 	}

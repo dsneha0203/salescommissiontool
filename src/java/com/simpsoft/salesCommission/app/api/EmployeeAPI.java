@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import com.simpsoft.salesCommission.app.model.Employee;
 import com.simpsoft.salesCommission.app.model.EmployeeManagerMap;
 import com.simpsoft.salesCommission.app.model.EmployeeRoleMap;
+import com.simpsoft.salesCommission.app.model.Frequency;
 import com.simpsoft.salesCommission.app.model.Role;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
 import com.simpsoft.salesCommission.app.model.State;
@@ -324,7 +325,7 @@ public class EmployeeAPI {
 		}
 	}
 	
-	private Role searchRole(String roleName) {
+	public Role searchRole(String roleName) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		List<Role> roleList = new ArrayList<>();
@@ -452,6 +453,28 @@ public class EmployeeAPI {
 			session.close();
 		}
 		return targetList.get(0);
+	}
+	
+	
+	public Frequency searchFrequency(String frequency) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<Frequency> freqList = new ArrayList<>();
+		try {
+			tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(Frequency.class);
+			crit.add(Restrictions.eq("frequencyName", frequency));
+			freqList = crit.list();
+			tx.commit();
+
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return freqList.get(0);
 	}
 
 }

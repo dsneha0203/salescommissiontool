@@ -261,7 +261,7 @@ overflow-y: scroll;
 								<!-- <label for="radio2"><input type="radio" name="test1"
 									value="radio2" />Role </label><br> -->
 									 Select Role :<select
-									name="roleName" class="radio2" name="for_radio2[]"
+									name="roleNameCompAsg" class="radio2" name="for_radio2[]"
 									disabled style="width: 140px; height: 1.5em;" required>
 									 <option value="">Choose role</option> 
 									<c:forEach items="${listRole}" var="role">
@@ -304,7 +304,7 @@ overflow-y: scroll;
 				<c:choose> 
 				<c:when test="${assObj.id != null}">
 					<input type="hidden" name="id" value="${assObj.id}">
-					<input type="hidden" name="name" value="${assObj.role.roleName}">
+					<input type="hidden" name="name" value="${assObj.role.roleNameCompAsg}">
 				</c:when>
 				<c:otherwise>
 					<input type="hidden" name="assid" value="${assObj1.id}">

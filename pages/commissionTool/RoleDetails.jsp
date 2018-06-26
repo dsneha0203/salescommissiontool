@@ -73,7 +73,7 @@ function beforeSubmit1() {
 									formId : 'targetListForm',
 									rowContainerId : 'targetListContainer',
 									indexedPropertyName : 'targetList',
-									indexedPropertyMemberNames : 'targetName,startDate,terminationDate,value',
+									indexedPropertyMemberNames : 'targetName,startDate,terminationDate,frequency,value',
 									rowAddedListener : rowAdded,
 									rowRemovedListener : rowRemoved1,
 									beforeSubmit : beforeSubmit1
@@ -168,9 +168,9 @@ function beforeSubmit1() {
 								<td><input type="date"  height="0.10"  name="targetList[].terminationDate"  id="end" value= "${endDate}" required></td>				
 											
 											
-									 	<td>
-										<select name="" style="width: 80px;"> 
-											<option value="">--Select--</option>
+									 <td>
+										<select name="targetList[].frequency"  required> 
+											<option value="${target.frequency.frequencyName}">--${target.frequency.frequencyName}--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />
 											<c:out value="${freq.frequencyName}" />
@@ -210,7 +210,7 @@ function beforeSubmit1() {
 								
 											
 											 <td>
-										<select name="" style="width: 80px;"> 
+										<select name="targetList[].frequency"  required> 
 											<option value="">--Select--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />

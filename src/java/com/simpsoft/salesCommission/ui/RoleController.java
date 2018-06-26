@@ -166,7 +166,7 @@ public class RoleController {
 			Target targetObj = (Target) iterator.next();
 			logger.debug("START DATE= "+targetObj.getStartDate());
 			logger.debug("END DATE= "+targetObj.getTerminationDate());
-			if(targetObj.getTerminationDate().after(cal.getTime())) {
+			if(targetObj.getTerminationDate().after(cal.getTime()) && targetObj.getStartDate().before(cal.getTime()) ) {
 				logger.debug("ADDING TARGET '"+targetObj.getTargetDefinition().getDisplayName() +"' TO LIST");
 				currentTargets.add(targetObj);
 				logger.debug("ADDED TARGET '"+targetObj.getTargetDefinition().getDisplayName() +"' TO LIST");
@@ -207,6 +207,7 @@ public class RoleController {
 			logger.debug("START DATE: " + T.getStartDate());
 			logger.debug("TERMINATION DATE: " + T.getTerminationDate());
 			logger.debug("VALUE: " + T.getValue());
+			logger.debug("FREQUENCY: " + T.getFrequency());
 		}
 		
 		model.addAttribute("roleName", roleUI.getRoleName());
@@ -221,6 +222,7 @@ public class RoleController {
 			TargetUI targetUi = (TargetUI) iterator.next();
 			Target target = new Target();
 			TargetDefinition targetDeff = employeeApi.searchTargetDefinition(targetUi.getTargetName());
+			Frequency freq= employeeApi.searchFrequency(targetUi.getFrequency());
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			String dateInString1 = targetUi.getStartDate();
 			String dateInString2 = targetUi.getTerminationDate();
@@ -243,6 +245,7 @@ public class RoleController {
 			}
 
 			target.setTargetDefinition(targetDeff);
+			target.setFrequency(freq);
 			target.setValue(targetUi.getValue());
 			ptr1.add(target);
 		}

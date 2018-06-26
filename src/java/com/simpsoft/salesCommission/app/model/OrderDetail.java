@@ -44,6 +44,12 @@ public class OrderDetail {
 	@JoinColumn(name = "CUST_ID")
 	private Customer customer;
 	
+	@Column(name = "productTotal")
+	private  long productTotal;
+	
+	@Column(name = "serviceTotal")
+	private  long serviceTotal;
+	
 	@Column(name = "orderTotal")
 	private  long orderTotal;
 	

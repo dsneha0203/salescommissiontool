@@ -42,6 +42,7 @@ public class Employee {
 	@IndexColumn(name = "detailSrl")
 	private List<Target> target;
 	
+	
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "OFC_LOC_ID")
 	private OfficeLocation officeLocation;

@@ -318,9 +318,9 @@ display:none;
 													<c:out value="${field.displayName}" />
 												</option>
 											</c:forEach>-->
-											<option
-												VALUE="lineItemTotal">Line Item Total</option>
+											<option VALUE="order_total">Order Total</option>
 											<option value="quantity">Quantity</option>
+											<option value="discount_percent">Discount Percentage</option>
 									</select></td>
 							</table></td>
 					</tr>

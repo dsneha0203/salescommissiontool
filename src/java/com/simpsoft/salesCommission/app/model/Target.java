@@ -23,6 +23,10 @@ public class Target {
 	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(name = "TGT_DEF_ID")
 	private TargetDefinition targetDefinition;
+	
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+	@JoinColumn(name = "FREQ_ID")
+	private Frequency frequency;
 
 	@Column(name = "startDate")
 	private Date startDate;
@@ -62,6 +66,23 @@ public class Target {
 	public void setTargetDefinition(TargetDefinition targetDefinition) {
 		this.targetDefinition = targetDefinition;
 	}
+	
+	
+	/**
+	 * @return the frequency
+	 */
+	public Frequency getFrequency() {
+		return frequency;
+	}
+
+	/**
+	 * @param frequency
+	 *            the frequency to set
+	 */
+	public void setFrequency(Frequency frequency) {
+		this.frequency = frequency;
+	}
+	
 
 	/**
 	 * @return the startDate

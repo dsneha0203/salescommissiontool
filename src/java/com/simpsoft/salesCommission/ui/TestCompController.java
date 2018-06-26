@@ -73,8 +73,8 @@ public class TestCompController {
 		model.addAttribute("ruleListContainer", (RuleListContainer) session.getAttribute("ruleListContainer"));
 
 		/*---------------------------Finding compensation assignment for role------------------------------*/
-
-		RoleUI object = (RoleUI) request.getSession().getAttribute("roleName");
+		
+		RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 		if (object != null) {
 			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object.getRoleName());
 			if(rAssdtail != null) {
@@ -98,7 +98,7 @@ public class TestCompController {
 			}
 			model.addAttribute("List2", rl1);
 			status.setComplete();
-			//session.removeAttribute("roleName");
+			//session.removeAttribute("roleNameCompAsg");
 			return new ModelAndView("CompPlan");
 					}
 				}else {
@@ -107,8 +107,10 @@ public class TestCompController {
 			
 			
 			}
-
+	
 		/*-----------------------------------Finding compensation assignment for Employee------------------------------------*/
+		
+		
 		EmployeeUI object1 = (EmployeeUI) request.getSession().getAttribute("EmployeeName");
 
 		if (object1 != null) {
@@ -146,6 +148,7 @@ public class TestCompController {
 				return new ModelAndView("CompPlan");
 			}
 		}
+	
 		/*-----------------------------------creating table for compensation plan against ruleId------------------------------------*/
 		AddRuleUI object2 = (AddRuleUI) request.getSession().getAttribute("Id");
 		if (object2 != null) {
@@ -278,7 +281,7 @@ public class TestCompController {
 		}
 		
 		
-		model.addAttribute("roleName", ruleAssEmpRole.getRoleName());
+		model.addAttribute("roleNameCompAsg", ruleAssEmpRole.getRoleName());
 		System.out.println("Rolename: " +  ruleAssEmpRole.getRoleName());
 		
 		for (RuleAss1UI rul1 : ruleListContainer.getRuleList1()) {
@@ -378,14 +381,14 @@ public class TestCompController {
 		//return "redirect:/compPlanAsg";
 	}
 
-	/*-------------------------------------Take roleName for check & pass to the /compplan-----------------------------------*/
+	/*-------------------------------------Take roleNameCompAsg for check & pass to the /compplan-----------------------------------*/
 	@RequestMapping(value = "/Submitrole", method = RequestMethod.POST)
 	public String addruleSerch(@ModelAttribute("SpringWeb") Role command, HttpServletRequest request,
 			HttpServletResponse response, ModelMap model) throws ServletException, IOException {
-		model.addAttribute("roleName", command.getRoleName());
+		model.addAttribute("roleNameCompAsg", command.getRoleName());
 		RoleUI object = new RoleUI();
 		object.setRoleName(command.getRoleName());
-		request.getSession().setAttribute("roleName", object);
+		request.getSession().setAttribute("roleNameCompAsg", object);
 		return "redirect:/compplan";
 		//return "redirect:/compPlanAsg";
 	}

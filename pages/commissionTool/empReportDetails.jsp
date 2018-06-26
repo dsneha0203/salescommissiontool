@@ -80,7 +80,7 @@ background: none;
 				
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
 								width="20" height="21" border="0" />
 						</button>
 				
@@ -93,8 +93,8 @@ background: none;
 				<td align="center">
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
-								width="20" height="21" border="0" />
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
+								width="20" height="21" />
 						</button>
 						</td>
 			</tr>
@@ -123,7 +123,7 @@ background: none;
 					<td align="center">
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo1');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
 								width="20" height="21" border="0" />
 						</button>
 						</td>
@@ -138,8 +138,8 @@ background: none;
 					<td align="center">
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo2');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
-								width="20" height="21" border="0" />
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
+								width="20" height="21" />
 						</button>
 						</td>
 					</tr>
@@ -153,8 +153,8 @@ background: none;
 					<td align="center">
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo1');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
-								width="20" height="21" border="0" />
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
+								width="20" height="21"  />
 						</button>
 						</td>
 					</tr>
@@ -168,7 +168,7 @@ background: none;
 					<td align="center">
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo2');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
 								width="20" height="21" border="0" />
 						</button>
 						</td>
@@ -183,8 +183,8 @@ background: none;
 					<td align="center">
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo3');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
-								width="20" height="21" border="0" />
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
+								width="20" height="21" />
 						</button>
 						</td>
 					</tr>
@@ -198,8 +198,8 @@ background: none;
 					<td align="center">
 					<button type="button" class="btn"
 							onClick="toggle_visibility('foo4');">
-							<img src="../resources/image/icon_next.png" alt="Tutorials Point"
-								width="20" height="21" border="0" />
+							<img src="../resources/image/show_details.png" alt="Tutorials Point"
+								width="20" height="21"/>
 						</button>
 						</td>
 					</tr>

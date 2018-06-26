@@ -294,8 +294,9 @@ table td, table th {
 									</select></td>
 									<td><select name="field">
 											<option value="${listRule4.ruleSimple.field}">---${listRule4.ruleSimple.field}---</option>
-											<option VALUE="lineItemTotal">Line Item Total
-											<option value="quantity">Quantity
+											<option VALUE="order_total">Order Total</option>
+											<option value="quantity">Quantity</option>
+											<option value="discount_percent">Discount Percentage</option>
 									</select></td>
 							</table></td>
 					</tr>

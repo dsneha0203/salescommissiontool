@@ -2,8 +2,10 @@ package com.simpsoft.salesCommission.app.api;
 
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -448,15 +450,16 @@ public class OrderAPI {
 		return orderRosters;
 	}
 
-	public void importOrders(InputStream is) {
+	public void importOrders(InputStream is) throws ParseException {
 
 		List<OrderRosterXML> importOrderList = parseXML(is);
-
+		
 		for (Iterator iterator = importOrderList.iterator(); iterator.hasNext();) {
 
 			OrderRosterXML orderRoster = (OrderRosterXML) iterator.next();
 			OrderRoster newOrderRoster = new OrderRoster();
 			logger.debug("IMPORT DATE= "+orderRoster.getImportDate());
+			
 			
 			newOrderRoster.setImportDate(orderRoster.getImportDate());
 			newOrderRoster.setCountOfOrders(orderRoster.getCountOfOrders());
@@ -517,6 +520,7 @@ public class OrderAPI {
 	}
 
 	public static List<OrderRosterXML> parseXML(InputStream is) {
+		
 		List<OrderRosterXML> importOrderList = new ArrayList<OrderRosterXML>();
 		try {
 
@@ -531,13 +535,20 @@ public class OrderAPI {
 
 				if (node.getNodeType() == Node.ELEMENT_NODE) {
 					Element elem = (Element) node;
-
+					
 					String importDate = node.getAttributes().getNamedItem("importDate").getNodeValue();
+					Date date=null;
+					if(!importDate.equals("")) {
 					System.out.println("importDate :" + importDate);
 
 					DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-					Date date = df.parse(importDate);
-
+					 date = df.parse(importDate);
+				}else {
+					Calendar cal = Calendar.getInstance();
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+					String importDateCurrent=dateFormat.format(cal.getTime());
+					 date=dateFormat.parse(importDateCurrent);
+				}
 					String importedBy = (elem.getElementsByTagName("importedBy").item(0).getChildNodes().item(0)
 							.getNodeValue());
 					System.out.println("importedBy :" + importedBy);
@@ -559,9 +570,10 @@ public class OrderAPI {
 
 							String date1 = node1.getAttributes().getNamedItem("orderDate").getNodeValue();
 							System.out.println("orderDate :" + date1);
-
-							Date orderDate = df.parse(importDate);
-
+							DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+							//Date orderDate = df.parse(orderDate);
+							Date orderDate = df.parse(date1);
+							
 							String salesRep = elem1.getElementsByTagName("salesRep").item(0).getChildNodes().item(0)
 									.getNodeValue();
 							System.out.println("salesRep :" + salesRep);

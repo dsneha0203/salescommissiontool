@@ -90,7 +90,7 @@ $(document)
 						formId : 'targetListForm',
 						rowContainerId : 'targetListContainer',
 						indexedPropertyName : 'targetList',
-						indexedPropertyMemberNames : 'targetName,startDate,terminationDate,value',
+						indexedPropertyMemberNames : 'targetName,startDate,terminationDate,frequency,value',
 						rowAddedListener : rowAdded,
 						rowRemovedListener : rowRemoved1,
 						beforeSubmit : beforeSubmit1
@@ -221,6 +221,7 @@ function checkDate(){
 							<form:form action="/CommissionTool/submitEmpDetails/${sessionScope.empDetailsId}"
 								modelAttribute="targetListContainer" method="post"
 								id="targetListForm">
+								<input type="hidden" name="currentRoleName" value="${sessionScope.roleName}"/>
 							<table id="targetListForm">
 								<thead>
 									<tr>
@@ -228,7 +229,7 @@ function checkDate(){
 										<td>Start Date</td>
 										<td>End Date</td>
 										<td>Repeat Frequency</td> 
-										<td>value</td>
+										<td>Value</td>
 									</tr>
 								</thead>
 								<tbody id="targetListContainer">
@@ -258,8 +259,8 @@ function checkDate(){
 											
 										
 										<td>
-										<select name="" style="width: 80px;"> 
-											<option value="">--Select--</option>
+										<select name="targetList[].frequency"  required> 
+											<option value="${target.frequency.frequencyName}">--${target.frequency.frequencyName}--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />
 											<c:out value="${freq.frequencyName}" />
@@ -298,7 +299,7 @@ function checkDate(){
 											
 							 	
 										<td>
-										<select name="" style="width: 80px;"> 
+										<select name="targetList[].frequency"  required> 
 											<option value="">--Select--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />

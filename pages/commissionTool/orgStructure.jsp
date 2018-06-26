@@ -33,7 +33,7 @@ list-style-type: none;
     <script src="resources/js/kendo.all.min.js"></script>
   
   <div align="center"><h1>Organization Structure </h1></div>
-   <div class="wrapper" align="center">   
+   <div class="wrapper">   
    
    <table>
    
@@ -50,7 +50,7 @@ list-style-type: none;
 			<c:set var="count" value="0"/>
 		
 			<li>
-					<span class="Collapsable"><c:forEach begin="0" end="${count}" step="1">&nbsp;&nbsp;</c:forEach>- &nbsp;<a href='/CommissionTool/roleDetails/${role.id}'>${role.roleName}</a></span><br>
+					<span class="Collapsable"><c:forEach begin="0" end="${count}" step="1">&nbsp;&nbsp;</c:forEach>- &nbsp;<a href='/CommissionTool/roleDetails/${role.id}'>${role.roleName}</a><br></span>
 					<ul>
 					<c:forEach items="${roleList}" var="role2">
 					<c:if test="${role2.roleName != role.roleName}">

@@ -87,8 +87,9 @@
 				<c:forEach items="${OrderLineItems}" var="orLineItems">
 					<tr>
 					
-						<td><a href="/CommissionTool/splitDetails/${orLineItems.product.id}"><input type="button"
-						value="${orLineItems.product.id}"></a></td>
+						<!-- <td><a href="/CommissionTool/splitDetails/${orLineItems.product.id}"><input type="button"
+						value="${orLineItems.product.id}"></a></td> -->
+						<td>${orLineItems.product.id}</td>
 						<td>${orLineItems.quantity}</td>
 						<td>${orLineItems.rate}</td>
 						<td>${orLineItems.discountPercentage}</td>
