@@ -63,7 +63,7 @@
 
 		</head>
 			<table id="grid">
-				<colgroup>
+				<!--<colgroup>
 					<col />
 					<col />
 					<col />
@@ -71,7 +71,7 @@
 					<col style="width: 120px" />
 					<col style="width: 130px" />
 					
-				</colgroup>
+				</colgroup>-->
 				<thead>
 					<tr>
 						<th data-field="ProductId">Product Id</th>
@@ -83,7 +83,8 @@
 						
 					</tr>
 				</thead>
-
+				<c:set var="product_total" value="0" />
+				<c:set var="service_total" value="0"/>
 				<c:forEach items="${OrderLineItems}" var="orLineItems">
 					<tr>
 					
@@ -94,12 +95,18 @@
 						<td>${orLineItems.rate}</td>
 						<td>${orLineItems.discountPercentage}</td>
 						<td>${orLineItems.dutyPercentage}</td>
-						<td>${orLineItems.subtotal}</td>
+						<!--<td>${orLineItems.subtotal}</td>   -->
+						<c:set var="qty" value="${orLineItems.quantity}"/>
+						<c:set var="rate" value="${orLineItems.rate}"/>
+						<c:set var="dis_percent" value="${orLineItems.discountPercentage}"/>
+						<c:set var="dut_percent" value="${orLineItems.dutyPercentage}"/>
+						<c:set var="subTotal" value="${(1+(dut_percent/100))*((1-(dis_percent/100))*(qty*rate)) }"/>
+						<td>Rs.${subTotal}</td>
 					
 					</tr>
-
+					
 				</c:forEach>
-
+				
 
 			</table>
 			

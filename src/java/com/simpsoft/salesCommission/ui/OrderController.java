@@ -25,6 +25,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -72,6 +73,8 @@ public class OrderController {
 
 	// private static final Logger logger =
 	// Logger.getLogger(EmployeeController.class);
+	
+	private static final Logger logger = Logger.getLogger(OrderController.class);
 
 	@RequestMapping(value = "/importOrders", method = RequestMethod.GET)
 	public String ImportOrder(ModelMap model, HttpSession session, HttpServletRequest request) {
@@ -120,14 +123,87 @@ public class OrderController {
 		OrderRoster ors = orderApi.getOrderRoster(id);
 		List<OrderDetail> ord = ors.getOrderDetail();
 		List<OrderDetail> ord1 = new ArrayList<OrderDetail>();
-		Iterator it = ord.iterator();
+		List<OrderLineItems> ordLineItems1=new ArrayList<OrderLineItems>();
+		List<OrderLineItems> ordLineItems=null;
+		List<Float> prodTotal = new ArrayList<Float>();
+		List<Float> servTotal = new ArrayList<Float>();;
+		List<Float> ordTotal = new ArrayList<Float>();;
+		Iterator it = ord.iterator();		
 		while (it.hasNext()) {
+			float subtotal=0;
+			float productTotal=0;
+			float serviceTotal=0;
+			
 			OrderDetail ord2 = (OrderDetail) it.next();
 			System.out.println(ord2.getId());
 			System.out.println(ord2.getOrderDate());
 			ord1.add(ord2);
+			
+			ordLineItems= ord2.getOrderLineItems();
+			
+			Iterator it2 = ordLineItems.iterator();
+			while(it2.hasNext()) {
+				OrderLineItems ordLineItems2 = (OrderLineItems) it2.next();
+				ordLineItems1.add(ordLineItems2);
+				
+				//calculate subtotal for each orderlineitem
+				 float rate= ordLineItems2.getRate();
+				 float quantity= ordLineItems2.getQuantity();
+				 float dutyPercent = ordLineItems2.getDutyPercentage();
+				 float discountPercent= ordLineItems2.getDiscountPercentage();
+				 
+				 
+				 subtotal= ((1+(dutyPercent/100))*((1-(discountPercent/100))*(quantity*rate)));
+				
+				 logger.debug("SUBTOTAL FOR ORDER LINE ITEM "+ordLineItems2.getId()+"= "+subtotal);
+				 
+				 
+				 //get product type of orderlineitem
+				 String prodType = ordLineItems2.getProduct().getProductSubType().getProductType().getProdType();
+				 
+				 if(prodType.equals("Product")) {
+					 logger.debug("TYPE PRODUCT. SUBTOTAL ADDED TO PRODUCT TOTAL");
+					 productTotal += subtotal;
+				 }else {
+					 logger.debug("TYPE SERVICE. SUBTOTAL ADDED TO SERVICE TOTAL");
+					 serviceTotal += subtotal;
+				 }
+				
+				 logger.debug("product total= "+productTotal);	 
+				 logger.debug("service total= "+serviceTotal);	
+				 
+			
+			
+			}
+			float orderTotal = productTotal + serviceTotal;
+			logger.debug("order total= " +orderTotal);
+			
+			prodTotal.add(productTotal);
+			servTotal.add(serviceTotal);
+			ordTotal.add(orderTotal);
 		}
 		model.addAttribute("ordetails", ord1);
+		model.addAttribute("ordLineItemsList", ordLineItems1);
+		model.addAttribute("prodTotal", prodTotal);
+		model.addAttribute("servTotal", servTotal);
+		model.addAttribute("ordTotal", ordTotal);
+		
+		
+		logger.debug("PRODUCT TOTAL LIST: ");
+		for(float pTot : prodTotal) {
+			logger.debug(pTot);
+		}
+		
+		logger.debug("SERVICE TOTAL LIST: ");
+		for(float sTot : servTotal) {
+			logger.debug(sTot);
+		}
+		
+		logger.debug("ORDER TOTAL LIST: ");
+		for(float oTot : ordTotal) {
+			logger.debug(oTot);
+		}
+		
 		return "OrderDetails";
 	}
 	

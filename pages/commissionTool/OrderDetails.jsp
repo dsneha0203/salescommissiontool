@@ -1,6 +1,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 
 <tiles:insertDefinition name="defaultTemplate">
 	<tiles:putAttribute name="body">
@@ -73,7 +74,7 @@ function openWindow(){
 
 		</head>
 			<table id="grid">
-				<colgroup>
+				<!--<colgroup>
 					<col />
 					<col style="width: 130px" />
 					<col />
@@ -82,31 +83,53 @@ function openWindow(){
 					<col style="width: 120px" />
 					<col style="width: 130px" />
 					
-				</colgroup>
+				</colgroup>-->
 				<thead>
 					<tr>
 						<th data-field="id">Order Id</th>
 						<th data-field="orderDate">Order Date</th>
 						<th data-field="salesRepresentative">Sales Representative</th>
-						<th data-field="supportEngineer">Support Engineer</th>
-						<th data-field="administrator">Administrator</th>
+						<!-- <th data-field="supportEngineer">Support Engineer</th>
+						<th data-field="administrator">Administrator</th> -->
 						<th data-field="customerName">Customer</th>
+						<th data-field="products">Products</th>
+						<th data-field="productTotal">Product Total</th>
+						<th data-field="serviceTotal">Service Total</th>
 						<th data-field="orderTotal">Order Total</th>
 						<th data-field="Details">Details</th>
 						
 					</tr>
 				</thead>
-
+				<c:set var="counter" value="0"/>
 				<c:forEach items="${ordetails}" var="ord">
+				
 					<tr>
 					
 						<td>${ord.id}</td>
 						<td>${ord.orderDate}</td>
 						<td>${ord.salesRepresentative.employeeName}</td>
-						<td>${ord.supportEngineer.employeeName}</td>
-						<td>${ord.administrator.employeeName}</td>
+						<!-- <td>${ord.supportEngineer.employeeName}</td>
+						<td>${ord.administrator.employeeName}</td> -->
 						<td>${ord.customer.customerName}</td>
-						<td>${ord.orderTotal}</td>
+						<td>
+						<table>
+						<c:forEach items="${ord.orderLineItems}" var="ordline">
+						
+						<c:forEach items="${ordLineItemsList}" var="ordLineItem">
+						<c:if test="${ordline.id eq ordLineItem.id }">
+						<tr>${ordLineItem.product.productName}(${ordLineItem.product.id})-${ordLineItem.quantity}</tr><br>
+						</c:if>						
+						</c:forEach>
+					
+						</c:forEach>
+						</table>
+						</td>
+						
+						
+						<td>Rs.${prodTotal[counter]}</td>
+						<td>Rs.${servTotal[counter]}</td>
+						<td>Rs.${ordTotal[counter]}</td>
+						
 						<td>
 						<a href="/CommissionTool/lineItemDetails/${ord.id}"><input type="button" 
 						 value="Details"></a>
@@ -127,7 +150,7 @@ function openWindow(){
 						-->
 						
 					</tr>
-
+					<c:set var="counter" value="${counter+1}"/>
 				</c:forEach>
 
 

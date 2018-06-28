@@ -237,6 +237,7 @@ function checkDate(){
 									<c:forEach items="${targetDetails}" var="target">
 
 										<tr class="person">
+										
 											<td><select name="targetList[].targetName">
 													<option value="${target.targetDefinition.displayName}">---${target.targetDefinition.displayName}---</option>
 
@@ -256,8 +257,7 @@ function checkDate(){
 								<td><input type="date"    name="targetList[].terminationDate" 
 									 value= "${endDate}" required></td>				
 													
-											
-										
+									
 										<td>
 										<select name="targetList[].frequency"  required> 
 											<option value="${target.frequency.frequencyName}">--${target.frequency.frequencyName}--</option>
@@ -273,6 +273,7 @@ function checkDate(){
 
 
 											<td><a href="#" class="removePerson1">&nbsp;Remove</a></td>
+											
 										</tr>
 									</c:forEach>
 
