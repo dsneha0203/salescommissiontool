@@ -2,7 +2,9 @@ package com.simpsoft.salesCommission.ui;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -36,13 +38,18 @@ import com.simpsoft.salesCommission.app.UImodel.Person1;
 import com.simpsoft.salesCommission.app.UImodel.PersonListContainer;
 import com.simpsoft.salesCommission.app.UImodel.PersonListContainer1;
 import com.simpsoft.salesCommission.app.UImodel.PersonListContainer2;
+import com.simpsoft.salesCommission.app.UImodel.PersonListContainerBenef;
 import com.simpsoft.salesCommission.app.UImodel.QualifyingClauseUI;
 import com.simpsoft.salesCommission.app.UImodel.RuleUI;
+import com.simpsoft.salesCommission.app.UImodel.SplitRuleBeneficiaryUI;
+import com.simpsoft.salesCommission.app.UImodel.SplitRuleListContainer;
+import com.simpsoft.salesCommission.app.UImodel.SplitRuleUI;
 import com.simpsoft.salesCommission.app.UImodel.TargetListContainer;
 import com.simpsoft.salesCommission.app.UImodel.TargetUI;
 import com.simpsoft.salesCommission.app.api.EmployeeAPI;
 import com.simpsoft.salesCommission.app.api.OrderAPI;
 import com.simpsoft.salesCommission.app.api.RuleSimpleAPI;
+import com.simpsoft.salesCommission.app.api.SplitQualifyingClauseAPI;
 import com.simpsoft.salesCommission.app.api.SplitRuleAPI;
 import com.simpsoft.salesCommission.app.model.OrderDetail;
 import com.simpsoft.salesCommission.app.model.OrderRoster;
@@ -70,6 +77,10 @@ public class OrderController {
 	
 	@Autowired
 	private SplitRuleAPI splitRuleApi;
+	
+	
+	
+	
 
 	// private static final Logger logger =
 	// Logger.getLogger(EmployeeController.class);
@@ -265,6 +276,11 @@ public class OrderController {
 		return new PersonListContainer(personList1);
 	}
 	
+	private PersonListContainerBenef getDummyPersonListContainerBenef() {
+		List<SplitRuleBeneficiaryUI> personList1 = new ArrayList<SplitRuleBeneficiaryUI>();
+			personList1.add(new SplitRuleBeneficiaryUI());
+		return new PersonListContainerBenef();
+	}
 	
 	@RequestMapping(value = "/orderSplitRule", method = RequestMethod.GET)
 	public String OrderSplitRule(ImportId Id, HttpServletRequest request,
@@ -282,12 +298,12 @@ public class OrderController {
 	@RequestMapping(value = "/splitRuleDetails/{id}", method = RequestMethod.GET)
 	public String SplitRuleDetails(@PathVariable("id") int id, ModelMap model, HttpSession session, HttpServletRequest request) {
 		
-		session.setAttribute("personListContainer1", getDummyPersonListContainer1());
-		session.setAttribute("personListContainer", getDummyPersonListContainer());
-		
-		
+		session.setAttribute("personListContainer1", getDummyPersonListContainer1()); //qualifying clause
+		session.setAttribute("personListContainer", getDummyPersonListContainer());		// beneficiary (rule param)
+		//session.setAttribute("personListContainer", getDummyPersonListContainerBenef());	
 		
 		SplitRule splitRule = splitRuleApi.getSplitRule(id);
+		model.addAttribute("splitOrdersId", splitRule.getId());
 		List<SplitQualifyingClause> qualifyingList = splitRule.getSplitQualifyingClause();
 		model.addAttribute("qualifyingList", qualifyingList);
 		model.addAttribute("splitRuleDetails", splitRule);
@@ -304,5 +320,75 @@ public class OrderController {
 		return "splitOrders";
 	}
 	
+	@RequestMapping(value = "/updateSplitRule/{id}", method = RequestMethod.POST)
+	public String updateSplitRuleDetails(@PathVariable("id") int id, PersonListContainer1 qualListContainer,PersonListContainer benefListContainer, 
+			 ModelMap model, HttpSession session, HttpServletRequest request) {
+	
+		SplitRule splitRule = splitRuleApi.getSplitRule(id);
+		List<SplitQualifyingClause> splitQualClauseList = new SplitQualifyingClauseAPI().getSplitQualClause(id);
+	
+		
+		for(QualifyingClauseUI Q : qualListContainer.getPersonList()) {
+			logger.debug("FIELD NAME: " + Q.getFieldName());
+			logger.debug("CONDITION: " + Q.getCondition());
+			logger.debug("CONDITION VALUE: " + Q.getConditionValue());
+			logger.debug("VALUE: " + Q.getValue());
+			
+			
+			
+		}
+		
+		for(RuleParameter B : benefListContainer.getPersonList1()) {
+			logger.debug("BENEFICIARY TYPE: " + B.getParameterName());
+			logger.debug("SPLIT PERCENTAGE: " + B.getParameterValue());
+		}
+	
+		logger.debug("SPLIT RULE NAME= "+request.getParameter("splitRuleName"));
+		logger.debug("SPLIT RULE DESC= "+request.getParameter("splitRuleDesc"));
+		logger.debug("SPLIT RULE START DATE= "+request.getParameter("startDate"));
+		logger.debug("SPLIT RULE END DATE= "+request.getParameter("endDate"));
+		
+		
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String dateInString1 = request.getParameter("startDate");
+		String dateInString2 = request.getParameter("endDate");
+
+		try {
+
+			Date date1 = formatter.parse(dateInString1);
+			Date date2 = formatter.parse(dateInString2);
+			logger.debug("DATE1= "+date1);
+			logger.debug("DATE2= "+date2);
+			if(date2.before(date1)) {
+				JOptionPane.showMessageDialog(null, 
+                        "The termination date cannot be earlier than the start date", 
+                        "Cannot update split rule", 
+                        JOptionPane.WARNING_MESSAGE);
+				
+			}else {
+			splitRule.setStartDate(date1);
+			splitRule.setEndDate(date2);
+			splitRule.setSplitRuleName(request.getParameter("splitRuleName"));
+			splitRule.setDescription(request.getParameter("splitRuleDesc"));
+			
+			splitRuleApi.editSplitRule(splitRule);
+			
+			for(SplitQualifyingClause sqc : splitQualClauseList) {
+				logger.debug("FIELD NAME= "+sqc.getFieldList().getFieldName());
+				logger.debug("NOT FLAG: "+sqc.isNotFlag());
+				logger.debug("CONDITION VALUE: "+sqc.getConditionList().getConditionValue());
+				logger.debug("VALUE: "+sqc.getValue());
+			}
+			
+		
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/splitRuleDetails/"+id;
+	
+	}
 	
 }

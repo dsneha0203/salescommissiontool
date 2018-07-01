@@ -81,13 +81,15 @@ overflow-y: scroll;
             });
             
             $("#emp_rad").click(function(){
-            	$("#check_emp").show(1000);
-            	 $("#check_role").hide(1000);
+            	document.getElementById("role_op").value="";
+            	$("#check_emp").show(500);
+            	 $("#check_role").hide(500);
              });
              
              $("#role_rad").click(function(){
-            	  $("#check_role").show(1000);
-            	 $("#check_emp").hide(1000);
+            	 document.getElementById("text1").value="";
+            	  $("#check_role").show(500);
+            	 $("#check_emp").hide(500);
              });
  });
  
@@ -162,7 +164,22 @@ overflow-y: scroll;
 	    };
 	    new DynamicListHelper(config);
 	    
+	    var emp_input_val = document.getElementById("text1").value;
+	    if(emp_input_val != ""){
+	    	document.getElementById("role_op").value="";
+	    	document.getElementById("role_rad").checked=false;
+	    	document.getElementById("emp_rad").checked=true;
+	    	document.getElementById("mag_emp").disabled=false;
+	    	$("#check_emp").show(500);
+	    }
 	    
+	    var role_input_val = document.getElementById("role_op").value;
+	    if(role_input_val != ""){
+	    	document.getElementById("text1").value="";
+	    	document.getElementById("emp_rad").checked=false;
+	    	document.getElementById("role_rad").checked=true;
+	    	 $("#check_role").show(500);
+	    }
 	});
 	
 	
@@ -241,34 +258,45 @@ overflow-y: scroll;
 						 Select Employee :&nbsp;&nbsp; <input type="image" img
 							src="resources/image/search.png"
 							style="height: 30px; width: 30px;" class="radio1"
-							disabled onclick="openWindow()" />
+							disabled onclick="openWindow()" id="mag_emp"/>
 							&nbsp;&nbsp;&nbsp;&nbsp;
 						</td>
 						<td>
 							<form id="form1" action="/CommissionTool/searchemp" method="post">
 								Selected Employee: <input type="text" name="EmployeeName"
 									id="text1" name="for_radio1[]" class="radio1" disabled
-									size="11" required
-									<c:forEach items="${empList}"
-													var="emp">value="${emp.employeeName }"</c:forEach> />
+									size="11" required value="${empNameChosen }"/>
+									<!--<c:forEach items="${empList}"
+													var="emp">value="${emp.employeeName }"</c:forEach> />-->
 								<input type="submit" value="check" id="check_emp" />
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Or</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							</form>
 						</td>
 						<td>
-							<form action="/CommissionTool/Submitrole" method="post"
-								model="command">
+							<form action="/CommissionTool/Submitrole" method="post" model="command">
 								<!-- <label for="radio2"><input type="radio" name="test1"
 									value="radio2" />Role </label><br> -->
-									 Select Role :<select
-									name="roleNameCompAsg" class="radio2" name="for_radio2[]"
-									disabled style="width: 140px; height: 1.5em;" required>
-									 <option value="">Choose role</option> 
+									 Select Role :<select name="roleName" 
+									 class="radio2" name="for_radio2[]" id="role_op"
+									disabled required>
+									<c:choose>
+									<c:when test="${rlelist.roleName != null }">
+									 <option value="${rlelist.roleName }">${rlelist.roleName}</option> 
+									 <c:forEach items="${listRole}" var="role">
+										<option value="${role.roleName}">
+											<c:out value="${role.roleName}" />
+										</option>
+									</c:forEach>
+									</c:when>
+									<c:otherwise>
+									<option value="">---Choose Role---</option> 
 									<c:forEach items="${listRole}" var="role">
 										<option value="${role.roleName}">
 											<c:out value="${role.roleName}" />
 										</option>
 									</c:forEach>
+									</c:otherwise>
+									</c:choose>
 								</select> <input type="submit" value="check" id="check_role" >
 							</form>
 						</td>
@@ -304,7 +332,7 @@ overflow-y: scroll;
 				<c:choose> 
 				<c:when test="${assObj.id != null}">
 					<input type="hidden" name="id" value="${assObj.id}">
-					<input type="hidden" name="name" value="${assObj.role.roleNameCompAsg}">
+					<input type="hidden" name="name" value="${assObj.role.roleName}">
 				</c:when>
 				<c:otherwise>
 					<input type="hidden" name="assid" value="${assObj1.id}">

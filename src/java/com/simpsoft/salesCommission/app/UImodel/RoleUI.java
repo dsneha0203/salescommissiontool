@@ -6,6 +6,8 @@ public class RoleUI {
 	private String description;
 	private String reportsTo;
 	private String selectRole;
+	
+	
 	public String getRoleName() {
 		return roleName;
 	}

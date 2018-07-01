@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.simpsoft.salesCommission.app.model.Employee;
 import com.simpsoft.salesCommission.app.model.OrderDetail;
 import com.simpsoft.salesCommission.app.model.OrderLineItems;
 import com.simpsoft.salesCommission.app.model.OrderLineItemsSplit;
@@ -329,7 +330,29 @@ public class SplitRuleAPI {
 	}
 	
 	
-	
+	public void editSplitRule(SplitRule splitRule) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			SplitRule splitRule1 = (SplitRule) session.get(SplitRule.class, splitRule.getId());
+			splitRule1.setId(splitRule.getId());
+			splitRule1.setSplitRuleName(splitRule.getSplitRuleName());
+			splitRule1.setDescription(splitRule.getDescription());
+			splitRule1.setStartDate(splitRule.getStartDate());
+			splitRule1.setEndDate(splitRule.getEndDate());
+			session.merge(splitRule1);
+			logger.debug("EDIT THE SPLIT RULE DETAILS FROM DATABASE" + splitRule1);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+	}
 	
 	
 }

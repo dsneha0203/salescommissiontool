@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,7 @@ import com.simpsoft.salesCommission.app.model.RuleAssignment;
 import com.simpsoft.salesCommission.app.model.RuleAssignmentDetails;
 import com.simpsoft.salesCommission.app.model.RuleAssignmentParameter;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
+import org.apache.log4j.Logger;
 
 @Controller
 
@@ -57,7 +59,7 @@ public class TestCompController {
 	
 	
 	
-	
+	private static final Logger logger = Logger.getLogger(TestCompController.class);
 	
 	@RequestMapping(value = "/compplan", method = RequestMethod.GET)
 	public ModelAndView listRules(ModelMap model, HttpServletRequest request, HttpSession session,
@@ -74,31 +76,37 @@ public class TestCompController {
 
 		/*---------------------------Finding compensation assignment for role------------------------------*/
 		
+		
 		RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
+		
 		if (object != null) {
+			logger.debug("ROLE UI SESSION ATTRIBUTE= "+object.getRoleName());
+			Role roleasign = roleApi.searchRoleByName(object.getRoleName());
+			model.addAttribute("rlelist", roleasign);
+			logger.debug("THE VALUE IS= " + roleasign.getRoleName());
 			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object.getRoleName());
 			if(rAssdtail != null) {
 			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
 			if(ptr1 != null) {
 			ArrayList<RuleAssignmentDetails> rl1 = new ArrayList<RuleAssignmentDetails>();
-			ArrayList<Role> rleName = new ArrayList<Role>();
+			//ArrayList<Role> rleName = new ArrayList<Role>();
 			model.addAttribute("assObj", rAssdtail);
-			List<RuleAssignmentParameter> parameterList = new ArrayList<RuleAssignmentParameter>();
-
+			
+			//List<RuleAssignmentParameter> parameterList = new ArrayList<RuleAssignmentParameter>();
+			
 			Iterator<RuleAssignmentDetails> it1 = ptr1.iterator();
 			while (it1.hasNext()) {
-				Role roleasign = roleApi.searchRoleByName(object.getRoleName());
-				model.addAttribute("rlelist", roleasign);
-				System.out.println("The Value Is" + roleasign);
+				
 				RuleAssignmentDetails rp = (RuleAssignmentDetails) it1.next();
 				List<RuleAssignmentParameter> ptr2 = rp.getRuleAssignmentParameter();
-				System.out.println(rp.getRule().getRuleName());
-				System.out.println(rp.getRule().getId());
+				logger.debug("RULE NAME= "+rp.getRule().getRuleName());
+				logger.debug("RULE ID= "+rp.getRule().getId());
 				rl1.add(rp);
 			}
 			model.addAttribute("List2", rl1);
+			
 			status.setComplete();
-			//session.removeAttribute("roleNameCompAsg");
+			session.removeAttribute("roleNameCompAsg");
 			return new ModelAndView("CompPlan");
 					}
 				}else {
@@ -114,6 +122,9 @@ public class TestCompController {
 		EmployeeUI object1 = (EmployeeUI) request.getSession().getAttribute("EmployeeName");
 
 		if (object1 != null) {
+			Employee empChosen = empApi.searchEmployee(object1.getEmployeeName());
+			if(empChosen != null) {
+			model.addAttribute("empNameChosen",empChosen.getEmployeeName());
 			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object1.getEmployeeName());
 			if(rAssdtail != null) {
 			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
@@ -146,6 +157,13 @@ public class TestCompController {
 			}
 			}else {
 				return new ModelAndView("CompPlan");
+			}
+			
+			}else {
+				JOptionPane.showMessageDialog(null, 
+                        "This employee does not exist in the database!", 
+                        "Cannot find employee", 
+                        JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	
@@ -386,6 +404,7 @@ public class TestCompController {
 	public String addruleSerch(@ModelAttribute("SpringWeb") Role command, HttpServletRequest request,
 			HttpServletResponse response, ModelMap model) throws ServletException, IOException {
 		model.addAttribute("roleNameCompAsg", command.getRoleName());
+		logger.debug("ROLE NAME= "+command.getRoleName());
 		RoleUI object = new RoleUI();
 		object.setRoleName(command.getRoleName());
 		request.getSession().setAttribute("roleNameCompAsg", object);

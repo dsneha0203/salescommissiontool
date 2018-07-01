@@ -106,10 +106,11 @@
 
 			</table>
 			
-			<br/><div align="center">
+			<br/>
+			<!--  <div align="center">
 					<a href="/CommissionTool/importOrders"> <input type="button"
 						value="Back To Import Orders" /></a>
 				</div>
-		
+			-->
 	</tiles:putAttribute>
 </tiles:insertDefinition>

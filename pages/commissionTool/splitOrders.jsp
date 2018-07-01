@@ -1,6 +1,7 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <tiles:insertDefinition name="defaultTemplate">
 		<tiles:putAttribute name="body">
@@ -23,7 +24,6 @@ table {
 	table-layout: auto;
 	border-collapse: collapse;
 }
-
 table td, table th {
 	border: 1px solid #DDD;
 	text-align: left;
@@ -46,7 +46,6 @@ table td, table th {
 			buttonImageOnly : true
 		});
 	});
-
 	</script>
 	
 	<script>
@@ -55,14 +54,12 @@ table td, table th {
 		//clear the imput fields for the row
 		$(rowElement).find("input").val('');
 		//may want to reset <select> options etc
-
 		//in fact you may want to submit the form
 		saveNeeded();
 	}
 	function rowRemoved1(rowElement) {
 		saveNeeded();
 	}
-
 	function saveNeeded() {
 		$('#submit').css('color', 'red');
 		$('#submit').css('font-weight', 'bold');
@@ -70,12 +67,10 @@ table td, table th {
 			$('#submit').val('!' + $('#submit').val());
 		}
 	}
-
 	function beforeSubmit1() {
 		alert('submitting....');
 		return true;
 	}
-
 	$(document)
 			.ready(
 					function() {
@@ -89,26 +84,22 @@ table td, table th {
 							indexedPropertyMemberNames : 'fieldName,condition,conditionValue,value',
 							rowAddedListener : rowAdded,
 							rowRemovedListener : rowRemoved1,
-							beforeSubmit : beforeSubmit1
+							//beforeSubmit : beforeSubmit1
 						};
 						new DynamicListHelper(config);
 					});
-
 	/*-----------------------------------------------------------------------------------------*/
-
 	
 			function rowAdded(rowElement) {
 				//clear the imput fields for the row
 				$(rowElement).find("input").val('');
 				//may want to reset <select> options etc
-
 				//in fact you may want to submit the form
 				saveNeeded();
 			}
 			function rowRemoved(rowElement) {
 				saveNeeded();
 			}
-
 			function saveNeeded() {
 				$('#submit').css('color', 'red');
 				$('#submit').css('font-weight', 'bold');
@@ -116,12 +107,10 @@ table td, table th {
 					$('#submit').val('!' + $('#submit').val());
 				}
 			}
-
 			function beforeSubmit() {
 				alert('submitting....');
 				return true;
 			}
-
 			$(document)
 					.ready(
 							function() {
@@ -129,10 +118,11 @@ table td, table th {
 									rowClass : 'beneficiary',
 									addRowId : 'addPerson',
 									removeRowClass : 'removePerson',
-									formId : 'personListForm1',
+									formId : 'personListForm',
 									rowContainerId : 'personListContainer',
 									indexedPropertyName : 'personList1',
 									indexedPropertyMemberNames : 'parameterName,parameterValue',
+									//indexedPropertyMemberNames : 'beneficiaryType,splitPercentage',
 									rowAddedListener : rowAdded,
 									rowRemovedListener : rowRemoved,
 									beforeSubmit : beforeSubmit
@@ -148,27 +138,36 @@ table td, table th {
 <div style="height: 580px; overflow: auto;">
 	
 
-			<form:form action="/CommissionTool" method="post" id="personListForm">
+			<form:form action="/CommissionTool/updateSplitRule/${splitOrdersId}" method="post" id="personListForm">
 
 				<h1 align="center">Split Rule Details</h1>
 				<div align="center">
 					<table>
 						<tr>
 							<td>Rule name:</td>
-							<td><input type="text" size=50 value="${splitRuleDetails.splitRuleName}"></input></td>
+							<td><input type="text" size=50 value="${splitRuleDetails.splitRuleName}" required name="splitRuleName"></input></td>
+							
 						</tr>
 						<tr>
 							<td valign="top">Description:</td>
 							<td valign="top"><textarea rows="4" cols="50"
-									style="vertical-align: top">${splitRuleDetails.description}</textarea></td>
+									style="vertical-align: top" name="splitRuleDesc">${splitRuleDetails.description}</textarea></td>
+							
 						</tr>
 						<tr>
 							<td>Split Plan validity :</td>
-							<td>From&nbsp; &nbsp;<input class="datepicker" type="text"
-								name="" size="11" height="0.10" value="${splitRuleDetails.startDate}">
-								&nbsp;&nbsp;&nbsp;To&nbsp;&nbsp;&nbsp;<input class="datepicker"
-								type="text" name="" size="11" height="0.10" value="${splitRuleDetails.endDate}">
-
+							<td>From&nbsp; &nbsp;
+							<!--  <input class="datepicker" type="text"
+								name="startDate" height="0.10" value="${splitRuleDetails.startDate}" required > -->
+								<fmt:formatDate var="fmtStartDate" value="${splitRuleDetails.startDate}" pattern="yyyy-MM-dd" />
+								<input type="date" name="startDate" value="${fmtStartDate}" required>
+								&nbsp;&nbsp;&nbsp;
+								To&nbsp;&nbsp;&nbsp;
+								<!--  <input class="datepicker"
+								type="text" name="endDate"  height="0.10" value="${splitRuleDetails.endDate}" required name="">-->
+								<fmt:formatDate var="fmtEndDate" value="${splitRuleDetails.endDate}" pattern="yyyy-MM-dd" />
+								<input type="date" name="endDate" value="${fmtEndDate}" required>
+								
 							</td>
 						</tr>
 						<tr>
@@ -248,42 +247,59 @@ table td, table th {
 						</tr>
 						
 						<tr>
-						<td></td>
+						<td>Beneficiary roles :</td>
 						<td>
 
-							<table id="personListForm1">
+							<table id="">
 								<tbody id="personListContainer">
 								<tr><td>Beneficiary</td><td>Split Percentage</td></tr>
 								<c:forEach items="${beneficiary}" var="benefi">
-								
-									<tr class="beneficiary defaultRow">
-										<td><select name="">
-									<option value="${benefi.beneficiaryType}" selected="selected">-${benefi.beneficiaryType}-</option>
-									<option value="">Admin</option>
-									<option value="" >Sales Representative</option>
-									<option value="">Supporting Engineer</option>
-									<option value="">Manager</option>
-									<option value="">Second Level Manager</option>
+									<tr class="beneficiary">
+										<td><select name="personList1[].parameterName" required>
+									<option value="${benefi.beneficiaryType}">-${benefi.beneficiaryType}-</option>
+									<option value="Admin">Admin</option>
+									<option value="Sales Representative" >Sales Representative</option>
+									<option value="Supporting Engineer">Supporting Engineer</option>
+									<option value="Manager">Manager</option>
+									<option value="Second Level Manager">Second Level Manager</option>
 										</select></td>
 										
 										
-										<td><input type="text"
-											name="" size="4" value="${benefi.splitPercentage}" /></td>
+										<td><input type="number"
+											name="personList1[].parameterValue" size="4" value="${benefi.splitPercentage}" required/></td>
 
 										<td><a href="#" class="removePerson">Remove</a></td>
 									</tr>
-								</c:forEach>
+									</c:forEach>						
+								<c:if test="${personListContainer.personList1.size() == 0 }">
+								<tr class="beneficiary defaultRow">
+										<td><select name="personList1[].parameterName" required>
+									<option value="" selected>-Select-</option>
+									<option value="Admin">Admin</option>
+									<option value="Sales Representative" >Sales Representative</option>
+									<option value="Supporting Engineer">Supporting Engineer</option>
+									<option value="Manager">Manager</option>
+									<option value="Second Level Manager">Second Level Manager</option>
+										</select></td>
+										
+										
+										<td><input type="number"
+											name="personList1[].parameterValue" size="4" value="" required/></td>
+
+										<td><a href="#" class="removePerson">Remove</a></td>
+									</tr>
+								</c:if>	
 
 								</tbody>
 							</table> <a href="#" id="addPerson">Add</a>&nbsp;&nbsp; <a
 							href="?f=">Reset List</a>
 
-						</TD>
+						</td>
 					</tr>
 					</table>
 				</div><br/>
 				<div align=center>
-					<input type="button" value="Update"></input>
+					<input type="submit" value="Update"></input>
 
 				</div>
 
