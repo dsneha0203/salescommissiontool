@@ -6,12 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Scanner;
-import java.io.File;
-import java.io.FileNotFoundException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,52 +16,42 @@ import javax.servlet.http.HttpSession;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.simpsoft.salesCommission.app.UImodel.DetailsId;
 import com.simpsoft.salesCommission.app.UImodel.FileList;
 import com.simpsoft.salesCommission.app.UImodel.ImportId;
-import com.simpsoft.salesCommission.app.UImodel.Person1;
 import com.simpsoft.salesCommission.app.UImodel.PersonListContainer;
 import com.simpsoft.salesCommission.app.UImodel.PersonListContainer1;
-import com.simpsoft.salesCommission.app.UImodel.PersonListContainer2;
 import com.simpsoft.salesCommission.app.UImodel.PersonListContainerBenef;
 import com.simpsoft.salesCommission.app.UImodel.QualifyingClauseUI;
-import com.simpsoft.salesCommission.app.UImodel.RuleUI;
 import com.simpsoft.salesCommission.app.UImodel.SplitRuleBeneficiaryUI;
-import com.simpsoft.salesCommission.app.UImodel.SplitRuleListContainer;
-import com.simpsoft.salesCommission.app.UImodel.SplitRuleUI;
-import com.simpsoft.salesCommission.app.UImodel.TargetListContainer;
-import com.simpsoft.salesCommission.app.UImodel.TargetUI;
-import com.simpsoft.salesCommission.app.api.EmployeeAPI;
 import com.simpsoft.salesCommission.app.api.OrderAPI;
 import com.simpsoft.salesCommission.app.api.RuleSimpleAPI;
-import com.simpsoft.salesCommission.app.api.SplitQualifyingClauseAPI;
 import com.simpsoft.salesCommission.app.api.SplitRuleAPI;
+import com.simpsoft.salesCommission.app.model.ConditionList;
+import com.simpsoft.salesCommission.app.model.FieldList;
 import com.simpsoft.salesCommission.app.model.OrderDetail;
+import com.simpsoft.salesCommission.app.model.OrderLineItems;
 import com.simpsoft.salesCommission.app.model.OrderRoster;
-import com.simpsoft.salesCommission.app.model.QualifyingClause;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
 import com.simpsoft.salesCommission.app.model.SplitQualifyingClause;
 import com.simpsoft.salesCommission.app.model.SplitRule;
 import com.simpsoft.salesCommission.app.model.SplitRuleBeneficiary;
-import com.simpsoft.salesCommission.app.model.OrderLineItems;
-import org.springframework.web.multipart.MultipartFile;
-
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class OrderController {
@@ -81,11 +68,14 @@ public class OrderController {
 	
 	
 	
+	
 
 	// private static final Logger logger =
 	// Logger.getLogger(EmployeeController.class);
 	
 	private static final Logger logger = Logger.getLogger(OrderController.class);
+	
+	
 
 	@RequestMapping(value = "/importOrders", method = RequestMethod.GET)
 	public String ImportOrder(ModelMap model, HttpSession session, HttpServletRequest request) {
@@ -258,7 +248,7 @@ public class OrderController {
 		model.addAttribute("listRule3", ruleSimpleApi.listOfConditions());
 		
 		
-
+		
 		return "splitOrders";
 	}
 	
@@ -267,6 +257,8 @@ public class OrderController {
 			personList.add(new QualifyingClauseUI());
 		return new PersonListContainer1();
 	}
+	
+	
 	
 	private PersonListContainer getDummyPersonListContainer() {
 		List<RuleParameter> personList1 = new ArrayList<RuleParameter>();
@@ -299,8 +291,9 @@ public class OrderController {
 	public String SplitRuleDetails(@PathVariable("id") int id, ModelMap model, HttpSession session, HttpServletRequest request) {
 		
 		session.setAttribute("personListContainer1", getDummyPersonListContainer1()); //qualifying clause
+		//session.setAttribute("personListContainer1", getDummyPersonListContainerSplit());
 		session.setAttribute("personListContainer", getDummyPersonListContainer());		// beneficiary (rule param)
-		//session.setAttribute("personListContainer", getDummyPersonListContainerBenef());	
+		
 		
 		SplitRule splitRule = splitRuleApi.getSplitRule(id);
 		model.addAttribute("splitOrdersId", splitRule.getId());
@@ -315,6 +308,26 @@ public class OrderController {
 		model.addAttribute("listRule2", ruleSimpleApi.listOfFields());
 		model.addAttribute("listRule3", ruleSimpleApi.listOfConditions());
 		
+		List<FieldList> fieldList = ruleSimpleApi.listOfFields();
+		logger.debug("SIZE OF FIELD LIST= "+fieldList.size());
+		LinkedHashSet<String> fieldNames = new LinkedHashSet<String>();
+		for(FieldList f : fieldList) {
+			fieldNames.add(f.getDisplayName());
+		}
+		ArrayList<String> uniqueFieldNameList = new ArrayList<String>(fieldNames);
+		logger.debug("SIZE OF UNIQUE FIELD NAME LIST= "+uniqueFieldNameList.size());
+		model.addAttribute("fieldNameList", uniqueFieldNameList);
+		
+		
+		List<ConditionList> condList = ruleSimpleApi.listOfConditions();
+		LinkedHashSet<String> condNames = new LinkedHashSet<String>();
+		for(ConditionList c : condList) {
+			condNames.add(c.getConditionValue());
+		}
+		ArrayList<String> uniqueCondNameList = new ArrayList<String>(condNames);
+		logger.debug("SIZE OF UNIQUE CONDITION NAME LIST= "+uniqueCondNameList.size());
+		model.addAttribute("condNameList", uniqueCondNameList);
+		
 		
 
 		return "splitOrders";
@@ -325,24 +338,46 @@ public class OrderController {
 			 ModelMap model, HttpSession session, HttpServletRequest request) {
 	
 		SplitRule splitRule = splitRuleApi.getSplitRule(id);
-		List<SplitQualifyingClause> splitQualClauseList = new SplitQualifyingClauseAPI().getSplitQualClause(id);
-	
 		
-		for(QualifyingClauseUI Q : qualListContainer.getPersonList()) {
-			logger.debug("FIELD NAME: " + Q.getFieldName());
-			logger.debug("CONDITION: " + Q.getCondition());
-			logger.debug("CONDITION VALUE: " + Q.getConditionValue());
-			logger.debug("VALUE: " + Q.getValue());
+		List<QualifyingClauseUI> qualList = qualListContainer.getPersonList();
+		List<SplitQualifyingClause> splitList = new ArrayList<>();
+		for (Iterator iterator = qualList.iterator(); iterator.hasNext();) {
+			QualifyingClauseUI tempQual = (QualifyingClauseUI) iterator.next();
+			SplitQualifyingClause tempSplit = new SplitQualifyingClause();
+			ConditionList condList = new ConditionList();
+			condList.setId(tempQual.getConditionId());
+			condList.setConditionValue(tempQual.getConditionValue());
+			tempSplit.setConditionList(condList);
+			FieldList fieldList = new FieldList();
+			fieldList.setId(tempQual.getFieldId());
+			fieldList.setDisplayName(tempQual.getFieldName());
+			fieldList.setFieldName(tempQual.getFn());
+			tempSplit.setFieldList(fieldList);
+			tempSplit.setValue(tempQual.getValue());
+			tempSplit.getConditionList().setConditionValue(tempQual.getConditionValue());
+			tempSplit.setNotFlag(tempQual.getCondition());
 			
-			
-			
+			splitList.add(tempSplit);
 		}
+		splitRule.setSplitQualifyingClause(splitList);
+		
 		
 		for(RuleParameter B : benefListContainer.getPersonList1()) {
 			logger.debug("BENEFICIARY TYPE: " + B.getParameterName());
 			logger.debug("SPLIT PERCENTAGE: " + B.getParameterValue());
 		}
 	
+		List<RuleParameter> paramList = benefListContainer.getPersonList1();
+		List<SplitRuleBeneficiary> benefList = new ArrayList<>();
+		for (Iterator iterator = paramList.iterator(); iterator.hasNext();) {
+			RuleParameter tempParam = (RuleParameter) iterator.next();
+			SplitRuleBeneficiary tempBenef = new SplitRuleBeneficiary();
+			tempBenef.setBeneficiaryType(tempParam.getParameterName());
+			tempBenef.setSplitPercentage(Integer.parseInt(tempParam.getParameterValue()));
+			benefList.add(tempBenef);
+		}
+		splitRule.setSplitRuleBeneficiary(benefList);
+		
 		logger.debug("SPLIT RULE NAME= "+request.getParameter("splitRuleName"));
 		logger.debug("SPLIT RULE DESC= "+request.getParameter("splitRuleDesc"));
 		logger.debug("SPLIT RULE START DATE= "+request.getParameter("startDate"));
@@ -374,14 +409,6 @@ public class OrderController {
 			
 			splitRuleApi.editSplitRule(splitRule);
 			
-			for(SplitQualifyingClause sqc : splitQualClauseList) {
-				logger.debug("FIELD NAME= "+sqc.getFieldList().getFieldName());
-				logger.debug("NOT FLAG: "+sqc.isNotFlag());
-				logger.debug("CONDITION VALUE: "+sqc.getConditionList().getConditionValue());
-				logger.debug("VALUE: "+sqc.getValue());
-			}
-			
-		
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -390,5 +417,6 @@ public class OrderController {
 		return "redirect:/splitRuleDetails/"+id;
 	
 	}
+
 	
 }

@@ -3,6 +3,7 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
+
 <tiles:insertDefinition name="defaultTemplate">
 		<tiles:putAttribute name="body">
 <title>Sales Commissioning Tool</title>
@@ -25,7 +26,6 @@ table {
 	border-collapse: collapse;
 }
 table td, table th {
-	border: 1px solid #DDD;
 	text-align: left;
 	padding: 5px 15px 5px 15px;
 	-webkit-box-sizing: border-box;
@@ -142,7 +142,7 @@ table td, table th {
 
 				<h1 align="center">Split Rule Details</h1>
 				<div align="center">
-					<table>
+					<table border="1">
 						<tr>
 							<td>Rule name:</td>
 							<td><input type="text" size=50 value="${splitRuleDetails.splitRuleName}" required name="splitRuleName"></input></td>
@@ -174,7 +174,7 @@ table td, table th {
 							<td valign="top">Applies when :</td>
 							<td>
 
-								<table>
+								<table border="1">
 
 									<tr>
 									<tbody id="personListContainer1">
@@ -183,23 +183,39 @@ table td, table th {
 											<td>&nbsp;FieldName&nbsp;<select
 												name="personList[].fieldName">
 													<option value="${quali.fieldList.displayName}">---${quali.fieldList.displayName}---</option>
-													<c:forEach items="${listRule2}" var="rule">
+													<!--<c:forEach items="${listRule2}" var="rule">
 														<option value="${rule.displayName}">
 															<c:out value="${rule.displayName}" />
 														</option>
+													</c:forEach>-->
+													<c:forEach items="${fieldNameList}" var="fieldName">
+													<option value="${fieldName}">
+															<c:out value="${fieldName}" />
+														</option>
 													</c:forEach>
-											</select>&nbsp;
+											</select>
 											</td>
-											<td>Not&nbsp;<input type="text"
+											<!--  <td>Not&nbsp;<input type="text"
 												name="personList[].condition" value="${quali.notFlag}"
-												size="2"></td>
+												size="2"></td>-->
+												<td>Not&nbsp;
+												<select name="personList[].condition" required>
+												<option value="${quali.notFlag}">---${quali.notFlag}---</option>
+												<option value="True">True</option>
+												<option value="False">False</option>
+												</select></td>
 
 											<td>Condition&nbsp;<select
 												name="personList[].conditionValue">
 													<option value="${quali.conditionList.conditionValue}">---${quali.conditionList.conditionValue}---</option>
-													<c:forEach items="${listRule3}" var="rule">
+													<!--<c:forEach items="${listRule3}" var="rule">
 														<option value="${rule.conditionValue}">
 															<c:out value="${rule.conditionValue}" />
+														</option>
+													</c:forEach>-->
+													<c:forEach items="${condNameList}" var="condName">
+													<option value="${condName}">
+															<c:out value="${condName}" />
 														</option>
 													</c:forEach>
 											</select>
@@ -216,23 +232,43 @@ table td, table th {
 											<tr class="qualiClause defaultRow">
 												<td>&nbsp;Field Name&nbsp;<select
 													name="personList[].fieldName">
-														<c:forEach items="${listRule2}" var="rule">
+														<!--<c:forEach items="${listRule2}" var="rule">
 															<option value="${rule.displayName}">
 																<c:out value="${rule.displayName}" />
 															</option>
-														</c:forEach>
+														</c:forEach>-->
+														<c:forEach items="${fieldNameList}" var="fieldName">
+													<option value="${fieldName}">
+															<c:out value="${fieldName}" />
+														</option>
+													</c:forEach>
 												</select></td>
 
-												<td>&nbsp;Not&nbsp;<input type="text"
-													name="personList[].condition" value="TRUE" size="2"></td>
+												<!--  <td>Not&nbsp;<input type="text"
+												name="personList[].condition" value="${quali.notFlag}"
+												size="2"></td>-->
+												<td>&nbsp;Not&nbsp;
+												<select name="personList[].condition" required>
+												<option value="${quali.notFlag}">---${quali.notFlag}---</option>
+												<option value="True">True</option>
+												<option value="False">False</option>
+												</select></td>
 
 												<td>&nbsp;Condition&nbsp;<select
-													name="personList[].conditionValue"><c:forEach
+													name="personList[].conditionValue">
+													<!--<c:forEach
 															items="${listRule3}" var="rule">
 															<option value="${rule.conditionValue}">
 																<c:out value="${rule.conditionValue}" />
 															</option>
-														</c:forEach></select>
+														</c:forEach>-->
+														<c:forEach items="${condNameList}" var="condName">
+													<option value="${condName}">
+															<c:out value="${condName}" />
+														</option>
+													</c:forEach>
+														
+													</select>
 												<td>&nbsp;Value&nbsp;<input type="text"
 													name="personList[].value"></td>
 												<td><a href="#" class="removePerson1">Remove</a></td>
@@ -250,7 +286,7 @@ table td, table th {
 						<td>Beneficiary roles :</td>
 						<td>
 
-							<table id="">
+							<table border="1">
 								<tbody id="personListContainer">
 								<tr><td>Beneficiary</td><td>Split Percentage</td></tr>
 								<c:forEach items="${beneficiary}" var="benefi">

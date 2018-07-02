@@ -24,7 +24,7 @@
     padding:5px;
 }
 body {
-    background-color: #d0e4fe;
+    background-color: #ffffff;
 }
 
 #customers {
@@ -178,6 +178,7 @@ overflow-y: scroll;
 	    	document.getElementById("text1").value="";
 	    	document.getElementById("emp_rad").checked=false;
 	    	document.getElementById("role_rad").checked=true;
+	    	document.getElementById("role_op").disabled=false;
 	    	 $("#check_role").show(500);
 	    }
 	});
@@ -311,6 +312,8 @@ overflow-y: scroll;
 		<!-- ------------------------------------------This part is for displaying table against Employee/Role----------------------------------- -->
 		
 			
+			<form:form action="/CommissionTool/update" method="post"
+						id="ruleListForm" modelAttribute="ruleListContainer">	
 				
 				<table id="customers" border="1">
 					<thead>
@@ -323,12 +326,11 @@ overflow-y: scroll;
 							<th data-field="from">From&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							<th data-field="to">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							<th data-field="parameter">Parameter&nbsp;&nbsp;&nbsp;
-								Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;overwrite&nbsp;</th>
+								Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Overwrite&nbsp;</th>
 
 						</tr>
 					</thead>
-					<form:form action="/CommissionTool/update" method="post"
-						id="ruleListForm" modelAttribute="ruleListContainer">
+					
 				<c:choose> 
 				<c:when test="${assObj.id != null}">
 					<input type="hidden" name="id" value="${assObj.id}">
@@ -368,7 +370,7 @@ overflow-y: scroll;
 											
 										
 											    <td>&nbsp;<input type="text" name="ruleList[${vs.index}].ruleAssignmentParameter[${assignments.index}].overwriteValue" value=""size="7"height="0.01">&nbsp;or&nbsp; 
-												<select style="width: 80px;">
+												<select >
 																<option value="">--Select--</option>
 														<c:forEach items="${targetlist}" var="target">
 																 <option value="${target.displayName}"/>
@@ -382,12 +384,42 @@ overflow-y: scroll;
 								</td>	
 							<br>
 							</tr>
-						</c:forEach><c:choose> 
-				<c:when test="${assObj1.id != null || assObj.id != null}"><td colspan="7" align="left"><input type="submit" value="Update"></td></c:when></c:choose></tbody>
+						</c:forEach>
+						<tr>
+						<td>
+			<form action="/CommissionTool/submitrule" method="post" model="command">
+				 <table>
+					<tr>
+					<td align="right">
+						<select name="Id">
+							<option value="">--Select--</option>
+							<c:forEach items="${listRules}" var="rule">
+                                <option>
+                                    <c:out value="${rule.id}" />
+                                </option>
+               			 	</c:forEach>
+           	 			</select></td>
+           	 			<td>
+           			 <input type="submit" value ="add"></td>
+            </tr></table></form>
+			</td>
+				</tr>
+				</tbody>
+				</table>		
+				<c:choose> 
+				<c:when test="${assObj1.id != null || assObj.id != null}">
+				<center>
+				<input type="submit" value="Update">
+				</center>
+				</c:when>
+				</c:choose>
+				
 			</form:form>
+			
 						
-		<!-- ------------------------------------------This part for creating table against RuleId----------------------------------- -->						
-				<form:form action="/CommissionTool/create" method="post"
+		<!-- ------------------------------------------This part for creating table against RuleId----------------------------------- -->	
+							
+				<!--<form:form action="/CommissionTool/create" method="post"
 						id="ruleListForm1" modelAttribute="ruleListContainer1">
 			
 					
@@ -435,28 +467,12 @@ overflow-y: scroll;
 						</tr>
 						</c:forEach>
 						</tbody>
-						<td align="center"><input type="submit" value="Create"></td>
+						 <td align="center"><input type="submit" value="Create"></td>  
 						
 						</form:form>
-				</table>
+				</table>-->
 				
-			<div>
-			<form action="/CommissionTool/submitrule" method="post" model="command">
-				 <table>
-					<tr>
-					<td colspan="6" align="right">
-						<select name="Id">
-							<option value="">--Select--</option>
-							<c:forEach items="${listRules}" var="rule">
-                                <option>
-                                    <c:out value="${rule.id}" />
-                                </option>
-               			 	</c:forEach>
-           	 			</select>
-           	 			
-           			 <input type="submit" value ="add"></td>
-            </tr></table></form>
-			</div>
+			
 		
 	</tiles:putAttribute>
 </tiles:insertDefinition>

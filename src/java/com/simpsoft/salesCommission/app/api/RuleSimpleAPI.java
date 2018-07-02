@@ -2,6 +2,7 @@ package com.simpsoft.salesCommission.app.api;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -225,12 +226,15 @@ public class RuleSimpleAPI {
 	 * 
 	 * @return conditionList
 	 */
+	@SuppressWarnings("unchecked")
 	public List<ConditionList> listOfConditions() {
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		tx = session.beginTransaction();
-		List conditionList = session.createQuery("FROM ConditionList").list();
+		List<ConditionList> conditionList = session.createQuery("FROM ConditionList").list();
+		
+	
 		/*
 		 * for (Iterator iterator = conditionList.iterator();
 		 * iterator.hasNext();) { ConditionList cdnLst = (ConditionList)
@@ -379,12 +383,15 @@ public class RuleSimpleAPI {
 	 * 
 	 * @return fieldList
 	 */
+	@SuppressWarnings("unchecked")
 	public List<FieldList> listOfFields() {
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		tx = session.beginTransaction();
-		List fieldList = session.createQuery("FROM FieldList").list();
+		List<FieldList> fieldList = session.createQuery("FROM FieldList").list();
+		
+		
 		/*
 		 * for (Iterator iterator = fieldList.iterator(); iterator.hasNext();) {
 		 * FieldList fldLst = (FieldList) iterator.next(); logger.debug(
@@ -393,6 +400,7 @@ public class RuleSimpleAPI {
 		 * 
 		 * }
 		 */
+		
 		return fieldList;
 	}
 

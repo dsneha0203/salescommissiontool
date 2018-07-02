@@ -1,12 +1,15 @@
 package com.simpsoft.salesCommission.app.api;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -341,6 +344,8 @@ public class SplitRuleAPI {
 			splitRule1.setDescription(splitRule.getDescription());
 			splitRule1.setStartDate(splitRule.getStartDate());
 			splitRule1.setEndDate(splitRule.getEndDate());
+			splitRule1.setSplitQualifyingClause(splitRule.getSplitQualifyingClause());
+			splitRule1.setSplitRuleBeneficiary(splitRule.getSplitRuleBeneficiary());
 			session.merge(splitRule1);
 			logger.debug("EDIT THE SPLIT RULE DETAILS FROM DATABASE" + splitRule1);
 			tx.commit();
@@ -354,5 +359,66 @@ public class SplitRuleAPI {
 
 	}
 	
+	/*public void editSplitQualClause(SplitQualifyingClause qualClause) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			SplitQualifyingClause splitQualifyingClause = (SplitQualifyingClause) session.get(SplitQualifyingClause.class, qualClause.getId());
+			splitQualifyingClause.setId(qualClause.getId());
+			splitQualifyingClause.setNotFlag(qualClause.isNotFlag());
+			splitQualifyingClause.setValue(qualClause.getValue());
+			splitQualifyingClause.getConditionList().setConditionValue(qualClause.getConditionList().getConditionValue());
+			splitQualifyingClause.getConditionList().setId(qualClause.getConditionList().getId());
+			session.merge(splitQualifyingClause);
+			logger.debug("EDIT THE SPLIT QUALIFYING CLAUSE DETAILS FROM DATABASE" + splitQualifyingClause);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+	}*/
 	
+	public List<SplitQualifyingClause> getSplitQualClause(int ruleID) {		
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		LinkedHashSet<SplitQualifyingClause> clause = new LinkedHashSet<SplitQualifyingClause>();
+		List<SplitQualifyingClause> clauseList=null;
+		try {
+			tx = session.beginTransaction();
+			Criteria criteria = session.createCriteria(SplitQualifyingClause.class);
+			criteria.add(Restrictions.isNotNull("splitRule"));
+			List splitQualClauseList=criteria.list();
+			logger.debug("LIST: ");
+			for (Iterator iterator = splitQualClauseList.iterator(); iterator.hasNext();) {
+				
+				SplitQualifyingClause spltQualClause = (SplitQualifyingClause) iterator.next();
+				int splitRuleId= (int) spltQualClause.getSplitRule().getId();
+				
+				logger.debug(spltQualClause.getSplitRule().getId());
+				logger.debug(spltQualClause.getFieldList().getDisplayName());
+				logger.debug(spltQualClause.getConditionList().getId());
+				logger.debug(spltQualClause.getConditionList().getConditionValue());
+				logger.debug(spltQualClause.getValue());
+				
+				if (ruleID == spltQualClause.getSplitRule().getId()) {
+					clause.add(spltQualClause);
+					
+				}
+			}
+			clauseList = new ArrayList<SplitQualifyingClause>(clause);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return clauseList;
+	}
 }

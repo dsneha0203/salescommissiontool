@@ -33,7 +33,7 @@ public class RuleAssignmentAPI {
 	@Autowired
 	private RuleAPI ruleAPI;
 
-	private static final Logger logger = Logger.getLogger(EmployeeAPI.class);
+	private static final Logger logger = Logger.getLogger(RuleAssignmentAPI.class);
 
 	public void setSessionFactory(SessionFactory factory) {
 		sessionFactory = factory;

@@ -30,6 +30,10 @@ public class SplitQualifyingClause {
 	@JoinColumn(name = "CND_LST_ID")
 	private ConditionList conditionList;
 	
+	@OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+	@JoinColumn(name = "SPLT_RUL_ID")
+	private SplitRule splitRule;
+	
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	@Column(name = "notFlag", nullable = false)
 	private boolean notFlag;
@@ -106,4 +110,14 @@ public class SplitQualifyingClause {
 	public void setNotFlag(boolean notFlag) {
 		this.notFlag = notFlag;
 	}
+
+	public SplitRule getSplitRule() {
+		return splitRule;
+	}
+
+	public void setSplitRule(SplitRule splitRule) {
+		this.splitRule = splitRule;
+	}
+	
+	
 }

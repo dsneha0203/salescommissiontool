@@ -3,9 +3,13 @@ package com.simpsoft.salesCommission.app.UImodel;
 public class QualifyingClauseUI {
 
 	private String value;
+	private int conditionId;
 	private String conditionValue;
 	private String fieldName;
+	private int fieldId;
+	private String fn;
 	private boolean condition;
+	
 
 	public String getValue() {
 		return value;
@@ -34,13 +38,20 @@ public class QualifyingClauseUI {
 		
 	}
 	
-public QualifyingClauseUI(String value, String conditionValue, String fieldName, boolean condition){
-	
-	this.value = value;
-	this.fieldName = fieldName;
-	this.conditionValue = conditionValue;
-	this.condition = condition;
-		
+
+
+
+
+public QualifyingClauseUI(String value, int conditionId, String conditionValue, String fieldName, int fieldId,
+			String fn, boolean condition) {
+		super();
+		this.value = value;
+		this.conditionId = conditionId;
+		this.conditionValue = conditionValue;
+		this.fieldName = fieldName;
+		this.fieldId = fieldId;
+		this.fn = fn;
+		this.condition = condition;
 	}
 
 public boolean getCondition() {
@@ -50,6 +61,32 @@ public boolean getCondition() {
 public void setCondition(boolean condition) {
 	this.condition = condition;
 }
+
+public int getConditionId() {
+	return conditionId;
+}
+
+public void setConditionId(int conditionId) {
+	this.conditionId = conditionId;
+}
+
+public int getFieldId() {
+	return fieldId;
+}
+
+public void setFieldId(int fieldId) {
+	this.fieldId = fieldId;
+}
+
+public String getFn() {
+	return fn;
+}
+
+public void setFn(String fn) {
+	this.fn = fn;
+}
+
+
 
 
 }
