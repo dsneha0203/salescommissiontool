@@ -139,7 +139,7 @@ table td, table th {
 	
 
 			<form:form action="/CommissionTool/updateSplitRule/${splitOrdersId}" method="post" id="personListForm">
-
+				
 				<h1 align="center">Split Rule Details</h1>
 				<div align="center">
 					<table border="1">
@@ -232,11 +232,7 @@ table td, table th {
 											<tr class="qualiClause defaultRow">
 												<td>&nbsp;Field Name&nbsp;<select
 													name="personList[].fieldName">
-														<!--<c:forEach items="${listRule2}" var="rule">
-															<option value="${rule.displayName}">
-																<c:out value="${rule.displayName}" />
-															</option>
-														</c:forEach>-->
+														
 														<c:forEach items="${fieldNameList}" var="fieldName">
 													<option value="${fieldName}">
 															<c:out value="${fieldName}" />
@@ -244,9 +240,7 @@ table td, table th {
 													</c:forEach>
 												</select></td>
 
-												<!--  <td>Not&nbsp;<input type="text"
-												name="personList[].condition" value="${quali.notFlag}"
-												size="2"></td>-->
+												
 												<td>&nbsp;Not&nbsp;
 												<select name="personList[].condition" required>
 												<option value="${quali.notFlag}">---${quali.notFlag}---</option>
@@ -256,12 +250,7 @@ table td, table th {
 
 												<td>&nbsp;Condition&nbsp;<select
 													name="personList[].conditionValue">
-													<!--<c:forEach
-															items="${listRule3}" var="rule">
-															<option value="${rule.conditionValue}">
-																<c:out value="${rule.conditionValue}" />
-															</option>
-														</c:forEach>-->
+													
 														<c:forEach items="${condNameList}" var="condName">
 													<option value="${condName}">
 															<c:out value="${condName}" />
@@ -289,6 +278,7 @@ table td, table th {
 							<table border="1">
 								<tbody id="personListContainer">
 								<tr><td>Beneficiary</td><td>Split Percentage</td></tr>
+								<c:if test="${personListContainer.personList1.size() != 0 }">
 								<c:forEach items="${beneficiary}" var="benefi">
 									<tr class="beneficiary">
 										<td><select name="personList1[].parameterName" required>
@@ -306,8 +296,9 @@ table td, table th {
 
 										<td><a href="#" class="removePerson">Remove</a></td>
 									</tr>
-									</c:forEach>						
-								<c:if test="${personListContainer.personList1.size() == 0 }">
+									</c:forEach>
+								</c:if>						
+								
 								<tr class="beneficiary defaultRow">
 										<td><select name="personList1[].parameterName" required>
 									<option value="" selected>-Select-</option>
@@ -324,7 +315,7 @@ table td, table th {
 
 										<td><a href="#" class="removePerson">Remove</a></td>
 									</tr>
-								</c:if>	
+								
 
 								</tbody>
 							</table> <a href="#" id="addPerson">Add</a>&nbsp;&nbsp; <a

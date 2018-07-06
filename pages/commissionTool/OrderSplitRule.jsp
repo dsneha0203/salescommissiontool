@@ -107,10 +107,10 @@
 			</table>
 			
 			<br/>
-			<!--  <div align="center">
-					<a href="/CommissionTool/importOrders"> <input type="button"
-						value="Back To Import Orders" /></a>
+			 <div align="center">
+					<a href="/CommissionTool/newSplitRule"> <input type="button"
+						value="Create Order Split Rule" /></a>
 				</div>
-			-->
+			
 	</tiles:putAttribute>
 </tiles:insertDefinition>

@@ -191,6 +191,7 @@ public class Employee {
     @Override
     public String toString() {
          return "<" + employeeName + ", "  
-                                  + startDate + terminationDate + ">";
+                                  + startDate +", "  
+                                          + terminationDate + ">";
     }
 }

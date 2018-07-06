@@ -40,6 +40,7 @@ import com.simpsoft.salesCommission.app.model.OrderRoster;
 import com.simpsoft.salesCommission.app.model.Product;
 import com.simpsoft.salesCommission.app.model.ProductSubType;
 import com.simpsoft.salesCommission.app.model.ProductType;
+import com.simpsoft.salesCommission.app.model.Role;
 import com.simpsoft.salesCommission.app.model.State;
 
 @Component
@@ -328,6 +329,28 @@ public class OrderAPI {
 			tx = session.beginTransaction();
 			Criteria crit = session.createCriteria(ProductSubType.class);
 			crit.add(Restrictions.eq("subType", productSubType));
+			productSubTypeList = crit.list();
+			tx.commit();
+
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return productSubTypeList.get(0);
+	}
+	
+	//search rpoduct sub type by id
+	public ProductSubType searchProductSubTypeById(long productSubTypeId) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<ProductSubType> productSubTypeList = new ArrayList<>();
+		try {
+			tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(ProductSubType.class);
+			crit.add(Restrictions.eq("id", productSubTypeId));
 			productSubTypeList = crit.list();
 			tx.commit();
 
@@ -733,4 +756,13 @@ public class OrderAPI {
 		return newOrderDetail;
 	}
 
+	public List<Product> listOfProductSubTypes(){
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		tx = session.beginTransaction();
+		List prod_sub_type_list = session.createQuery("FROM ProductSubType").list();
+		
+		return prod_sub_type_list;
+		
+	}
 }

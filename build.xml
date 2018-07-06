@@ -189,6 +189,27 @@
 	</target>
 
 	<!-- Calling Java Main -->
+	<target name="dummyEmpScript" depends="compile, package">
+		<java classname="com.simpsoft.salesCommission.dummyData.dummyEmployee" fork="true"
+	           failonerror="true">
+		    <arg value="100"/>
+			<classpath refid="build.class.path" />
+		   
+		        <classpath path="${temp.dir.classes}"/>
+		   
+		</java>
+	</target>
+	<target name="dummyProductScript" depends="compile, package">
+			<java classname="com.simpsoft.salesCommission.dummyData.dummyProduct" fork="true"
+		           failonerror="true">
+			    <arg value="10"/>
+				<classpath refid="build.class.path" />
+			   
+			        <classpath path="${temp.dir.classes}"/>
+			   
+			</java>
+		</target>
+	
 	<target name="callJava" depends="restore_db,compile, package">
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForAggregateFunction"  fork="true"
 			           failonerror="true">
@@ -208,12 +229,12 @@
 							<classpath refid="build.class.path" />
 							<classpath path="${temp.dir.classes}" />
 						</java>
-		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRole"  fork="true"
+		<!--<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRole"  fork="true"
 							           failonerror="true">
 									<arg value="-h"/>
 									<classpath refid="build.class.path" />
 									<classpath path="${temp.dir.classes}" />
-								</java>
+								</java>-->
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForFrequency"  fork="true"
 									           failonerror="true">
 											<arg value="-h"/>
@@ -238,12 +259,12 @@
 					<classpath refid="build.class.path" />
 					<classpath path="${temp.dir.classes}" />
 				</java>
-		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLFile"  fork="true"
+		<!--<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLFile"  fork="true"
 			           failonerror="true">
 					<arg value="-h"/>
 					<classpath refid="build.class.path" />
 					<classpath path="${temp.dir.classes}" />
-				</java>
+				</java>-->
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForCustomerType"  fork="true"
 			           failonerror="true">
 					<arg value="-h"/>
@@ -268,24 +289,24 @@
 					<classpath refid="build.class.path" />
 					<classpath path="${temp.dir.classes}" />
 				</java>
-		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForProduct"  fork="true"
+		<!--<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForProduct"  fork="true"
 			           failonerror="true">
 					<arg value="-h"/>
 					<classpath refid="build.class.path" />
 					<classpath path="${temp.dir.classes}" />
-				</java>
+				</java>-->
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignment"  fork="true"
 									           failonerror="true">
 											<arg value="-h"/>
 											<classpath refid="build.class.path" />
 											<classpath path="${temp.dir.classes}" />
 										</java>
-		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignmentToRole"  fork="true"
+		<!--<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignmentToRole"  fork="true"
 									           failonerror="true">
 											<arg value="-h"/>
 											<classpath refid="build.class.path" />
 											<classpath path="${temp.dir.classes}" />
-										</java> 
+										</java> -->
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForSplitRule"  fork="true"
 											           failonerror="true">
 													<arg value="-h"/>

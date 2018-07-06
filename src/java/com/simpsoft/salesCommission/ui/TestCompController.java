@@ -15,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -286,68 +288,68 @@ public class TestCompController {
 
 	/*-----------------------------------------------------creating compensation plan assignment ----------------------------------------------------*/
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public String create(@ModelAttribute("SpringWeb") RuleListContainer1 ruleListContainer, RuleAssEmpRoleUI ruleAssEmpRole,
-			ModelMap model) {
+	public String create(@ModelAttribute("SpringWeb") RuleListContainer1 ruleListContainer, RuleAssEmpRoleUI ruleAssEmpRole,ModelMap model, 
+			HttpServletRequest request, HttpSession session,SessionStatus status) {
 		
-		model.addAttribute("text2", ruleAssEmpRole.getEmpName());
-		System.out.println("EmpName: " + ruleAssEmpRole.getEmpName());
-		empApi.searchEmployee(ruleAssEmpRole.getEmpName());
-		List<Employee> employee = empApi.searchEmployeesByName(ruleAssEmpRole.getEmpName());
-		for (Iterator iterator = employee.iterator(); iterator.hasNext();) {
-			Employee emp = (Employee) iterator.next();
-			long empId = emp.getId();
-		}
-		
-		
-		model.addAttribute("roleNameCompAsg", ruleAssEmpRole.getRoleName());
-		System.out.println("Rolename: " +  ruleAssEmpRole.getRoleName());
-		
-		for (RuleAss1UI rul1 : ruleListContainer.getRuleList1()) {
-			System.out.println("Id:   " + rul1.getId());
-			System.out.println("RuleName:  " + rul1.getRuleName());
-			System.out.println("Fixed:  " + rul1.getFixed());
-			System.out.println("Repeats:  " + rul1.getRepeats());
-			System.out.println("Frequency:  " + rul1.getFrequency());
-			System.out.println("StartDate:  " + rul1.getStartdate());
-			System.out.println("EndDate:  " + rul1.getEndDate());
-			for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
-				System.out.println("ParameterName: " + rul2.getParameterName());
-				System.out.println("overwriteValue: " + rul2.getOverwriteValue());
-			}
-		}
-		List<RuleAss1UI> rul = ruleListContainer.getRuleList1();
-		List<RuleAssignmentDetails> rp = new ArrayList<>();
-		RuleAssignment ras = new RuleAssignment();
-		Employee emp = empApi.searchEmployee(ruleAssEmpRole.getEmpName());
-		ras.setEmployee(emp);
-		for (Iterator iterator = rul.iterator(); iterator.hasNext();) {
-			RuleAss1UI rpm = (RuleAss1UI) iterator.next();
-			RuleAssignmentDetails rass = new RuleAssignmentDetails();
-			rass.setId(rpm.getId());
-			String rName = rpm.getRuleName();
-			Rule rule1 = ruleApi.searchRuleByName(rName);
-			rass.setRule(rule1);
-			String fixed = rpm.getFixed();
-			String repeats = rpm.getRepeats();
-			String frequency = rpm.getFrequency();
-			if (fixed != null) {
-				rass.setValidityType(fixed);
-			} else {
-				rass.setValidityType(repeats);
-				Frequency frq = ruleAssApi.searchFrequency(frequency);
-				rass.setFrequency(frq);
-			}
-			rass.setStartDate(rpm.getStartdate());
-			rass.setEndDate(rpm.getEndDate());
-			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
-			
-			rass.setRuleAssignmentParameter(rpm1);
-			rp.add(rass);
-		}
-		
-		ras.setRuleAssignmentDetails(rp);
-		
-	 ruleAssApi.createRuleAssignment(ras);
+//		model.addAttribute("text2", ruleAssEmpRole.getEmpName());
+//		System.out.println("EmpName: " + ruleAssEmpRole.getEmpName());
+//		empApi.searchEmployee(ruleAssEmpRole.getEmpName());
+//		List<Employee> employee = empApi.searchEmployeesByName(ruleAssEmpRole.getEmpName());
+//		for (Iterator iterator = employee.iterator(); iterator.hasNext();) {
+//			Employee emp = (Employee) iterator.next();
+//			long empId = emp.getId();
+//		}
+//		
+//		
+//		model.addAttribute("roleNameCompAsg", ruleAssEmpRole.getRoleName());
+//		System.out.println("Rolename: " +  ruleAssEmpRole.getRoleName());
+//		
+//		for (RuleAss1UI rul1 : ruleListContainer.getRuleList1()) {
+//			System.out.println("Id:   " + rul1.getId());
+//			System.out.println("RuleName:  " + rul1.getRuleName());
+//			System.out.println("Fixed:  " + rul1.getFixed());
+//			System.out.println("Repeats:  " + rul1.getRepeats());
+//			System.out.println("Frequency:  " + rul1.getFrequency());
+//			System.out.println("StartDate:  " + rul1.getStartdate());
+//			System.out.println("EndDate:  " + rul1.getEndDate());
+//			for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
+//				System.out.println("ParameterName: " + rul2.getParameterName());
+//				System.out.println("overwriteValue: " + rul2.getOverwriteValue());
+//			}
+//		}
+//		List<RuleAss1UI> rul = ruleListContainer.getRuleList1();
+//		List<RuleAssignmentDetails> rp = new ArrayList<>();
+//		RuleAssignment ras = new RuleAssignment();
+//		Employee emp = empApi.searchEmployee(ruleAssEmpRole.getEmpName());
+//		ras.setEmployee(emp);
+//		for (Iterator iterator = rul.iterator(); iterator.hasNext();) {
+//			RuleAss1UI rpm = (RuleAss1UI) iterator.next();
+//			RuleAssignmentDetails rass = new RuleAssignmentDetails();
+//			rass.setId(rpm.getId());
+//			String rName = rpm.getRuleName();
+//			Rule rule1 = ruleApi.searchRuleByName(rName);
+//			rass.setRule(rule1);
+//			String fixed = rpm.getFixed();
+//			String repeats = rpm.getRepeats();
+//			String frequency = rpm.getFrequency();
+//			if (fixed != null) {
+//				rass.setValidityType(fixed);
+//			} else {
+//				rass.setValidityType(repeats);
+//				Frequency frq = ruleAssApi.searchFrequency(frequency);
+//				rass.setFrequency(frq);
+//			}
+//			rass.setStartDate(rpm.getStartdate());
+//			rass.setEndDate(rpm.getEndDate());
+//			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
+//			
+//			rass.setRuleAssignmentParameter(rpm1);
+//			rp.add(rass);
+//		}
+//		
+//		ras.setRuleAssignmentDetails(rp);
+//		
+//	 ruleAssApi.createRuleAssignment(ras);
 		
 		
 		/*if (EmpName != null) {
@@ -356,7 +358,6 @@ public class TestCompController {
 			//ruleAss.setRuleAssignmentDetails(rp);
 			//ruleAss.setRole(role);
 			//ruleAssApi.editRuleAssignment(ruleAss);
-
 		} else {
 			//RuleAssignment ruleAss = ruleAssApi.getRuleAssignment(assIdForEmp);
 			//Employee emp = empApi.searchEmployee(assnmnt.getEmpName());
@@ -365,9 +366,10 @@ public class TestCompController {
 			//ruleAssApi.editRuleAssignment(ruleAss);
 		}*/
 		
-		
+		logger.debug("EMPLOYEE NAME= "+ruleAssEmpRole.getEmpName());
+		logger.debug("ROLE NAME= "+ruleAssEmpRole.getRoleName());
 	
-	return "hello";
+	return "redirect:/compplan";
 }
 	
 	/*----------------------------------------------Search Employee-----------------------------------------------------*/

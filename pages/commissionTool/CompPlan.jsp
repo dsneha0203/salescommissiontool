@@ -1,4 +1,3 @@
-
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
@@ -15,7 +14,6 @@
 </head>
 
 <style>
-
 #header {
     background-color:#c7cfd1;
     color:black;
@@ -26,23 +24,18 @@
 body {
     background-color: #ffffff;
 }
-
 #customers {
     font-family: "Trebuchet MS", Times New Roman, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
 }
-
 #customers td, #customers th {
     border: 1px solid #ddd;
     text-align: left;
     padding: 8px;
 }
-
 #customers tr:nth-child(even){background-color: #f2f2f2}
-
 #customers tr:hover {background-color: #ddd;}
-
 #customers th {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -55,7 +48,6 @@ display:none;
 #check_emp{
 display:none;
 }
-
 html {
 overflow: -moz-scrollbars-vertical; 
 overflow-y: scroll;
@@ -84,12 +76,14 @@ overflow-y: scroll;
             	document.getElementById("role_op").value="";
             	$("#check_emp").show(500);
             	 $("#check_role").hide(500);
+            	
              });
              
              $("#role_rad").click(function(){
             	 document.getElementById("text1").value="";
             	  $("#check_role").show(500);
             	 $("#check_emp").hide(500);
+            	 
              });
  });
  
@@ -98,7 +92,6 @@ overflow-y: scroll;
 	    var val = $(this).val(),
 	        selectId = $(this).closest('tr').find('select').first();
 	    
-
 	    if ($(this).val() === 'true') {
 	        $(selectId).prop("disabled", false);
 	      
@@ -128,14 +121,12 @@ overflow-y: scroll;
 	    //clear the imput fields for the row
 	    $(rowElement).find("input").val('');
 	    //may want to reset <select> options etc
-
 	    //in fact you may want to submit the form
 	    saveNeeded();
 	}
 	function rowRemoved(rowElement) {
 	    saveNeeded();
 	}
-
 	function saveNeeded() {
 	    $('#submit').css('color','red');
 	    $('#submit').css('font-weight','bold');
@@ -143,12 +134,10 @@ overflow-y: scroll;
 	        $('#submit').val( '!' + $('#submit').val() );
 	    }
 	}
-
 	function beforeSubmit() {
 	    alert('wait your table is updating....!!');
 	    return true;
 	}
-
 	$(document).ready( function() {
 	    var config = {
 	        rowClass : 'rule',
@@ -171,6 +160,7 @@ overflow-y: scroll;
 	    	document.getElementById("emp_rad").checked=true;
 	    	document.getElementById("mag_emp").disabled=false;
 	    	$("#check_emp").show(500);
+	    	
 	    }
 	    
 	    var role_input_val = document.getElementById("role_op").value;
@@ -180,6 +170,7 @@ overflow-y: scroll;
 	    	document.getElementById("role_rad").checked=true;
 	    	document.getElementById("role_op").disabled=false;
 	    	 $("#check_role").show(500);
+	    	
 	    }
 	});
 	
@@ -191,14 +182,12 @@ overflow-y: scroll;
 	    //clear the imput fields for the row
 	    $(rowElement).find("input").val('');
 	    //may want to reset <select> options etc
-
 	    //in fact you may want to submit the form
 	    saveNeeded();
 	}
 	function rowRemoved(rowElement) {
 	    saveNeeded();
 	}
-
 	function saveNeeded() {
 	    $('#submit').css('color','red');
 	    $('#submit').css('font-weight','bold');
@@ -206,12 +195,20 @@ overflow-y: scroll;
 	        $('#submit').val( '!' + $('#submit').val() );
 	    }
 	}
-
 	function beforeSubmit() {
 	    alert('wait....!!');
 	    return true;
 	}
-
+	
+	
+	function setEmpValue(value){
+		
+		 document.getElementById("text2").value= value;
+	}
+	function setRoleValue(value){
+		
+		document.getElementById("text3").value=value;
+	}
 	$(document).ready( function() {
 	    var config = {
 	        rowClass : 'rule1',
@@ -266,7 +263,7 @@ overflow-y: scroll;
 							<form id="form1" action="/CommissionTool/searchemp" method="post">
 								Selected Employee: <input type="text" name="EmployeeName"
 									id="text1" name="for_radio1[]" class="radio1" disabled
-									size="11" required value="${empNameChosen }"/>
+									size="11" required value="${empNameChosen }" oninput="setEmpValue(this.value)"/>
 									<!--<c:forEach items="${empList}"
 													var="emp">value="${emp.employeeName }"</c:forEach> />-->
 								<input type="submit" value="check" id="check_emp" />
@@ -279,7 +276,7 @@ overflow-y: scroll;
 									value="radio2" />Role </label><br> -->
 									 Select Role :<select name="roleName" 
 									 class="radio2" name="for_radio2[]" id="role_op"
-									disabled required>
+									disabled required onchange="setRoleValue(this.value)">
 									<c:choose>
 									<c:when test="${rlelist.roleName != null }">
 									 <option value="${rlelist.roleName }">${rlelist.roleName}</option> 
@@ -312,8 +309,7 @@ overflow-y: scroll;
 		<!-- ------------------------------------------This part is for displaying table against Employee/Role----------------------------------- -->
 		
 			
-			<form:form action="/CommissionTool/update" method="post"
-						id="ruleListForm" modelAttribute="ruleListContainer">	
+				
 				
 				<table id="customers" border="1">
 					<thead>
@@ -327,10 +323,11 @@ overflow-y: scroll;
 							<th data-field="to">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
 							<th data-field="parameter">Parameter&nbsp;&nbsp;&nbsp;
 								Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Overwrite&nbsp;</th>
-
+							<th></th>
 						</tr>
 					</thead>
-					
+					<form:form action="/CommissionTool/update" method="post"
+						id="ruleListForm" modelAttribute="ruleListContainer">
 				<c:choose> 
 				<c:when test="${assObj.id != null}">
 					<input type="hidden" name="id" value="${assObj.id}">
@@ -382,53 +379,35 @@ overflow-y: scroll;
 										</c:forEach>
 									</table>
 								</td>	
-							<br>
+								<td><a href="#" class="removeRule">Remove</a></td>
+							
 							</tr>
 						</c:forEach>
-						<tr>
-						<td>
-			<form action="/CommissionTool/submitrule" method="post" model="command">
-				 <table>
-					<tr>
-					<td align="right">
-						<select name="Id">
-							<option value="">--Select--</option>
-							<c:forEach items="${listRules}" var="rule">
-                                <option>
-                                    <c:out value="${rule.id}" />
-                                </option>
-               			 	</c:forEach>
-           	 			</select></td>
-           	 			<td>
-           			 <input type="submit" value ="add"></td>
-            </tr></table></form>
-			</td>
-				</tr>
-				</tbody>
-				</table>		
-				<c:choose> 
+						
+				
+				
+			<!-- <a href="#" id="addRule">Add</a> -->
+			<c:choose> 
 				<c:when test="${assObj1.id != null || assObj.id != null}">
 				<center>
 				<input type="submit" value="Update">
 				</center>
 				</c:when>
 				</c:choose>
-				
-			</form:form>
-			
+				</tbody>
+			</form:form>  
 						
 		<!-- ------------------------------------------This part for creating table against RuleId----------------------------------- -->	
 							
-				<!--<form:form action="/CommissionTool/create" method="post"
+				<form:form action="/CommissionTool/create" method="post"
 						id="ruleListForm1" modelAttribute="ruleListContainer1">
-			
+						
 					
-						<input type="hidden" name="EmpName" id="text2">
-					
-					
-						<tbody id="ruleListContainer1">
+						<input type="hidden" name="EmpName" id="text2" > 						
+						<input type="hidden" name="RoleName" id="text3">
+						
+					 	<tbody id="ruleListContainer1">
 						<c:forEach items="${ruleList}" var="rs" varStatus="vs">
-
 							<tr class="rule1">
 								<td><input type="hidden" name="ruleList1[${vs.index}].id" value="${rs.id}" /> ${rs.id}</td>
                         		<td><input type="hidden" name="ruleList1[${vs.index}].ruleName" value="${rs.ruleName}" /> ${rs.ruleName}</td>
@@ -451,28 +430,43 @@ overflow-y: scroll;
 											  <td><input type="hidden" name="ruleList1[${vs.index}].ruleAssignmentParameter[${assignments.index}].parameterName" value="${ass.parameterName}" /> ${ass.parameterName}</td>
 											  <td><input type="hidden" name="ruleList1[${vs.index}].ruleAssignmentParameter[${assignments.index}].overwriteValue" value="${ass.parameterValue}" /> ${ass.parameterValue}</td>
 											  <td>&nbsp;<input type="text" value=""size="7"height="0.01">&nbsp;or&nbsp; 
-											  		<select style="width: 80px;"> 
-														<option value="">--Select--</option>
-														<c:forEach items="${listfrequency}" var="fre">
-															<option value="${fre.frequencyName}" />
-															<c:out value="${fre.frequencyName}" />
-														</c:forEach>
-													</select>
+											  		<select >
+																<option value="">--Select--</option>
+														<c:forEach items="${targetlist}" var="target">
+																 <option value="${target.displayName}"/>
+                                 								 <c:out value="${target.displayName}" />
+                                                          </c:forEach>
+                                                 </select>
 											 </td>
 											</tr>
 										</c:forEach>
 									</table>
 							</td>
+							<td><a href="#" class="removeRule1">Remove</a></td>
 							
 						</tr>
 						</c:forEach>
-						</tbody>
-						 <td align="center"><input type="submit" value="Create"></td>  
+					  </tbody>  
+					  <td><input type="submit" value="Create"></td>  
+					  </form:form> 
+						</table>  
 						
-						</form:form>
-				</table>-->
-				
-			
-		
+			<div>
+		<form action="/CommissionTool/submitrule" method="post" model="command">
+				 <table>
+					<tr>
+					<td align="right">
+						<select name="Id" required>
+							<option value="">--Select--</option>
+							<c:forEach items="${listRules}" var="rule">
+                                <option>
+                                    <c:out value="${rule.id}" />
+                                </option>
+               			 	</c:forEach>
+           	 			</select></td>
+           	 			<td>
+           			 <input type="submit" value ="add"></td>
+            </tr></table></form>
+            </div>
 	</tiles:putAttribute>
 </tiles:insertDefinition>

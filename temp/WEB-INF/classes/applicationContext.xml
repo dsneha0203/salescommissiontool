@@ -29,6 +29,8 @@
 	<bean id="employeeApi" class="com.simpsoft.salesCommission.app.api.EmployeeAPI">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
+	
+
 	<bean id="roleApi" class="com.simpsoft.salesCommission.app.api.RoleAPI">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>

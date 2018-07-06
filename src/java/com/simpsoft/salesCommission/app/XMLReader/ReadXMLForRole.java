@@ -3,7 +3,7 @@ package com.simpsoft.salesCommission.app.XMLReader;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
-
+import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -19,10 +19,12 @@ import java.util.List;
 
 import com.simpsoft.salesCommission.app.api.RoleAPI;
 import com.simpsoft.salesCommission.app.model.Role;
+import com.simpsoft.salesCommission.ui.OrderController;
 import com.simpsoft.salesCommission.app.dataloader.RoleXML;
 
 @Component
 public class ReadXMLForRole {
+	private  final Logger logger = Logger.getLogger(ReadXMLForRole.class);
 	public static void main(String argv[]) {
 		ApplicationContext context = new ClassPathXmlApplicationContext("/applicationContext.xml");
 		RoleAPI roleAPI = (RoleAPI) context.getBean("roleApi");
@@ -54,6 +56,7 @@ public class ReadXMLForRole {
 			doc.getDocumentElement().normalize();
 
 			NodeList nodeList = doc.getElementsByTagName("Role");
+			logger.debug("NODELIST SIZE= "+nodeList.getLength());
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				Node node = nodeList.item(i);
 

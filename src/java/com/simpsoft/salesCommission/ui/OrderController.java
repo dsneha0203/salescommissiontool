@@ -16,12 +16,6 @@ import javax.servlet.http.HttpSession;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -333,6 +327,42 @@ public class OrderController {
 		return "splitOrders";
 	}
 	
+	@RequestMapping(value = "/newSplitRule", method = RequestMethod.GET)
+	public String CreateSplitRule( ModelMap model, HttpSession session, HttpServletRequest request) {
+		session.setAttribute("personListContainer1", getDummyPersonListContainer1()); //qualifying clause
+		//session.setAttribute("personListContainer1", getDummyPersonListContainerSplit());
+		session.setAttribute("personListContainer", getDummyPersonListContainer());		// beneficiary (rule param)
+
+
+		
+		
+		model.addAttribute("listRule2", ruleSimpleApi.listOfFields());
+		model.addAttribute("listRule3", ruleSimpleApi.listOfConditions());
+		
+		List<FieldList> fieldList = ruleSimpleApi.listOfFields();
+		logger.debug("SIZE OF FIELD LIST= "+fieldList.size());
+		LinkedHashSet<String> fieldNames = new LinkedHashSet<String>();
+		for(FieldList f : fieldList) {
+			fieldNames.add(f.getDisplayName());
+		}
+		ArrayList<String> uniqueFieldNameList = new ArrayList<String>(fieldNames);
+		logger.debug("SIZE OF UNIQUE FIELD NAME LIST= "+uniqueFieldNameList.size());
+		model.addAttribute("fieldNameList", uniqueFieldNameList);
+		
+		
+		List<ConditionList> condList = ruleSimpleApi.listOfConditions();
+		LinkedHashSet<String> condNames = new LinkedHashSet<String>();
+		for(ConditionList c : condList) {
+			condNames.add(c.getConditionValue());
+		}
+		ArrayList<String> uniqueCondNameList = new ArrayList<String>(condNames);
+		logger.debug("SIZE OF UNIQUE CONDITION NAME LIST= "+uniqueCondNameList.size());
+		model.addAttribute("condNameList", uniqueCondNameList);
+		
+		
+		return "newSplitOrder";
+	}
+	
 	@RequestMapping(value = "/updateSplitRule/{id}", method = RequestMethod.POST)
 	public String updateSplitRuleDetails(@PathVariable("id") int id, PersonListContainer1 qualListContainer,PersonListContainer benefListContainer, 
 			 ModelMap model, HttpSession session, HttpServletRequest request) {
@@ -417,6 +447,96 @@ public class OrderController {
 		return "redirect:/splitRuleDetails/"+id;
 	
 	}
+	
+	@RequestMapping(value = "/updateSplitRule", method = RequestMethod.POST)
+	public String createSplitRule( PersonListContainer1 qualListContainer,PersonListContainer benefListContainer, 
+			 ModelMap model, HttpSession session, HttpServletRequest request) {
+	
+		SplitRule splitRule = new SplitRule();
+		
+		
+		logger.debug("SPLIT RULE NAME= "+request.getParameter("splitRuleName"));
+		logger.debug("SPLIT RULE DESC= "+request.getParameter("splitRuleDesc"));
+		logger.debug("SPLIT RULE START DATE= "+request.getParameter("startDate"));
+		logger.debug("SPLIT RULE END DATE= "+request.getParameter("endDate"));
+		
+		
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String dateInString1 = request.getParameter("startDate");
+		String dateInString2 = request.getParameter("endDate");
+
+		try {
+
+			Date date1 = formatter.parse(dateInString1);
+			Date date2 = formatter.parse(dateInString2);
+			logger.debug("DATE1= "+date1);
+			logger.debug("DATE2= "+date2);
+			if(date2.before(date1)) {
+				JOptionPane.showMessageDialog(null, 
+                        "The termination date cannot be earlier than the start date", 
+                        "Cannot update split rule", 
+                        JOptionPane.WARNING_MESSAGE);
+				
+			}else {
+			splitRule.setStartDate(date1);
+			splitRule.setEndDate(date2);
+			splitRule.setSplitRuleName(request.getParameter("splitRuleName"));
+			splitRule.setDescription(request.getParameter("splitRuleDesc"));
+			
+			long id =splitRuleApi.createSplitRule(splitRule);
+			
+			SplitRule splitRule2 = splitRuleApi.getSplitRule(id);
+			
+			List<QualifyingClauseUI> qualList = qualListContainer.getPersonList();
+			List<SplitQualifyingClause> splitList = new ArrayList<>();
+			for (Iterator iterator = qualList.iterator(); iterator.hasNext();) {
+				QualifyingClauseUI tempQual = (QualifyingClauseUI) iterator.next();
+				SplitQualifyingClause tempSplit = new SplitQualifyingClause();
+				ConditionList condList = new ConditionList();
+				condList.setId(tempQual.getConditionId());
+				condList.setConditionValue(tempQual.getConditionValue());
+				tempSplit.setConditionList(condList);
+				FieldList fieldList = new FieldList();
+				fieldList.setId(tempQual.getFieldId());
+				fieldList.setDisplayName(tempQual.getFieldName());
+				fieldList.setFieldName(tempQual.getFn());
+				tempSplit.setFieldList(fieldList);
+				tempSplit.setValue(tempQual.getValue());
+				tempSplit.getConditionList().setConditionValue(tempQual.getConditionValue());
+				tempSplit.setNotFlag(tempQual.getCondition());
+				
+				splitList.add(tempSplit);
+			}
+			splitRule2.setSplitQualifyingClause(splitList);
+			
+			
+			for(RuleParameter B : benefListContainer.getPersonList1()) {
+				logger.debug("BENEFICIARY TYPE: " + B.getParameterName());
+				logger.debug("SPLIT PERCENTAGE: " + B.getParameterValue());
+			}
+		
+			List<RuleParameter> paramList = benefListContainer.getPersonList1();
+			List<SplitRuleBeneficiary> benefList = new ArrayList<>();
+			for (Iterator iterator = paramList.iterator(); iterator.hasNext();) {
+				RuleParameter tempParam = (RuleParameter) iterator.next();
+				SplitRuleBeneficiary tempBenef = new SplitRuleBeneficiary();
+				tempBenef.setBeneficiaryType(tempParam.getParameterName());
+				tempBenef.setSplitPercentage(Integer.parseInt(tempParam.getParameterValue()));
+				benefList.add(tempBenef);
+			}
+			splitRule2.setSplitRuleBeneficiary(benefList);
+			splitRuleApi.editSplitRule(splitRule2);
+			return "redirect:/splitRuleDetails/"+id ;
+			}
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return "redirect:/newSplitRule/";
+	}
+	
+	
 
 	
 }

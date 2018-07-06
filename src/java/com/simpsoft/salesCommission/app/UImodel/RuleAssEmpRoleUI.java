@@ -8,13 +8,14 @@ public class RuleAssEmpRoleUI {
 	public void setEmpName(String empName) {
 		this.empName = empName;
 	}
+	private String roleName;
 	public String getRoleName() {
 		return roleName;
 	}
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-	private String roleName;
+	
 	
 	RuleAssEmpRoleUI(){
 		

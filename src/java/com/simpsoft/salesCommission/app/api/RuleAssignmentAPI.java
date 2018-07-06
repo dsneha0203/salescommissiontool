@@ -230,12 +230,21 @@ public class RuleAssignmentAPI {
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
+		List frequencyList=null;
+		try {
 		tx = session.beginTransaction();
-		List frequencyList = session.createQuery("FROM Frequency").list();
+		frequencyList = session.createQuery("FROM Frequency").list();
 		for (Iterator iterator = frequencyList.iterator(); iterator.hasNext();) {
 			Frequency frequency = (Frequency) iterator.next();
 			logger.debug("GET THE RULE DETAILS FROM DATABASE= " + frequency.getId() +" "+ frequency.getFrequencyName());
 
+		}
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return frequencyList;
 	}

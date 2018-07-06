@@ -45,29 +45,38 @@ public class SplitRuleAPI {
 	 * @param splitRule
 	 * @return
 	 */
-	public SplitRule createSplitRule(SplitRule splitRule) {
+	public long createSplitRule(SplitRule splitRule) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		SplitRule newSplitRule = new SplitRule();
 		try {
 			tx = session.beginTransaction();
+			logger.debug("NEW SPLIT RULE NAME= "+splitRule.getSplitRuleName());
 			newSplitRule.setSplitRuleName(splitRule.getSplitRuleName());
+			logger.debug("NEW SPLIT RULE DESC= "+splitRule.getDescription());
 			newSplitRule.setDescription(splitRule.getDescription());
+			logger.debug("NEW SPLIT RULE START DATE= "+splitRule.getStartDate());
 			newSplitRule.setStartDate(splitRule.getStartDate());
+			logger.debug("NEW SPLIT RULE END DATE= "+splitRule.getEndDate());
 			newSplitRule.setEndDate(splitRule.getEndDate());
-			newSplitRule.setSplitQualifyingClause(splitRule.getSplitQualifyingClause());
-			newSplitRule.setSplitRuleBeneficiary(splitRule.getSplitRuleBeneficiary());
-			session.save(newSplitRule);
+			
+//			logger.debug("NEW SPLIT RULE QUAL CLAUSE LIST= "+splitRule.getSplitQualifyingClause());
+//			newSplitRule.setSplitQualifyingClause(splitRule.getSplitQualifyingClause());
+//			logger.debug("NEW SPLIT RULE BENEF LIST= "+splitRule.getSplitRuleBeneficiary());
+//			newSplitRule.setSplitRuleBeneficiary(splitRule.getSplitRuleBeneficiary());
+			
+			session.save(newSplitRule);			
 			tx.commit();
-			logger.debug("CREATED AN SPLIT RULE INTO DATABASE" + newSplitRule);
+			logger.debug("CREATED A SPLIT RULE INTO DATABASE" + newSplitRule);
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
 		} finally {
 			session.close();
-		}
-		return newSplitRule;
+			
+			}
+		return newSplitRule.getId();
 	}
 	
 	/**
@@ -359,29 +368,6 @@ public class SplitRuleAPI {
 
 	}
 	
-	/*public void editSplitQualClause(SplitQualifyingClause qualClause) {
-		Session session = sessionFactory.openSession();
-		Transaction tx = null;
-		try {
-			tx = session.beginTransaction();
-			SplitQualifyingClause splitQualifyingClause = (SplitQualifyingClause) session.get(SplitQualifyingClause.class, qualClause.getId());
-			splitQualifyingClause.setId(qualClause.getId());
-			splitQualifyingClause.setNotFlag(qualClause.isNotFlag());
-			splitQualifyingClause.setValue(qualClause.getValue());
-			splitQualifyingClause.getConditionList().setConditionValue(qualClause.getConditionList().getConditionValue());
-			splitQualifyingClause.getConditionList().setId(qualClause.getConditionList().getId());
-			session.merge(splitQualifyingClause);
-			logger.debug("EDIT THE SPLIT QUALIFYING CLAUSE DETAILS FROM DATABASE" + splitQualifyingClause);
-			tx.commit();
-		} catch (HibernateException e) {
-			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-
-	}*/
 	
 	public List<SplitQualifyingClause> getSplitQualClause(int ruleID) {		
 		Session session = sessionFactory.openSession();
