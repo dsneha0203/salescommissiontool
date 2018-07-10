@@ -210,6 +210,23 @@
 			</java>
 		</target>
 	
+	<!-- separate target to upload rule assignment to role and employee -->
+	<target name="uploadRuleAssgToEmpAndRole" depends="compile, package">
+		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignment"  fork="true"
+											           failonerror="true">
+													<arg value="-h"/>
+													<classpath refid="build.class.path" />
+													<classpath path="${temp.dir.classes}" />
+												</java>
+		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignmentToRole"  fork="true"
+											           failonerror="true">
+													<arg value="-h"/>
+													<classpath refid="build.class.path" />
+													<classpath path="${temp.dir.classes}" />
+												</java> 
+	
+	</target>
+	
 	<target name="callJava" depends="restore_db,compile, package">
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForAggregateFunction"  fork="true"
 			           failonerror="true">
@@ -301,12 +318,12 @@
 											<classpath refid="build.class.path" />
 											<classpath path="${temp.dir.classes}" />
 										</java>
-		<!--<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignmentToRole"  fork="true"
+		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignmentToRole"  fork="true"
 									           failonerror="true">
 											<arg value="-h"/>
 											<classpath refid="build.class.path" />
 											<classpath path="${temp.dir.classes}" />
-										</java> -->
+										</java>
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForSplitRule"  fork="true"
 											           failonerror="true">
 													<arg value="-h"/>

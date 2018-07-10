@@ -2,6 +2,7 @@ package com.simpsoft.salesCommission.ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,9 +29,11 @@ import com.simpsoft.salesCommission.app.UImodel.EmployeeUI;
 import com.simpsoft.salesCommission.app.UImodel.RoleUI;
 import com.simpsoft.salesCommission.app.UImodel.RuleAss1UI;
 import com.simpsoft.salesCommission.app.UImodel.RuleAssEmpRoleUI;
+import com.simpsoft.salesCommission.app.UImodel.RuleAssParamUI;
 import com.simpsoft.salesCommission.app.UImodel.RuleAssUI;
 import com.simpsoft.salesCommission.app.UImodel.RuleListContainer;
 import com.simpsoft.salesCommission.app.UImodel.RuleListContainer1;
+import com.simpsoft.salesCommission.app.UImodel.RuleListParamContainer;
 import com.simpsoft.salesCommission.app.api.EmployeeAPI;
 import com.simpsoft.salesCommission.app.api.RoleAPI;
 import com.simpsoft.salesCommission.app.api.RuleAPI;
@@ -43,6 +46,8 @@ import com.simpsoft.salesCommission.app.model.RuleAssignment;
 import com.simpsoft.salesCommission.app.model.RuleAssignmentDetails;
 import com.simpsoft.salesCommission.app.model.RuleAssignmentParameter;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
+import com.simpsoft.salesCommission.app.model.TargetDefinition;
+
 import org.apache.log4j.Logger;
 
 @Controller
@@ -75,17 +80,26 @@ public class TestCompController {
 		if (session.getAttribute("ruleListContainer") == null)
 			session.setAttribute("ruleListContainer", getDummyRuleListContainer());
 		model.addAttribute("ruleListContainer", (RuleListContainer) session.getAttribute("ruleListContainer"));
+		
+		
 
 		/*---------------------------Finding compensation assignment for role------------------------------*/
 		
 		
-		RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
+RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 		
 		if (object != null) {
 			logger.debug("ROLE UI SESSION ATTRIBUTE= "+object.getRoleName());
 			Role roleasign = roleApi.searchRoleByName(object.getRoleName());
 			model.addAttribute("rlelist", roleasign);
 			logger.debug("THE VALUE IS= " + roleasign.getRoleName());
+			
+			
+			
+			
+			
+			
+			
 			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object.getRoleName());
 			if(rAssdtail != null) {
 			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
@@ -109,11 +123,16 @@ public class TestCompController {
 			
 			status.setComplete();
 			session.removeAttribute("roleNameCompAsg");
-			return new ModelAndView("CompPlan");
+			return new ModelAndView("compPlanAssignment");
+			//return new ModelAndView("CompPlan");
 					}
 				}else {
-				return new ModelAndView("CompPlan");
-					}
+				//return new ModelAndView("CompPlan");
+					return new ModelAndView("compPlanAssignment");
+				
+				}
+			
+			
 			
 			
 			}
@@ -155,10 +174,12 @@ public class TestCompController {
 			model.addAttribute("empList", empName);
 			status.setComplete();
 			session.removeAttribute("EmployeeName");
-			return new ModelAndView("CompPlan");
+			//return new ModelAndView("CompPlan");
+			return new ModelAndView("compPlanAssignment");
 			}
 			}else {
-				return new ModelAndView("CompPlan");
+				//return new ModelAndView("CompPlan");
+				return new ModelAndView("compPlanAssignment");
 			}
 			
 			}else {
@@ -168,6 +189,7 @@ public class TestCompController {
                         JOptionPane.WARNING_MESSAGE);
 			}
 		}
+	
 	
 		/*-----------------------------------creating table for compensation plan against ruleId------------------------------------*/
 		AddRuleUI object2 = (AddRuleUI) request.getSession().getAttribute("Id");
@@ -185,10 +207,12 @@ public class TestCompController {
 			model.addAttribute("ruleList", rl1);
 			status.setComplete();
 			session.removeAttribute("Id");
-			return new ModelAndView("CompPlan");
+			//return new ModelAndView("CompPlan");
+			return new ModelAndView("compPlanAssignment");
 			
 		}
-		return new ModelAndView("CompPlan");
+		//return new ModelAndView("CompPlan");
+		return new ModelAndView("compPlanAssignment");
 		
 	}
 
@@ -202,32 +226,35 @@ public class TestCompController {
 		return new RuleListContainer(ruleList);
 	}
 
+
+
 	/*-----------------------------------------------------Updating Table----------------------------------------------------*/
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String update(@ModelAttribute("ruleListContainer") RuleListContainer ruleListContainer, AssignmentUI assnmnt,
-			ModelMap model) {
-
+	public String update(AssignmentUI assnmnt, RuleListContainer ruleListContainer,
+			ModelMap model, HttpSession session, HttpServletRequest request) {
+		logger.debug("-----IN UPDATE METHOD----");
+		
+		
 		model.addAttribute("id", assnmnt.getId());
-		System.out.println("chkId: " + assnmnt.getId());
+		logger.debug("chkId: " + assnmnt.getId());
 		model.addAttribute("assRoleName", assnmnt.getName());
-		System.out.println("name: " + assnmnt.getName());
+		logger.debug("Assignee name: " + assnmnt.getName());
 		model.addAttribute("assid", assnmnt.getAssid());
-		System.out.println("chkId: " + assnmnt.getAssid());
+		logger.debug("chkId: " + assnmnt.getAssid());
 		model.addAttribute("assempName", assnmnt.getEmpName());
-		System.out.println("name: " + assnmnt.getEmpName());
+		logger.debug("name: " + assnmnt.getEmpName());
 
 		for (RuleAssUI rul1 : ruleListContainer.getRuleList()) {
-			System.out.println("Id:   " + rul1.getId());
-			System.out.println("RuleName:  " + rul1.getRuleName());
-			System.out.println("Fixed:  " + rul1.getFixed());
-			System.out.println("Repeats:  " + rul1.getRepeats());
-			System.out.println("Frequency:  " + rul1.getFrequency());
-			// System.out.println("Validity Type: " + rul1.getValidityType());
-			System.out.println("StartDate:  " + rul1.getStartdate());
-			System.out.println("EndDate:  " + rul1.getEndDate());
+			logger.debug("Id:   " + rul1.getId());
+			logger.debug("RuleName:  " + rul1.getRuleName());
+			logger.debug("Fixed:  " + rul1.getFixed());
+			logger.debug("Repeats:  " + rul1.getRepeats());
+			logger.debug("Frequency:  " + rul1.getFrequency());
+			logger.debug("StartDate:  " + rul1.getStartdate());
+			logger.debug("EndDate:  " + rul1.getEndDate());
 			for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
-				System.out.println("ParameterName: " + rul2.getParameterName());
-				System.out.println("OverwriteValue: " + rul2.getOverwriteValue());
+				logger.debug("ParameterName: " + rul2.getParameterName());
+				logger.debug("OverwriteValue: " + rul2.getOverwriteValue());
 			}
 		}
 
@@ -251,18 +278,53 @@ public class TestCompController {
 			rass.setStartDate(rpm.getStartdate());
 			rass.setEndDate(rpm.getEndDate());
 			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
-			// List<RuleAssignmentParameter> rpm4 = new ArrayList<>();
-			/*
-			 * Iterator it = rpm1.iterator(); while(it.hasNext()) {
-			 * RuleAssignmentParameter rpm2 = (RuleAssignmentParameter)
-			 * iterator.next(); RuleAssignmentParameter rpm3 = new
-			 * RuleAssignmentParameter();
-			 * rpm3.setParameterName(rpm2.getParameterName()); String def =
-			 * rpm2.getOverwriteValue(); if (def != null) {
-			 * rpm3.setOverwriteValue(rpm2.getOverwriteValue()); } else {
-			 * System.out.println("logic is not ready"); } rpm4.add(rpm3); }
-			 */
-			rass.setRuleAssignmentParameter(rpm1);
+			List<RuleAssignmentParameter> ruleParamList = new ArrayList<>();
+			for(Iterator iterator1 = rpm1.iterator(); iterator1.hasNext();) {
+				RuleAssignmentParameter ruleAssParam = (RuleAssignmentParameter) iterator1.next();
+				String paramValue = (ruleAssApi.getParamValue(ruleAssParam.getParameterName())).getParameterValue();
+				logger.debug("PARAM VALUE= "+paramValue);
+				logger.debug("OVERWRITE ="+ruleAssParam.getOverwriteValue());
+				if(!ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
+					logger.debug("TARGET DEF NAME= "+ruleAssParam.getTargetDefinition().getDisplayName());
+				}else {
+					logger.debug("TARGET DEF NAME= null");
+				}
+				if(ruleAssParam.getOverwriteValue().equals("")) {
+					logger.debug("VALUE TYPE= DEFAULT");
+					ruleAssParam.setValueType("default");
+					ruleAssParam.setOverwriteValue(paramValue);
+					
+					if( ruleAssParam.getTargetDefinition().getDisplayName().equals("")){
+						ruleAssParam.setTargetDefinition(null);
+					}else {
+						logger.debug("OVERLAY VALUE= "+ruleAssParam.getTargetDefinition().getDisplayName());
+						logger.debug("VALUE TYPE= OVERLAY");
+						ruleAssParam.setValueType("overlay");
+						TargetDefinition tgd = ruleAssApi.searchTargetDef(ruleAssParam.getTargetDefinition().getDisplayName());
+						ruleAssParam.setTargetDefinition(tgd);
+					}
+				}
+				else if(!(ruleAssParam.getOverwriteValue().equals(paramValue)) && ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
+					logger.debug("OVERWRITE VALUE= "+ruleAssParam.getOverwriteValue());
+					logger.debug("VALUE TYPE= OVERWRITE");
+					ruleAssParam.setValueType("overwrite");
+					ruleAssParam.setTargetDefinition(null);
+				}
+				else if( !(ruleAssParam.getTargetDefinition().getDisplayName().equals(""))) {
+					logger.debug("OVERLAY VALUE= "+ruleAssParam.getTargetDefinition().getDisplayName());
+					logger.debug("VALUE TYPE= OVERLAY");
+					ruleAssParam.setValueType("overlay");
+					TargetDefinition tgd = ruleAssApi.searchTargetDef(ruleAssParam.getTargetDefinition().getDisplayName());
+					ruleAssParam.setTargetDefinition(tgd);
+				}
+				
+				
+				ruleParamList.add(ruleAssParam);
+				
+			}
+						
+			//rass.setRuleAssignmentParameter(rpm1);
+			rass.setRuleAssignmentParameter(ruleParamList);
 			rp.add(rass);
 		}
 
@@ -283,7 +345,9 @@ public class TestCompController {
 			ruleAss.setEmployee(emp);
 			ruleAssApi.editRuleAssignment(ruleAss);
 		}
-		return "hello";
+		
+		return "redirect:/compplan";
+		
 	}
 
 	/*-----------------------------------------------------creating compensation plan assignment ----------------------------------------------------*/
@@ -291,83 +355,172 @@ public class TestCompController {
 	public String create(@ModelAttribute("SpringWeb") RuleListContainer1 ruleListContainer, RuleAssEmpRoleUI ruleAssEmpRole,ModelMap model, 
 			HttpServletRequest request, HttpSession session,SessionStatus status) {
 		
-//		model.addAttribute("text2", ruleAssEmpRole.getEmpName());
-//		System.out.println("EmpName: " + ruleAssEmpRole.getEmpName());
+		model.addAttribute("text2", ruleAssEmpRole.getEmpName());
+		logger.debug("EmpName: " + ruleAssEmpRole.getEmpName());
+//		if(!ruleAssEmpRole.getEmpName().equals("")) {
 //		empApi.searchEmployee(ruleAssEmpRole.getEmpName());
 //		List<Employee> employee = empApi.searchEmployeesByName(ruleAssEmpRole.getEmpName());
 //		for (Iterator iterator = employee.iterator(); iterator.hasNext();) {
 //			Employee emp = (Employee) iterator.next();
 //			long empId = emp.getId();
 //		}
-//		
-//		
-//		model.addAttribute("roleNameCompAsg", ruleAssEmpRole.getRoleName());
-//		System.out.println("Rolename: " +  ruleAssEmpRole.getRoleName());
-//		
-//		for (RuleAss1UI rul1 : ruleListContainer.getRuleList1()) {
-//			System.out.println("Id:   " + rul1.getId());
-//			System.out.println("RuleName:  " + rul1.getRuleName());
-//			System.out.println("Fixed:  " + rul1.getFixed());
-//			System.out.println("Repeats:  " + rul1.getRepeats());
-//			System.out.println("Frequency:  " + rul1.getFrequency());
-//			System.out.println("StartDate:  " + rul1.getStartdate());
-//			System.out.println("EndDate:  " + rul1.getEndDate());
-//			for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
-//				System.out.println("ParameterName: " + rul2.getParameterName());
-//				System.out.println("overwriteValue: " + rul2.getOverwriteValue());
-//			}
 //		}
-//		List<RuleAss1UI> rul = ruleListContainer.getRuleList1();
-//		List<RuleAssignmentDetails> rp = new ArrayList<>();
-//		RuleAssignment ras = new RuleAssignment();
-//		Employee emp = empApi.searchEmployee(ruleAssEmpRole.getEmpName());
-//		ras.setEmployee(emp);
-//		for (Iterator iterator = rul.iterator(); iterator.hasNext();) {
-//			RuleAss1UI rpm = (RuleAss1UI) iterator.next();
-//			RuleAssignmentDetails rass = new RuleAssignmentDetails();
-//			rass.setId(rpm.getId());
-//			String rName = rpm.getRuleName();
-//			Rule rule1 = ruleApi.searchRuleByName(rName);
-//			rass.setRule(rule1);
-//			String fixed = rpm.getFixed();
-//			String repeats = rpm.getRepeats();
-//			String frequency = rpm.getFrequency();
-//			if (fixed != null) {
-//				rass.setValidityType(fixed);
-//			} else {
-//				rass.setValidityType(repeats);
-//				Frequency frq = ruleAssApi.searchFrequency(frequency);
-//				rass.setFrequency(frq);
-//			}
-//			rass.setStartDate(rpm.getStartdate());
-//			rass.setEndDate(rpm.getEndDate());
-//			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
-//			
-//			rass.setRuleAssignmentParameter(rpm1);
-//			rp.add(rass);
+		
+		model.addAttribute("roleNameCompAsg", ruleAssEmpRole.getRoleName());
+		logger.debug("Rolename: " +  ruleAssEmpRole.getRoleName());
+		
+		for (RuleAss1UI rul1 : ruleListContainer.getRuleList1()) {
+			logger.debug("Id:   " + rul1.getId());
+			logger.debug("RuleName:  " + rul1.getRuleName());
+			logger.debug("Fixed:  " + rul1.getFixed());
+			logger.debug("Repeats:  " + rul1.getRepeats());
+			logger.debug("Frequency:  " + rul1.getFrequency());
+			logger.debug("StartDate:  " + rul1.getStartdate());
+			logger.debug("EndDate:  " + rul1.getEndDate());
+			for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
+				logger.debug("ParameterName: " + rul2.getParameterName());
+				logger.debug("overwriteValue: " + rul2.getOverwriteValue());
+				if(!rul2.getTargetDefinition().getDisplayName().equals("")) {
+					logger.debug("target def name: "+rul2.getTargetDefinition().getDisplayName());
+				}
+			}
+		}
+		List<RuleAss1UI> rul = ruleListContainer.getRuleList1();
+		List<RuleAssignmentDetails> rp = new ArrayList<>();
+		RuleAssignment ras = new RuleAssignment();
+		if(!ruleAssEmpRole.getEmpName().equals("")) {
+			Employee emp = empApi.searchEmployee(ruleAssEmpRole.getEmpName());			
+			ras.setEmployee(emp);
+			ras.setRole(null);
+			logger.debug("EMPLOYEE ID ASSIGNED= "+ras.getEmployee().getId());
+		}else {
+			Role role = roleApi.searchRoleByName(ruleAssEmpRole.getRoleName());
+			ras.setRole(role);
+			ras.setEmployee(null);
+			logger.debug("ROLE ID ASSIGNED= "+ras.getRole().getId());
+		}
+		for (Iterator iterator = rul.iterator(); iterator.hasNext();) {
+			RuleAss1UI rpm = (RuleAss1UI) iterator.next();
+			RuleAssignmentDetails rass = new RuleAssignmentDetails();
+			rass.setId(rpm.getId());		
+			String rName = rpm.getRuleName();
+			Rule rule1 = ruleApi.searchRuleByName(rName);
+			rass.setRule(rule1);
+			String fixed = rpm.getFixed();
+			String repeats = rpm.getRepeats();
+			String frequency = rpm.getFrequency();
+			if (fixed != null) {
+				rass.setValidityType(fixed);
+			} else {
+				rass.setValidityType(repeats);
+				Frequency frq = ruleAssApi.searchFrequency(frequency);
+				rass.setFrequency(frq);
+				logger.debug("VALIDITY TYPE ASSIGNED= "+rass.getValidityType());
+				
+			}
+			rass.setStartDate(rpm.getStartdate());
+			logger.debug("START DATE ASSIGNED= "+rass.getStartDate());
+			rass.setEndDate(rpm.getEndDate());
+			logger.debug("END DATE ASSIGNED= "+rass.getEndDate());
+			
+			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
+			
+			List<RuleAssignmentParameter> ruleParamList = new ArrayList<>();
+			for(Iterator iterator1 = rpm1.iterator(); iterator1.hasNext();) {
+				RuleAssignmentParameter ruleAssParam = (RuleAssignmentParameter) iterator1.next();
+				String paramValue = (ruleAssApi.getParamValue(ruleAssParam.getParameterName())).getParameterValue();
+				logger.debug("PARAM VALUE= "+paramValue);
+				logger.debug("OVERWRITE ="+ruleAssParam.getOverwriteValue());
+				if(!ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
+					logger.debug("TARGET DEF NAME= "+ruleAssParam.getTargetDefinition().getDisplayName());
+				}else {
+					logger.debug("TARGET DEF NAME= null");
+				}
+				if(ruleAssParam.getOverwriteValue().equals("")) {
+					logger.debug("VALUE TYPE= DEFAULT");
+					ruleAssParam.setValueType("default");
+					ruleAssParam.setOverwriteValue(paramValue);
+					
+					if( ruleAssParam.getTargetDefinition().getDisplayName().equals("")){
+						ruleAssParam.setTargetDefinition(null);
+					}else {
+						logger.debug("OVERLAY VALUE= "+ruleAssParam.getTargetDefinition().getDisplayName());
+						logger.debug("VALUE TYPE= OVERLAY");
+						ruleAssParam.setValueType("overlay");
+						TargetDefinition tgd = ruleAssApi.searchTargetDef(ruleAssParam.getTargetDefinition().getDisplayName());
+						ruleAssParam.setTargetDefinition(tgd);
+					}
+				}
+				else if(!(ruleAssParam.getOverwriteValue().equals(paramValue)) && ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
+					logger.debug("OVERWRITE VALUE= "+ruleAssParam.getOverwriteValue());
+					logger.debug("VALUE TYPE= OVERWRITE");
+					ruleAssParam.setValueType("overwrite");
+					ruleAssParam.setTargetDefinition(null);
+				}
+				else if( !(ruleAssParam.getTargetDefinition().getDisplayName().equals(""))) {
+					logger.debug("OVERLAY VALUE= "+ruleAssParam.getTargetDefinition().getDisplayName());
+					logger.debug("VALUE TYPE= OVERLAY");
+					ruleAssParam.setValueType("overlay");
+					TargetDefinition tgd = ruleAssApi.searchTargetDef(ruleAssParam.getTargetDefinition().getDisplayName());
+					ruleAssParam.setTargetDefinition(tgd);
+				}
+				
+				
+				ruleParamList.add(ruleAssParam);
+				
+			}
+						
+			//rass.setRuleAssignmentParameter(rpm1);
+			rass.setRuleAssignmentParameter(ruleParamList);
+			rp.add(rass);
+		}
+		
+		ras.setRuleAssignmentDetails(rp);
+		if(!ruleAssEmpRole.getEmpName().equals("")) {
+			Employee emp = empApi.searchEmployee(ruleAssEmpRole.getEmpName());
+			if(ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()) !=null) {
+			//get rule assignment id of this emp id
+			long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()).getId();
+			logger.debug("EXISTING ID FOR EMP= "+existingRuleAsgId);
+			ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+			}else {
+				ruleAssApi.createRuleAssignment(ras);
+			}
+		}else {
+			Role role = roleApi.searchRoleByName(ruleAssEmpRole.getRoleName());
+			logger.debug("ROLE SELECTED= "+role.getRoleName());
+			//get rule assignment id of this role id
+			if(ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()) !=null) {
+				
+				long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()).getId();
+				logger.debug("EXISTING ID FOR ROLE= "+existingRuleAsgId);
+				ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+				
+			}else {
+				ruleAssApi.createRuleAssignment(ras);
+			}
+		}
+			
+	
+		
+		
+		
+//		if (EmpName != null) {
+//			RuleAssignment ruleAss = ruleAssApi.getRuleAssignment(assIdForRole);
+//			//Role role = roleApi.searchRole(assnmnt.getName());
+//			//ruleAss.setRuleAssignmentDetails(rp);
+//			//ruleAss.setRole(role);
+//			//ruleAssApi.editRuleAssignment(ruleAss);
+//		} else {
+//			//RuleAssignment ruleAss = ruleAssApi.getRuleAssignment(assIdForEmp);
+//			//Employee emp = empApi.searchEmployee(assnmnt.getEmpName());
+//			//ruleAss.setRuleAssignmentDetails(rp);
+//			//ruleAss.setEmployee(emp);
+//			//ruleAssApi.editRuleAssignment(ruleAss);
 //		}
-//		
-//		ras.setRuleAssignmentDetails(rp);
-//		
-//	 ruleAssApi.createRuleAssignment(ras);
 		
-		
-		/*if (EmpName != null) {
-			RuleAssignment ruleAss = ruleAssApi.getRuleAssignment(assIdForRole);
-			//Role role = roleApi.searchRole(assnmnt.getName());
-			//ruleAss.setRuleAssignmentDetails(rp);
-			//ruleAss.setRole(role);
-			//ruleAssApi.editRuleAssignment(ruleAss);
-		} else {
-			//RuleAssignment ruleAss = ruleAssApi.getRuleAssignment(assIdForEmp);
-			//Employee emp = empApi.searchEmployee(assnmnt.getEmpName());
-			//ruleAss.setRuleAssignmentDetails(rp);
-			//ruleAss.setEmployee(emp);
-			//ruleAssApi.editRuleAssignment(ruleAss);
-		}*/
-		
-		logger.debug("EMPLOYEE NAME= "+ruleAssEmpRole.getEmpName());
-		logger.debug("ROLE NAME= "+ruleAssEmpRole.getRoleName());
+//		logger.debug("EMPLOYEE NAME= "+ruleAssEmpRole.getEmpName());
+//		logger.debug("ROLE NAME= "+ruleAssEmpRole.getRoleName());
 	
 	return "redirect:/compplan";
 }
@@ -398,7 +551,7 @@ public class TestCompController {
 		object1.setEmployeeName(obj.getEmployeeName());
 		request.getSession().setAttribute("EmployeeName", object1);
 		return "redirect:/compplan";
-		//return "redirect:/compPlanAsg";
+		
 	}
 
 	/*-------------------------------------Take roleNameCompAsg for check & pass to the /compplan-----------------------------------*/
@@ -411,19 +564,19 @@ public class TestCompController {
 		object.setRoleName(command.getRoleName());
 		request.getSession().setAttribute("roleNameCompAsg", object);
 		return "redirect:/compplan";
-		//return "redirect:/compPlanAsg";
+		
 	}
 
 	/*-------------------------------------Take ruleId  pass to the /compplan-----------------------------------*/
 	@RequestMapping(value = "/submitrule", method = RequestMethod.POST)
-	public String addroleSerch(@ModelAttribute("SpringWeb") Rule obj2, HttpServletRequest request,
+	public String addNewRule(@ModelAttribute("SpringWeb") Rule obj2, HttpServletRequest request,
 			HttpServletResponse response, ModelMap model) throws ServletException, IOException {
 		model.addAttribute("Id", obj2.getId());
 		AddRuleUI object2 = new AddRuleUI();
 		object2.setId(obj2.getId());
 		request.getSession().setAttribute("Id", object2);
 		return "redirect:/compplan";
-		//return "redirect:/compPlanAsg";
+		
 	}
 	
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <RuleAssignments>
 	<RuleAssignment>
-		<EmployeeName>Potter</EmployeeName>
+		<EmployeeName>emp_1</EmployeeName>
 		<RoleName>null</RoleName>
 		<AssignmentDetails>
 			<AssignmentDetail validityType="fixed">
@@ -19,7 +19,7 @@
 		</AssignmentDetails>
 	</RuleAssignment>
 	<RuleAssignment>
-		<EmployeeName>Harry</EmployeeName>
+		<EmployeeName>emp_2</EmployeeName>
 		<RoleName>null</RoleName>
 		<AssignmentDetails>
 			<AssignmentDetail validityType="repeats">
@@ -37,7 +37,7 @@
 		</AssignmentDetails>
 	</RuleAssignment>
 	<RuleAssignment>
-		<EmployeeName>Tom</EmployeeName>
+		<EmployeeName>emp_3</EmployeeName>
 		<RoleName>null</RoleName>
 		<AssignmentDetails>
 			<AssignmentDetail validityType="fixed">
@@ -55,7 +55,7 @@
 		</AssignmentDetails>
 	</RuleAssignment>
 	<RuleAssignment>
-		<EmployeeName>Jerry</EmployeeName>
+		<EmployeeName>emp_4</EmployeeName>
 		<RoleName>null</RoleName>
 		<AssignmentDetails>
 			<AssignmentDetail validityType="repeats">

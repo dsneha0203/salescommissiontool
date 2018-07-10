@@ -262,11 +262,6 @@ public class OrderController {
 		return new PersonListContainer(personList1);
 	}
 	
-	private PersonListContainerBenef getDummyPersonListContainerBenef() {
-		List<SplitRuleBeneficiaryUI> personList1 = new ArrayList<SplitRuleBeneficiaryUI>();
-			personList1.add(new SplitRuleBeneficiaryUI());
-		return new PersonListContainerBenef();
-	}
 	
 	@RequestMapping(value = "/orderSplitRule", method = RequestMethod.GET)
 	public String OrderSplitRule(ImportId Id, HttpServletRequest request,

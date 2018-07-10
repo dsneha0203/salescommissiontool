@@ -96,5 +96,17 @@ public class RuleAssUI {
 		this.frequency=frequency;
 		
 	}
+	public RuleAssUI(int id, String ruleName, String fixed, String repeats, String frequency, Date startdate,
+			Date endDate, List<RuleAssignmentParameter> ruleAssignmentParameter) {
+		
+		this.id = id;
+		this.ruleName = ruleName;
+		this.fixed = fixed;
+		this.repeats = repeats;
+		this.frequency = frequency;
+		Startdate = startdate;
+		this.endDate = endDate;
+		this.ruleAssignmentParameter = ruleAssignmentParameter;
+	}
 	
 }

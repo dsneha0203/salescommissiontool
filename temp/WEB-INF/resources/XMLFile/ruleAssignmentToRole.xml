@@ -1,8 +1,26 @@
 <?xml version="1.0"?>
-<RuleAssignments>
+<RuleAssignments>	
 	<RuleAssignment>
 		<EmployeeName>null</EmployeeName>
-		<RoleName>Director QA</RoleName>
+		<RoleName>VP Finance</RoleName>
+		<AssignmentDetails>
+			<AssignmentDetail validityType="repeats">
+				<StartDate>31/03/2016</StartDate>
+				<EndDate>30/09/2016</EndDate>
+				<RuleID>1</RuleID>
+				<Frequency>weekly</Frequency>
+			</AssignmentDetail>
+			<AssignmentDetail validityType="repeats">
+				<StartDate>02/04/2016</StartDate>
+				<EndDate>02/10/2016</EndDate>
+				<RuleID>4</RuleID>
+				<Frequency>monthly</Frequency>
+			</AssignmentDetail>
+		</AssignmentDetails>
+	</RuleAssignment>
+	<RuleAssignment>
+		<EmployeeName>null</EmployeeName>
+		<RoleName>CEO</RoleName>
 		<AssignmentDetails>
 			<AssignmentDetail validityType="fixed">
 				<StartDate>31/03/2016</StartDate>
@@ -20,43 +38,7 @@
 	</RuleAssignment>
 	<RuleAssignment>
 		<EmployeeName>null</EmployeeName>
-		<RoleName>Director Development</RoleName>
-		<AssignmentDetails>
-			<AssignmentDetail validityType="repeats">
-				<StartDate>31/03/2016</StartDate>
-				<EndDate>30/09/2016</EndDate>
-				<RuleID>1</RuleID>
-				<Frequency>weekly</Frequency>
-			</AssignmentDetail>
-			<AssignmentDetail validityType="fixed">
-				<StartDate>02/04/2016</StartDate>
-				<EndDate>02/10/2016</EndDate>
-				<RuleID>3</RuleID>
-				<Frequency>null</Frequency>
-			</AssignmentDetail>
-		</AssignmentDetails>
-	</RuleAssignment>
-	<RuleAssignment>
-		<EmployeeName>null</EmployeeName>
-		<RoleName>Director Project Management</RoleName>
-		<AssignmentDetails>
-			<AssignmentDetail validityType="fixed">
-				<StartDate>31/03/2016</StartDate>
-				<EndDate>31/08/2016</EndDate>
-				<RuleID>1</RuleID>
-				<Frequency>null</Frequency>
-			</AssignmentDetail>
-			<AssignmentDetail validityType="repeats">
-				<StartDate>02/04/2016</StartDate>
-				<EndDate>02/10/2016</EndDate>
-				<RuleID>4</RuleID>
-				<Frequency>monthly</Frequency>
-			</AssignmentDetail>
-		</AssignmentDetails>
-	</RuleAssignment>
-	<RuleAssignment>
-		<EmployeeName>null</EmployeeName>
-		<RoleName>Analyst I</RoleName>
+		<RoleName>Accounts</RoleName>
 		<AssignmentDetails>
 			<AssignmentDetail validityType="repeats">
 				<StartDate>31/03/2016</StartDate>

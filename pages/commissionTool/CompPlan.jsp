@@ -223,6 +223,9 @@ overflow-y: scroll;
 	        beforeSubmit : beforeSubmit
 	    };
 	    new DynamicListHelper(config);
+	    
+	   
+	    
 	});
  
 </script>
@@ -325,9 +328,10 @@ overflow-y: scroll;
 								Value &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Overwrite&nbsp;</th>
 							<th></th>
 						</tr>
-					</thead>
+					</thead> 
 					<form:form action="/CommissionTool/update" method="post"
 						id="ruleListForm" modelAttribute="ruleListContainer">
+					
 				<c:choose> 
 				<c:when test="${assObj.id != null}">
 					<input type="hidden" name="id" value="${assObj.id}">
@@ -345,10 +349,18 @@ overflow-y: scroll;
 							<tr class="rule">
 								<td><input type="hidden" name="ruleList[${vs.index}].id" value="${as.rule.id}" /> ${as.rule.id}</td>
                         		<td><input type="hidden" name="ruleList[${vs.index}].ruleName" value="${as.rule.ruleName}" /> ${as.rule.ruleName}</td>
-								<td>&nbsp;&nbsp;<input type="checkbox" name="ruleList[].fixed" value="fixed" /></td>
-								<td>&nbsp;&nbsp; <input type="checkbox" name="ruleList[].repeats" value="repeats">						
-  									<select name="ruleList[].frequency" style="width: 80px;"> 
-											<option value="">--Select--</option>
+                        		
+								<td>&nbsp;&nbsp;<input type="checkbox" name="ruleList[].fixed" id="fixed_checkbox" value="fixed"
+								<c:if test="${as.validityType eq 'fixed' }">
+								checked
+								</c:if> ></td>
+								<td>&nbsp;&nbsp; <input type="checkbox" name="ruleList[].repeats" value="repeats" id="repeats_checkbox" 
+								<c:if test="${as.validityType eq 'repeats'}">
+								checked
+								</c:if>
+								>						
+  									<select name="ruleList[].frequency" > 
+											<option value="${as.frequency.frequencyName }">--${as.frequency.frequencyName }--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />
 											<c:out value="${freq.frequencyName}" />
@@ -366,7 +378,7 @@ overflow-y: scroll;
                                                 <td><input type="hidden" value="${asss.overwriteValue}" /> ${asss.overwriteValue}</td>
 											
 										
-											    <td>&nbsp;<input type="text" name="ruleList[${vs.index}].ruleAssignmentParameter[${assignments.index}].overwriteValue" value=""size="7"height="0.01">&nbsp;or&nbsp; 
+											    <td>&nbsp;<input type="number" name="ruleList[${vs.index}].ruleAssignmentParameter[${assignments.index}].overwriteValue" value=""size="7"height="0.01">&nbsp;or&nbsp; 
 												<select >
 																<option value="">--Select--</option>
 														<c:forEach items="${targetlist}" var="target">
@@ -382,24 +394,15 @@ overflow-y: scroll;
 								<td><a href="#" class="removeRule">Remove</a></td>
 							
 							</tr>
-						</c:forEach>
-						
-				
-				
-			<!-- <a href="#" id="addRule">Add</a> -->
-			<c:choose> 
-				<c:when test="${assObj1.id != null || assObj.id != null}">
-				<center>
-				<input type="submit" value="Update">
-				</center>
-				</c:when>
+						</c:forEach></tbody></table>	
+				<c:choose> 
+				<c:when test="${assObj1.id != null || assObj.id != null}"><input type="submit" value="Update"></c:when>
 				</c:choose>
-				</tbody>
-			</form:form>  
-						
+			</form:form>
+					
 		<!-- ------------------------------------------This part for creating table against RuleId----------------------------------- -->	
 							
-				<form:form action="/CommissionTool/create" method="post"
+				<!--<form:form action="/CommissionTool/create" method="post"
 						id="ruleListForm1" modelAttribute="ruleListContainer1">
 						
 					
@@ -413,7 +416,7 @@ overflow-y: scroll;
                         		<td><input type="hidden" name="ruleList1[${vs.index}].ruleName" value="${rs.ruleName}" /> ${rs.ruleName}</td>
 								<td>&nbsp;&nbsp;<input type="checkbox" name="ruleList1[].fixed" value="fixed" /></td>
 								<td>&nbsp;&nbsp; <input type="checkbox" name="ruleList1[].repeats" value="repeats">						
-  									<select name="ruleList1[].frequency" style="width: 80px;"> 
+  									<select name="ruleList1[].frequency" > 
 										<option value="">--Select--</option>
 										<c:forEach items="${listfrequency}" var="fre">
 											<option value="${fre.frequencyName}" />
@@ -429,7 +432,7 @@ overflow-y: scroll;
 											<tr >
 											  <td><input type="hidden" name="ruleList1[${vs.index}].ruleAssignmentParameter[${assignments.index}].parameterName" value="${ass.parameterName}" /> ${ass.parameterName}</td>
 											  <td><input type="hidden" name="ruleList1[${vs.index}].ruleAssignmentParameter[${assignments.index}].overwriteValue" value="${ass.parameterValue}" /> ${ass.parameterValue}</td>
-											  <td>&nbsp;<input type="text" value=""size="7"height="0.01">&nbsp;or&nbsp; 
+											  <td>&nbsp;<input type="number" value=""size="7"height="0.01">&nbsp;or&nbsp; 
 											  		<select >
 																<option value="">--Select--</option>
 														<c:forEach items="${targetlist}" var="target">
@@ -447,7 +450,7 @@ overflow-y: scroll;
 						</tr>
 						</c:forEach>
 					  </tbody>  
-					  <td><input type="submit" value="Create"></td>  
+					  <td><input type="submit" value="Create"></td>   
 					  </form:form> 
 						</table>  
 						
@@ -467,6 +470,6 @@ overflow-y: scroll;
            	 			<td>
            			 <input type="submit" value ="add"></td>
             </tr></table></form>
-            </div>
+            </div>-->
 	</tiles:putAttribute>
 </tiles:insertDefinition>

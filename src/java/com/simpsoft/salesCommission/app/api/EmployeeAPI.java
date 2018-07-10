@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import com.simpsoft.salesCommission.app.model.EmployeeRoleMap;
 import com.simpsoft.salesCommission.app.model.Frequency;
 import com.simpsoft.salesCommission.app.model.Role;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
+import com.simpsoft.salesCommission.app.model.SplitQualifyingClause;
 import com.simpsoft.salesCommission.app.model.State;
 import com.simpsoft.salesCommission.app.model.TargetDefinition;
 
@@ -425,14 +427,31 @@ public class EmployeeAPI {
 
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
-		tx = session.beginTransaction();
-		List targetDefinition = session.createQuery("FROM TargetDefinition").list();
-		for (Iterator iterator = targetDefinition.iterator(); iterator.hasNext();) {
-			TargetDefinition target = (TargetDefinition) iterator.next();
-			logger.debug("GET THE TARGET DEFINITION DETAILS FROM DATABASE" + target.getId() + target.getDisplayName());
-
+		
+		LinkedHashSet<TargetDefinition> defs = new LinkedHashSet<>();
+		List<TargetDefinition> defsList=null;
+		try {
+			tx = session.beginTransaction();
+			Criteria criteria = session.createCriteria(TargetDefinition.class);
+			criteria.add(Restrictions.isNotNull("targetName"));
+			//List targetDefinition = session.createQuery("FROM TargetDefinition").list();
+			List targetDefinition =criteria.list();
+			for (Iterator iterator = targetDefinition.iterator(); iterator.hasNext();) {
+				TargetDefinition target = (TargetDefinition) iterator.next();
+				logger.debug("GET THE TARGET DEFINITION DETAILS FROM DATABASE" + target.getId() + target.getDisplayName());
+				defs.add(target);
+			}
+			defsList = new ArrayList<TargetDefinition>(defs);
+			tx.commit();
+		}catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		return targetDefinition;
+		
+		return defsList;
 	}
 	
 	public TargetDefinition searchTargetDefinition(String targetName) {
