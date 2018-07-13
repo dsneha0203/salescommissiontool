@@ -369,6 +369,8 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 		model.addAttribute("roleNameCompAsg", ruleAssEmpRole.getRoleName());
 		logger.debug("Rolename: " +  ruleAssEmpRole.getRoleName());
 		
+		if(!ruleAssEmpRole.getEmpName().equals("") || !ruleAssEmpRole.getRoleName().equals("")) {
+		
 		for (RuleAss1UI rul1 : ruleListContainer.getRuleList1()) {
 			logger.debug("Id:   " + rul1.getId());
 			logger.debug("RuleName:  " + rul1.getRuleName());
@@ -479,10 +481,17 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 		if(!ruleAssEmpRole.getEmpName().equals("")) {
 			Employee emp = empApi.searchEmployee(ruleAssEmpRole.getEmpName());
 			if(ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()) !=null) {
-			//get rule assignment id of this emp id
-			long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()).getId();
-			logger.debug("EXISTING ID FOR EMP= "+existingRuleAsgId);
-			ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+				logger.debug("RULE ASSIGNMENT FOR EMP ALREADY EXISTS");
+				logger.debug("RULE ASSG ID= "+ ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()).getId() );
+//			//get rule assignment id of this emp id
+//			long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()).getId();
+//			logger.debug("EXISTING ID FOR EMP= "+existingRuleAsgId);
+//			ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+				RuleAssignment ruleAssg = ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId());
+				List<RuleAssignmentDetails> rulesAssgDetailList = ruleAssg.getRuleAssignmentDetails();
+				rulesAssgDetailList.addAll(rp);
+				ruleAssApi.editRuleAssignment(ruleAssg);		
+				
 			}else {
 				ruleAssApi.createRuleAssignment(ras);
 			}
@@ -491,17 +500,24 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			logger.debug("ROLE SELECTED= "+role.getRoleName());
 			//get rule assignment id of this role id
 			if(ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()) !=null) {
-				
-				long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()).getId();
-				logger.debug("EXISTING ID FOR ROLE= "+existingRuleAsgId);
-				ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+				logger.debug("RULE ASSIGNMENT FOR ROLE ALREADY EXISTS");
+				logger.debug("RULE ASSG ID= "+ ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()).getId() );
+//				long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()).getId();
+//				logger.debug("EXISTING ID FOR ROLE= "+existingRuleAsgId);
+//				ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+			
+			//get previous rule assignment for role
+			RuleAssignment ruleAssg = ruleAssApi.getPreviousRuleAssignmentForRole(role.getId());
+			List<RuleAssignmentDetails> rulesAssgDetailList = ruleAssg.getRuleAssignmentDetails();
+			rulesAssgDetailList.addAll(rp);
+			ruleAssApi.editRuleAssignment(ruleAssg);	
 				
 			}else {
 				ruleAssApi.createRuleAssignment(ras);
 			}
 		}
 			
-	
+	}
 		
 		
 		

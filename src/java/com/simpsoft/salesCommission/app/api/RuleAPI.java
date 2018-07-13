@@ -12,7 +12,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.simpsoft.salesCommission.app.UImodel.QualifyingClauseUI;
+import com.simpsoft.salesCommission.app.model.QualifyingClause;
 import com.simpsoft.salesCommission.app.model.Rule;
+import com.simpsoft.salesCommission.app.model.RuleParameter;
 import com.simpsoft.salesCommission.app.model.RuleSimple;
 import com.simpsoft.salesCommission.app.model.RuleType;
 
@@ -123,12 +126,13 @@ public class RuleAPI {
 	 * @param rule
 	 */
 	public void editRule(Rule rule) {
-
+		logger.debug("---IN EDIT METHOD---");
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
 			Rule newRule = (Rule) session.get(Rule.class, rule.getId());
+			logger.debug("RULE NAME= "+rule.getRuleName());
 			newRule.setRuleName(rule.getRuleName());
 			newRule.setDescription(rule.getDescription());
 			newRule.setRuleDetails(rule.getRuleDetails());
@@ -137,8 +141,13 @@ public class RuleAPI {
 			newRule.setCompensationFormula(rule.getCompensationFormula());
 			newRule.setCompensationParameter(rule.getCompensationParameter());
 			newRule.clearRuleParameter(newRule.getRuleParameter());
+			for(Iterator itr= rule.getRuleParameter().iterator(); itr.hasNext();) {
+				RuleParameter parameter = (RuleParameter)itr.next();
+				logger.debug("PARAM NAME= "+parameter.getParameterName());
+				logger.debug("PARAM VALUE= "+parameter.getParameterValue());
+			}
 			newRule.addRuleParameter(rule.getRuleParameter());
-			//newRule.setRuleParameter(rule.getRuleParameter());
+//			newRule.setRuleParameter(rule.getRuleParameter());
 			if (rule.getRuleType().equals("Composite")) {
 				newRule.setConnectionType(rule.getConnectionType());
 				newRule.setRuleComposite(rule.getRuleComposite());
@@ -214,7 +223,15 @@ public class RuleAPI {
 		newsimp.setField(simpRule.getField());
 		newsimp.clearQualifyingClause(newsimp.getQualifyingClause());
 		newsimp.addQualifyingClause(simpRule.getQualifyingClause());
-	//	newsimp.setQualifyingClause(simpRule.getQualifyingClause());
+		for(Iterator itr= simpRule.getQualifyingClause().iterator(); itr.hasNext();) {
+			QualifyingClause p = (QualifyingClause)itr.next();
+			logger.debug("Edit QualifyingClauseValue: " + p.getValue());
+			logger.debug("Edit Condition: " + p.isNotFlag());
+			logger.debug("Edit ConditionValue: " + p.getConditionList().getConditionValue());
+			logger.debug("Edit FieldName: " + p.getFieldList().getDisplayName());
+			logger.debug("Edit Aggregate function: "+p.getAggregateFunctions().getFunctionName());
+		}
+//		newsimp.setQualifyingClause(simpRule.getQualifyingClause());
 		newsimp.setAggregateFunctions(simpRule.getAggregateFunctions());
 
 		session.merge(newsimp);

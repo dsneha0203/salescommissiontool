@@ -171,6 +171,7 @@ overflow: auto;
 	    	document.getElementById("role_rad").checked=false;
 	    	document.getElementById("emp_rad").checked=true;
 	    	document.getElementById("mag_emp").disabled=false;
+	    	document.getElementById("text1").disabled=false;	    	
 	    	$("#check_emp").show(500);
 	    	
 	    }

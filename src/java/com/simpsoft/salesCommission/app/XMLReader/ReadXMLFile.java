@@ -51,13 +51,13 @@ import com.simpsoft.salesCommission.app.model.State;
 			  Employee newEmployee = new Employee();
 			  newEmployee.setEmployeeName(employeeXml.getEmployeeName());
 			  newEmployee.setStartDate(employeeXml.getStartDate());
-			  OfficeLocation OffLoc = employeeXml.getOfficeLocation();
-			  Address address = OffLoc.getAddress();
-			  State state = address.getState();
-			  State newState = ordrAPI.searchState(state.getStateName());
-			  address.setState(newState);
-			  OffLoc.setAddress(address);
-			  newEmployee.setOfficeLocation(OffLoc);
+//			  OfficeLocation OffLoc = employeeXml.getOfficeLocation();
+//			  Address address = OffLoc.getAddress();
+//			  State state = address.getState();
+//			  State newState = ordrAPI.searchState(state.getStateName());
+//			  address.setState(newState);
+//			  OffLoc.setAddress(address);
+//			  newEmployee.setOfficeLocation(OffLoc);
 			  List<EmployeeManagerMapXML> employeeMgrMap = employeeXml.getEmployeeManagerMapXml();
 			  List<EmployeeManagerMap> newEmloyeeMgrMap = new ArrayList<EmployeeManagerMap>();
 			  
@@ -118,30 +118,30 @@ import com.simpsoft.salesCommission.app.model.State;
 	                		 		.item(0).getChildNodes().item(0).getNodeValue());                   
 	                   DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	                   Date date = df.parse(startDate); 
-	                   
-	                   String officeName = (elem.getElementsByTagName("OfficeName")
-               		 		.item(0).getChildNodes().item(0).getNodeValue());
-	                   System.out.println("OfficeName :" + officeName);
-	                   
-	                   int officeCode = Integer.parseInt(elem.getElementsByTagName("OfficeCode")
-               		 		.item(0).getChildNodes().item(0).getNodeValue());
-	                   System.out.println("OfficeCode :" + officeCode);
-	                   
-	                   String add_line_1 = (elem.getElementsByTagName("add_line_1")
-               		 		.item(0).getChildNodes().item(0).getNodeValue());
-	                   System.out.println("add_line_1 :" + add_line_1);
-	                   
-	                   String add_line_2 = (elem.getElementsByTagName("add_line_2")
-               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
-	                   System.out.println("add_line_2 :" + add_line_2);
-	                   
-	                   String state = (elem.getElementsByTagName("state")
-	               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
-	                   System.out.println("state :" + state);
+//	                   
+//	                   String officeName = (elem.getElementsByTagName("OfficeName")
+//               		 		.item(0).getChildNodes().item(0).getNodeValue());
+//	                   System.out.println("OfficeName :" + officeName);
+//	                   
+//	                   int officeCode = Integer.parseInt(elem.getElementsByTagName("OfficeCode")
+//               		 		.item(0).getChildNodes().item(0).getNodeValue());
+//	                   System.out.println("OfficeCode :" + officeCode);
+//	                   
+//	                   String add_line_1 = (elem.getElementsByTagName("add_line_1")
+//               		 		.item(0).getChildNodes().item(0).getNodeValue());
+//	                   System.out.println("add_line_1 :" + add_line_1);
+//	                   
+//	                   String add_line_2 = (elem.getElementsByTagName("add_line_2")
+//               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
+//	                   System.out.println("add_line_2 :" + add_line_2);
+//	                   
+//	                   String state = (elem.getElementsByTagName("state")
+//	               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
+//	                   System.out.println("state :" + state);
 	                   
 	                   Integer salary = Integer.parseInt(elem.getElementsByTagName("Salary")
                                .item(0).getChildNodes().item(0).getNodeValue());
-	                   System.out.println("OfficeCode :" + officeCode);
+	                 //  System.out.println("OfficeCode :" + officeCode);
 	                   
 	                   List<EmployeeManagerMapXML> employeeMgrMap = new ArrayList<EmployeeManagerMapXML>();
 						NodeList nodeList1 = elem.getElementsByTagName("manager");
@@ -206,23 +206,23 @@ import com.simpsoft.salesCommission.app.model.State;
 
 								}
 							}
-							Address addr = new Address();
-							addr.setAddrslinen1(add_line_1);
-							addr.setAddrslinen2(add_line_2);
-							State newState = new State();
-							newState.setStateName(state);
-							addr.setState(newState);
-							OfficeLocation offcLoc = new OfficeLocation();
-							offcLoc.setOfficeCode(officeCode);
-							offcLoc.setOfficeName(officeName);
-							offcLoc.setAddress(addr);
+//							Address addr = new Address();
+//							addr.setAddrslinen1(add_line_1);
+//							addr.setAddrslinen2(add_line_2);
+//							State newState = new State();
+//							newState.setStateName(state);
+//							addr.setState(newState);
+//							OfficeLocation offcLoc = new OfficeLocation();
+//							offcLoc.setOfficeCode(officeCode);
+//							offcLoc.setOfficeName(officeName);
+//							offcLoc.setAddress(addr);
 	                     EmployeeXML empXml = new EmployeeXML();
 	                     empXml.setEmployeeName(empName);
 	                     empXml.setStartDate(date);
 	                   //  emp.setSalary(salary);
 	                     empXml.setEmployeeManagerMapXml(employeeMgrMap);
 	                     empXml.setEmployeeRoleMapXml(employeeRoleMap);
-	                     empXml.setOfficeLocation(offcLoc);
+//	                     empXml.setOfficeLocation(offcLoc);
 	                   //  empXml.setAddressXml(addrxml);
 	                     employeesXml.add(empXml);
 	                   

@@ -29,6 +29,10 @@ public class Role {
 	@IndexColumn(name = "detailSrl")
 	private List<Target> target;
 
+	@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
+	@JoinColumn(name = "ROLE_ID")
+	@IndexColumn(name = "detailSrl")
+	private List<CalculationSimple> calcSimpleList;
 	
 	public Role() {
 	}
@@ -111,6 +115,16 @@ public class Role {
 	 */
 	public void setTarget(List<Target> target) {
 		this.target = target;
+	}
+
+
+	public List<CalculationSimple> getCalcSimpleList() {
+		return calcSimpleList;
+	}
+
+
+	public void setCalcSimpleList(List<CalculationSimple> calcSimpleList) {
+		this.calcSimpleList = calcSimpleList;
 	}
 
 

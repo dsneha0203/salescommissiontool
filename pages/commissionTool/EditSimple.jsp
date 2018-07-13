@@ -11,7 +11,7 @@
 
 		<style>
 table {
-    width: 700px;
+    width: 100%;
     border: 1px solid #AAA;
     table-layout: auto;
     border-collapse: collapse;
@@ -56,6 +56,7 @@ table td, table th {
 			}
 
 			function beforeSubmit1() {
+				
 				alert('submitting....');
 				return true;
 			}
@@ -70,10 +71,10 @@ table td, table th {
 									formId : 'personListForm',
 									rowContainerId : 'personListContainer1',
 									indexedPropertyName : 'personList',
-									indexedPropertyMemberNames : 'fieldName,condition,conditionValue,value',
+									indexedPropertyMemberNames : 'aggFuncName,fieldName,condition,conditionValue,value',
 									rowAddedListener : rowAdded,
 									rowRemovedListener : rowRemoved1,
-									beforeSubmit : beforeSubmit1
+									//beforeSubmit : beforeSubmit1
 								};
 								new DynamicListHelper(config);
 							});
@@ -99,6 +100,7 @@ table td, table th {
 			}
 
 			function beforeSubmit() {
+				
 				alert('submitting....');
 				return true;
 			}
@@ -119,6 +121,49 @@ table td, table th {
 									beforeSubmit : beforeSubmit
 								};
 								new DynamicListHelper(config);
+								
+								$("#rad_ind").click(function(){
+					            	$("#row_rank").hide(1000);
+					            	
+					             });
+					             
+					             $("#rad_rank").click(function(){
+					            	  $("#row_rank").show(1000);
+					            	
+					             });
+					             
+					             if(document.getElementById("rad_ind").checked){
+					            	 $("#row_rank").hide();
+					             }else{
+					            	 $("#row_rank").show();
+					             }
+					             
+					             var rad_fixed = document.getElementById("compensationTypeFixed");
+									
+									if(rad_fixed.checked){
+									document.getElementById("fixedCompValue").disabled=false;
+									document.getElementById("fixedCompValue").required=true;
+									document.getElementById("compensationFormula").disabled=true;
+									document.getElementById("compensationParameter").disabled=true;	
+									
+									}		
+								
+									var rad_variable = document.getElementById("compensationTypeVariable");
+									
+									
+									
+									if(rad_variable.checked){
+										document.getElementById("fixedCompValue").disabled=true;
+										document.getElementById("fixedCompValue").required=false;
+										document.getElementById("compensationFormula").disabled=false;
+										document.getElementById("compensationFormula").required=true;
+										document.getElementById("compensationParameter").disabled=false;	
+										document.getElementById("compensationParameter").required=true;
+									}
+									
+									if(document.getElementById("rad_global").checked){
+										document.getElementById("rad_global_val").disabled=false;
+						             }
 							});
 
 			var count = "1";
@@ -194,6 +239,7 @@ table td, table th {
 
 							<table>
 								<tbody id="personListContainer">
+								<c:if test="${personListContainer.personList1.size() != 0}">
 									<c:forEach items="${parList}" var="par">
 
 										<tr class="ruleParameter">
@@ -207,9 +253,9 @@ table td, table th {
 											<td><a href="#" class="removePerson">&nbsp;Remove</a></td>
 										</tr>
 									</c:forEach>
-
-									<c:if test="${personListContainer.personList1.size() == 0}">
-										<tr class="person defaultRow">
+								</c:if>
+									
+										<tr class="ruleParameter defaultRow">
 											<td>Parameter Name&nbsp;<input type="text"
 												name="personList1[].parameterName" value="" /></td>
 											<td>&nbsp;&nbsp;Parameter Value&nbsp;<input type="text"
@@ -217,7 +263,7 @@ table td, table th {
 
 											<td><a href="#" class="removePerson">Remove</a></td>
 										</tr>
-									</c:if>
+									
 
 								</tbody>
 							</table> <a href="#" id="addPerson">Add Parameters</a>&nbsp;&nbsp; <a
@@ -230,18 +276,21 @@ table td, table th {
 					<tr>
 						<td><b>Calculation mode:</b></td>
 						<td><input type="radio" name="calculationMode" value="individual"
-							${listRule4.ruleSimple.calculationMode=='individual'?'checked':''}>Individual&nbsp;&nbsp;&nbsp;&nbsp;<input
+							${listRule4.ruleSimple.calculationMode=='individual'?'checked':''} id="rad_ind">Individual&nbsp;&nbsp;&nbsp;&nbsp;<input
 							type="radio" name="calculationMode" value="rank"
-							${listRule4.ruleSimple.calculationMode=='rank'?'checked':''}>Rank</td>
+							${listRule4.ruleSimple.calculationMode=='rank'?'checked':''} id="rad_rank">Rank</td>
 					</tr>
+						<tr id="row_rank">
+					<td></td>
+					<td>
+					<table>
 					<tr>
 						<td></td>
-						<td>Within <input type="text" Name="rankCount"
-							value="${listRule4.ruleSimple.rankCount}" size="4">ranks
-							in <input type="radio" Name="rankType" value="Number"
-							${listRule4.ruleSimple.rankingType=='Number'?'checked':''}>number<input
-							type="radio" Name="rankType" value="Percentage"
-							${listRule4.ruleSimple.rankingType=='Percentage'?'checked':''}>percentage
+						<td>Within <input type="number" Name="rankCount" value="${listRule4.ruleSimple.rankCount}"
+							size="4">ranks in <input type="radio" Name="rankType"
+							value="Number" ${listRule4.ruleSimple.rankingType=='Number'?'checked':''}>number &nbsp;&nbsp;
+							<input type="radio" Name="rankType"
+							value="percentage" ${listRule4.ruleSimple.rankingType=='Percentage'?'checked':''}>percentage
 						</td>
 					</tr>
 					<tr>
@@ -251,30 +300,44 @@ table td, table th {
 								<tr>
 									<td>Population</td>
 									<td><input type="radio" Name="populationType"
-										value="SameReportingManager"
-										${listRule4.ruleSimple.populationType=='SameReportingManager'?'checked':''}>Under
-										same reporting manager</td>
+										value="SameReportingManager" id="rad_same_mgr" ${listRule4.ruleSimple.populationType=='SameReportingManager'?'checked':''}>Under same reporting
+										manager</td>
 								</tr>
 								<tr>
 									<td></td>
 									<td><input type="radio" Name="populationType"
-										value="SameRole"
-										${listRule4.ruleSimple.populationType=='SameRole'?'checked':''}>Same
-										role</td>
+										value="SameRole" id="rad_same_role" ${listRule4.ruleSimple.populationType=='SameRole'?'checked':''}>Same role</td>
 								</tr>
 								<tr>
 									<td></td>
 									<td><input type="radio" Name="populationType"
-										value="global upto"
-										${listRule4.ruleSimple.populationType=='global upto'?'checked':''}>Global
-										Upto <input type="text" Name="populationUpto" size="4"
-										value="${listRule4.ruleSimple.populationUpto}"></input> level
-										up</td>
+										value="global upto" id="rad_global" ${listRule4.ruleSimple.populationType=='global upto'?'checked':''}>Global Upto <input type="number"
+										Name="populationUpto" id="rad_global_val" value="${listRule4.ruleSimple.populationUpto}" disabled></input> level up</td>
 								</tr>
 							</table>
 						</td>
+						</tr>
+						</table>
+						</td>
+						<script>
+						 $("#rad_global").click(function(){
+			            	  $("#rad_global_val").prop("disabled",false);
+			            	
+			             });
+			             
+			             $("#rad_same_role").click(function(){
+			            	  $("#rad_global_val").prop("disabled",true);
+			            	
+			             });
+			             
+			             $("#rad_same_mgr").click(function(){
+			            	  $("#rad_global_val").prop("disabled",true);
+			            	
+			             });
+						
+						</script>
 					</tr>
-
+					
 					<tr>
 						<td><b>Based on: </b></td>
 						<td><table>
@@ -286,17 +349,19 @@ table td, table th {
 									<td><select name="aggregateFunctions">
 											<option
 												value="${listRule4.ruleSimple.aggregateFunctions.functionName}">---${listRule4.ruleSimple.aggregateFunctions.functionName}---</option>
+											
 											<c:forEach items="${listRule1}" var="rule">
 												<option value="${rule.functionName}">
 													<c:out value="${rule.functionName}" />
 												</option>
 											</c:forEach>
 									</select></td>
-									<td><select name="field">
+									<td><select name="Field">
 											<option value="${listRule4.ruleSimple.field}">---${listRule4.ruleSimple.field}---</option>
-											<option VALUE="order_total">Order Total</option>
-											<option value="quantity">Quantity</option>
-											<option value="discount_percent">Discount Percentage</option>
+											<option VALUE="Order Total">Order Total</option>
+											<option value="Quantity">Quantity</option>
+											<option value="Discount Percentage">Discount Percentage</option>
+											<option VALUE="Line Item Total">Line Item Total</option>
 									</select></td>
 							</table></td>
 					</tr>
@@ -327,6 +392,21 @@ table td, table th {
 								<tbody id="personListContainer1">
 									<c:forEach items="${qualifyingList}" var="quali">
 										<tr class="person">
+										<td>&nbsp;Aggregate function&nbsp;
+									<select name="personList[].aggFuncName">
+									<option value="${quali.aggregateFunctions.functionName }">
+													<c:out value="---${quali.aggregateFunctions.functionName }---" />
+												</option>
+												<option value="">
+													<c:out value="------" />
+												</option>
+									<c:forEach
+												items="${listRule1}" var="rule">
+												<option value="${rule.functionName}">
+													<c:out value="${rule.functionName}" />
+												</option>
+											</c:forEach>
+									</select></td>
 											<td>&nbsp;FieldName&nbsp;<select
 												name="personList[].fieldName">
 													<option value="${quali.fieldList.displayName}">---${quali.fieldList.displayName}---</option>
@@ -337,9 +417,28 @@ table td, table th {
 													</c:forEach>
 											</select>&nbsp;
 											</td>
-											<td>Not&nbsp;<input type="text"
+											<!--<td>Not&nbsp;<input type="text"
 												name="personList[].condition" value="${quali.notFlag}"
-												size="2"></td>
+												size="2"></td>-->
+												
+												<td>&nbsp;Not&nbsp;<select name="personList[].condition" required>
+												<option value="${quali.notFlag}">
+															<c:out value="---${quali.notFlag}---" />
+														</option>
+														<option value="">
+															<c:out value="------" />
+														<option value="true">
+															<c:out value="true" />
+															<option value="false">
+															<c:out value="false" />
+														</option>
+												
+												</select>
+										<!--  <input type="text"
+											name="personList[].condition" value="TRUE" size="2"> --> 
+											<!-- <input type="checkbox"  value="true" id="notFlag" name="personList[].condition" ${quali.notFlag=='true'?'checked':''}> -->
+											
+										</td>
 
 											<td>Condition&nbsp;<select
 												name="personList[].conditionValue">
@@ -361,6 +460,18 @@ table td, table th {
 
 									<c:if test="${personListContainer1.personList.size() == 0}">
 										<tr class="person defaultRow">
+										<td>&nbsp;Aggregate function&nbsp;
+											<select name="personList[].aggFuncName">
+											<option value="">
+															<c:out value="------" />
+													<c:forEach
+														items="${listRule1}" var="rule">
+														<option value="${rule.functionName}">
+															<c:out value="${rule.functionName}" />
+														</option>
+													</c:forEach>
+											</select>
+										</td>
 											<td>&nbsp;Field Name&nbsp;<select
 												name="personList[].fieldName">
 													<c:forEach items="${listRule2}" var="rule">
@@ -371,8 +482,25 @@ table td, table th {
 											</select>&nbsp;
 											</td>
 
-											<td>&nbsp;Not&nbsp;<input type="text"
-												name="personList[].condition" size="2"></td>
+											<!-- <td>&nbsp;Not&nbsp;<input type="text"
+												name="personList[].condition" size="2"></td> -->
+												
+												<td>&nbsp;Not&nbsp;
+										<!-- <input type="text"
+											name="personList[].condition" value="TRUE" size="2"> 
+											<input type="checkbox" value="TRUE" name="personList[].condition">-->
+											<select name="personList[].condition" required>
+												
+														<option value="">
+															<c:out value="------" />
+														<option value="true">
+															<c:out value="true" />
+															<option value="false">
+															<c:out value="false" />
+														</option>
+												
+												</select>
+										</td>
 
 											<td>&nbsp;Condition&nbsp;<select
 												name="personList[].conditionValue">
@@ -402,22 +530,24 @@ table td, table th {
 							<table>
 								<tr>
 									<td><input type="radio" name="compensationType"
-										value="Fixed"
-										${listRule4.compensationType=='Fixed'?'checked':''}>Fixed</td>
-									<td><input type="text" size="20" name="fixedCompValue"
-										value="${listRule4.fixedCompValue}"></input></td>
+										value="Fixed" id="compensationTypeFixed"
+										${listRule4.compensationType=='Fixed'?'checked':''} 
+										onchange="enableFixed()">Fixed</td>
+									<td><input type="number" size="20" name="fixedCompValue"
+										value="${listRule4.fixedCompValue}" id="fixedCompValue"  required></input></td>
 								</tr>
 								<tr>
 									<td valign="top"><input type="radio"
 										name="compensationType" value="Variable"
-										${listRule4.compensationType=='Variable'?'checked':''}>Variable&nbsp;
+										${listRule4.compensationType=='Variable'?'checked':''} id="compensationTypeVariable"
+										onchange="enableVariable()">Variable&nbsp;
 									</td>
 									<td>Apply formula <input type="text" size="20"
-										name="compensationFormula"
+										name="compensationFormula" id="compensationFormula"
 										value="${listRule4.compensationFormula}"><br />
 									<br /> &nbsp;&nbsp;&nbsp;Parameters <input type="text"
 										size="20" name="compensationParameter"
-										value="${listRule4.compensationParameter}">
+										value="${listRule4.compensationParameter}" id="compensationParameter">
 									</td>
 								</tr>
 							</table>
@@ -426,6 +556,37 @@ table td, table th {
 
 
 				</table>
+				
+				<script>
+							function enableFixed(){
+								
+								var rad_fixed = document.getElementById("compensationTypeFixed");
+								
+								if(rad_fixed.checked){
+								document.getElementById("fixedCompValue").disabled=false;
+								document.getElementById("fixedCompValue").required=true;
+								document.getElementById("compensationFormula").disabled=true;
+								document.getElementById("compensationParameter").disabled=true;	
+								
+								}		
+							}
+							function enableVariable(){
+								
+							
+								var rad_variable = document.getElementById("compensationTypeVariable");
+								
+							
+								
+								if(rad_variable.checked){
+									document.getElementById("fixedCompValue").disabled=true;
+									document.getElementById("fixedCompValue").required=false;
+									document.getElementById("compensationFormula").disabled=false;
+									document.getElementById("compensationFormula").required=true;
+									document.getElementById("compensationParameter").disabled=false;	
+									document.getElementById("compensationParameter").required=true;
+								}
+							}
+						</script>
 
 				<br/><div align="center">
 					<input type="submit" value="Update"> <a

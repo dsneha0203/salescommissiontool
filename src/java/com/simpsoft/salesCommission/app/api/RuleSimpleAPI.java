@@ -178,22 +178,38 @@ public class RuleSimpleAPI {
 	public AggregateFunctions searchAggregateFunction(String aggtFunName) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
-		List<AggregateFunctions> aggtList = new ArrayList<>();
-		try {
 		tx = session.beginTransaction();
-		Criteria crit = session.createCriteria(AggregateFunctions.class);
-		crit.add(Restrictions.eq("functionName", aggtFunName));
-		aggtList = crit.list();
-				tx.commit();
-
-		} catch (HibernateException e) {
-			if (tx != null)
-				tx.rollback();
-			e.printStackTrace();
-		} finally {
-			session.close();
+		List aggFuncs = session.createQuery("FROM AggregateFunctions").list();
+		AggregateFunctions aggFunc = new AggregateFunctions();
+		for(Iterator itr=aggFuncs.iterator(); itr.hasNext(); ) {
+			AggregateFunctions aggFuncItr = (AggregateFunctions) itr.next();
+			if(aggFuncItr.getFunctionName().equals(aggtFunName)) {
+				aggFunc=aggFuncItr;
+				break;
+			}
 		}
-		return aggtList.get(0);
+//		List<AggregateFunctions> aggtList = new ArrayList<>();
+//		try {
+//		tx = session.beginTransaction();
+//		Criteria crit = session.createCriteria(AggregateFunctions.class);
+//		crit.add(Restrictions.eq("functionName", aggtFunName));
+//		aggtList = crit.list();
+//				tx.commit();
+//
+//		} catch (HibernateException e) {
+//			if (tx != null)
+//				tx.rollback();
+//			e.printStackTrace();
+//		} finally {
+//			session.close();
+//		}
+//		if(aggtList.isEmpty()) {
+//			return null;
+//		}else {
+//			return aggtList.get(0);
+//		}
+		logger.debug("AGGFUNC NAME= "+aggFunc.getFunctionName());
+		return aggFunc;
 	}
 	/**
 	 * Method for create Condition List

@@ -1,15 +1,11 @@
 package com.simpsoft.salesCommission.app.api;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -19,7 +15,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,9 +24,6 @@ import com.simpsoft.salesCommission.app.model.EmployeeManagerMap;
 import com.simpsoft.salesCommission.app.model.EmployeeRoleMap;
 import com.simpsoft.salesCommission.app.model.Frequency;
 import com.simpsoft.salesCommission.app.model.Role;
-import com.simpsoft.salesCommission.app.model.RuleParameter;
-import com.simpsoft.salesCommission.app.model.SplitQualifyingClause;
-import com.simpsoft.salesCommission.app.model.State;
 import com.simpsoft.salesCommission.app.model.TargetDefinition;
 
 /**
@@ -75,7 +67,7 @@ public class EmployeeAPI {
 			emp.setTerminationDate(employee.getTerminationDate());
 			emp.setEmployeeManagerMap(employee.getEmployeeManagerMap());
 			emp.setEmployeeRoleMap(employee.getEmployeeRoleMap());
-			emp.setOfficeLocation(employee.getOfficeLocation());
+			//emp.setOfficeLocation(employee.getOfficeLocation());
 			emp.setTarget(employee.getTarget());
 			session.save(emp);	
 			tx.commit();

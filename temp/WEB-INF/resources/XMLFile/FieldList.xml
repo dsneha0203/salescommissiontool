@@ -26,5 +26,9 @@
 	
 	<FieldList fieldName="field_7">
 	  <DisplayName>Quantity</DisplayName>
+	</FieldList>
+	
+	<FieldList fieldName="field_8">
+	  <DisplayName>Product Name</DisplayName>
 	</FieldList>	
 </FieldLists>

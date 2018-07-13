@@ -3,11 +3,17 @@ package com.simpsoft.salesCommission.app.dataloader;
 import java.util.Date;
 import java.util.List;
 
+import com.simpsoft.salesCommission.app.model.OfficeLocation;
+
 public class OrderXML {
 	
 	private long id;
 
 	private Date orderDate;
+	
+	private OfficeLocation officeLocation;
+	
+	private AddressXML addressXml;
 	
 	private String salesRepresentative;
 
@@ -17,7 +23,7 @@ public class OrderXML {
 	
 	private String customer;
 	
-	private  long orderTotal;
+	//private  long orderTotal;
 	
 	private List<OrderLineItemsXML> orderLineItemsXML;
 	
@@ -109,19 +115,19 @@ public class OrderXML {
 		this.customer = customer;
 	}
 
-	/**
-	 * @return the orderTotal
-	 */
-	public long getOrderTotal() {
-		return orderTotal;
-	}
-
-	/**
-	 * @param orderTotal the orderTotal to set
-	 */
-	public void setOrderTotal(long orderTotal) {
-		this.orderTotal = orderTotal;
-	}
+//	/**
+//	 * @return the orderTotal
+//	 */
+//	public long getOrderTotal() {
+//		return orderTotal;
+//	}
+//
+//	/**
+//	 * @param orderTotal the orderTotal to set
+//	 */
+//	public void setOrderTotal(long orderTotal) {
+//		this.orderTotal = orderTotal;
+//	}
 
 	/**
 	 * @return the orderLineItemsXML
@@ -136,5 +142,32 @@ public class OrderXML {
 	public void setOrderLineItemsXML(List<OrderLineItemsXML> orderLineItemsXML) {
 		this.orderLineItemsXML = orderLineItemsXML;
 	}
+	
+	/**
+	 * @return the officeLocation
+	 */
+	public OfficeLocation getOfficeLocation() {
+		return officeLocation;
+	}
 
+	/**
+	 * @param officeLocation the officeLocation to set
+	 */
+	public void setOfficeLocation(OfficeLocation officeLocation) {
+		this.officeLocation = officeLocation;
+	}
+
+	/**
+	 * @return the addressXml
+	 */
+	public AddressXML getAddressXml() {
+		return addressXml;
+	}
+
+	/**
+	 * @param addressXml the addressXml to set
+	 */
+	public void setAddressXml(AddressXML addressXml) {
+		this.addressXml = addressXml;
+	}
 }

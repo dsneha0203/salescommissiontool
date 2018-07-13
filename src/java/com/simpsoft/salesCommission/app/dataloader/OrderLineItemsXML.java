@@ -16,7 +16,7 @@ public class OrderLineItemsXML {
 	
 	private  int dutyPercentage;
 
-	private  long subtotal;
+//	private  long subtotal;
 	
     public OrderLineItemsXML() {
 		
@@ -106,17 +106,17 @@ public class OrderLineItemsXML {
 		this.dutyPercentage = dutyPercentage;
 	}
 
-	/**
-	 * @return the subtotal
-	 */
-	public long getSubtotal() {
-		return subtotal;
-	}
-
-	/**
-	 * @param subtotal the subtotal to set
-	 */
-	public void setSubtotal(long subtotal) {
-		this.subtotal = subtotal;
-	}
+//	/**
+//	 * @return the subtotal
+//	 */
+//	public long getSubtotal() {
+//		return subtotal;
+//	}
+//
+//	/**
+//	 * @param subtotal the subtotal to set
+//	 */
+//	public void setSubtotal(long subtotal) {
+//		this.subtotal = subtotal;
+//	}
 }

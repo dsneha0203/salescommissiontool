@@ -95,5 +95,18 @@ public class RuleAssignment {
 		this.ruleAssignmentDetails = ruleAssignmentDetails;
 	}
 
-	
+	/**
+	 * 
+	 * @param ruleAssignmentDetails
+	 */
+	public void clearRuleAssignmentDetails(List<RuleAssignmentDetails> ruleAssignmentDetails) {
+			this.ruleAssignmentDetails.removeAll(ruleAssignmentDetails);
+		}
+	/**
+	 * 
+	 * @param ruleAssignmentDetails
+	 */
+		public void addRuleAssignmentDetails(List<RuleAssignmentDetails> ruleAssignmentDetails) {
+		    this.ruleAssignmentDetails.addAll(ruleAssignmentDetails);
+		}
 }

@@ -11,7 +11,7 @@
 
 		<style>
 table {
-	width: 700px;
+	width: 100%;
 	border: 1px solid #AAA;
 	table-layout: auto;
 	border-collapse: collapse;
@@ -60,6 +60,7 @@ display:none;
 			}
 
 			function beforeSubmit1() {
+				
 				alert('submitting....');
 				return true;
 			}
@@ -74,7 +75,7 @@ display:none;
 									formId : 'personListForm2',
 									rowContainerId : 'personListContainer1',
 									indexedPropertyName : 'personList',
-									indexedPropertyMemberNames : 'fieldName,condition,conditionValue,value',
+									indexedPropertyMemberNames : 'aggFuncName,fieldName,condition,conditionValue,value',
 									rowAddedListener : rowAdded,
 									rowRemovedListener : rowRemoved1,
 									beforeSubmit : beforeSubmit1
@@ -103,6 +104,7 @@ display:none;
 			}
 
 			function beforeSubmit() {
+				
 				alert('submitting....');
 				return true;
 			}
@@ -178,7 +180,8 @@ display:none;
 			
 			  
 		</script>
-		<form:form action="/CommissionTool/submitSimpRule" method="post">
+		<form:form action="/CommissionTool/submitSimpRule" modelAttribute="personListContainer" method="post"
+			id="personListForm">
 			<!--
 <form action="/CommissionTool/submitSimpRule"  method="post">
 	-->
@@ -311,16 +314,17 @@ display:none;
 												</option>
 											</c:forEach>
 									</select></td>
-									<td><select name="fields">
+									<td><select name="Field">
 									<!--<c:forEach
 												items="${listRule2}" var="field">
 												<option value="${field.displayName}">
 													<c:out value="${field.displayName}" />
 												</option>
 											</c:forEach>-->
-											<option VALUE="order_total">Order Total</option>
-											<option value="quantity">Quantity</option>
-											<option value="discount_percent">Discount Percentage</option>
+											<option VALUE="Order Total">Order Total</option>
+											<option value="Quantity">Quantity</option>
+											<option value="Discount Percentage">Discount Percentage</option>
+											<option VALUE="Line Item Total">Line Item Total</option>
 									</select></td>
 							</table></td>
 					</tr>
@@ -334,6 +338,19 @@ display:none;
 
 
 									<tr class="person defaultRow">
+									<td>&nbsp;Aggregate function&nbsp;
+									<select name="personList[].aggFuncName">
+									<option value="">
+													<c:out value="------" />
+												</option>
+									<c:forEach
+												items="${listRule1}" var="rule">
+												<option value="${rule.functionName}">
+													<c:out value="${rule.functionName}" />
+												</option>
+											</c:forEach>
+									</select></td>
+									
 										<td>&nbsp;Field Name&nbsp;<select
 											name="personList[].fieldName">
 												<c:forEach items="${listRule2}" var="rule">
@@ -346,8 +363,15 @@ display:none;
 										<td>&nbsp;Not&nbsp;
 										<!-- <input type="text"
 											name="personList[].condition" value="TRUE" size="2"> -->
-											<input type="checkbox" value="TRUE" name="personList[].condition">
-											
+											<!-- <input type="checkbox" name="personList[].condition" id="notFlag"> -->
+											<select name="personList[].condition">
+															<option value="true">
+															<c:out value="true" />
+															<option value="false">
+															<c:out value="false" />
+														</option>
+												
+												</select>
 										</td>
 
 										<td>&nbsp;Condition&nbsp;<select

@@ -24,7 +24,10 @@ public class OrderDetail {
 	@GeneratedValue
 	@Column(name = "id")
 	private long id;
-
+	
+	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "OFC_LOC_ID")
+	private OfficeLocation officeLocation;
 	@Column(name = "orderDate")
 	private Date orderDate;
 
@@ -165,5 +168,19 @@ public class OrderDetail {
 	 */
 	public void setOrderLineItems(List<OrderLineItems> orderLineItems) {
 		this.orderLineItems = orderLineItems;
+	}
+	
+	/**
+	 * @return the officeLocation
+	 */
+	public OfficeLocation getOfficeLocation() {
+		return officeLocation;
+	}
+
+	/**
+	 * @param officeLocation the officeLocation to set
+	 */
+	public void setOfficeLocation(OfficeLocation officeLocation) {
+		this.officeLocation = officeLocation;
 	}
 }

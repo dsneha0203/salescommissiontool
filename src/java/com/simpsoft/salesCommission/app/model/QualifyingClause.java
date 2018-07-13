@@ -37,6 +37,10 @@ public class QualifyingClause {
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	@Column(name = "ignoreCase", nullable = false)
 	private boolean ignoreCase;
+	
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH})
+	@JoinColumn(name = "AGG_FUNC_ID")
+	private AggregateFunctions aggregateFunctions;
 
 	/**
 	 * @return the id
@@ -81,6 +85,15 @@ public class QualifyingClause {
 	 */
 	public void setFieldList(FieldList fieldList) {
 		this.fieldList = fieldList;
+	}
+
+	
+	public AggregateFunctions getAggregateFunctions() {
+		return aggregateFunctions;
+	}
+
+	public void setAggregateFunctions(AggregateFunctions aggregateFunctions) {
+		this.aggregateFunctions = aggregateFunctions;
 	}
 
 	/**

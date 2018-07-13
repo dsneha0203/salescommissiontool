@@ -44,6 +44,8 @@ public class RuleController {
 	@Autowired
 	private RuleSimpleAPI ruleSimpleApi;
 
+	
+	private static final Logger logger = Logger.getLogger(RuleController.class);
 	@RequestMapping(value = "/simpleRule", method = RequestMethod.GET)
 	public String simpleRule(ModelMap model, HttpSession session, HttpServletRequest request, String message) {
 
@@ -67,10 +69,18 @@ public class RuleController {
 		return new PersonListContainer(personList1);
 	}
 
-	private PersonListContainer1 getDummyPersonListContainer1() {
-		List<QualifyingClauseUI> personList = new ArrayList<QualifyingClauseUI>();
+//	private PersonListContainer1 getDummyPersonListContainer1() {
+//		List<QualifyingClauseUI> personList = new ArrayList<QualifyingClauseUI>();
+//	
+//			personList.add(new QualifyingClauseUI());
+//	
+//		return new PersonListContainer1();
+//	}
 	
-			personList.add(new QualifyingClauseUI());
+	private PersonListContainer1 getDummyPersonListContainer1() {
+		List<QualifyingClause> personList = new ArrayList<QualifyingClause>();
+	
+			personList.add(new QualifyingClause());
 	
 		return new PersonListContainer1();
 	}
@@ -88,12 +98,23 @@ public class RuleController {
 		}
 
 		for (QualifyingClauseUI p : personListContainer1.getPersonList()) {
-			System.out.println("QualifyingClauseValue: " + p.getValue());
-			System.out.println("condition: " + p.getCondition());
-			System.out.println("ConditionValue: " + p.getConditionValue());
-			System.out.println("FieldName: " + p.getFieldName());
+			logger.debug("QualifyingClauseValue: " + p.getValue());
+			logger.debug("condition: " + p.getCondition());
+			logger.debug("ConditionValue: " + p.getConditionValue());
+			logger.debug("FieldName: " + p.getFieldName());
+			logger.debug("Aggregate function: "+p.getAggFuncName());
 
 		}
+		
+//		for (QualifyingClause p : personListContainer1.getPersonList()) {
+//			logger.debug("QualifyingClauseValue: " + p.getValue());
+//			logger.debug("condition: " + p.isNotFlag());
+//			logger.debug("ConditionValue: " + p.getConditionList().getConditionValue());
+//			logger.debug("FieldName: " + p.getFieldList().getDisplayName());
+//			logger.debug("Aggregate function: "+p.getAggregateFunctions().getFunctionName());
+//
+//		}
+		
 		model.addAttribute("id", ruleUI.getId());
 		model.addAttribute("ruleName", ruleUI.getRuleName());
 		System.out.println("***************************" + ruleUI.getRuleName());
@@ -147,16 +168,39 @@ public class RuleController {
 
 		RuleSimple ruleSimple = rule.getRuleSimple();
 		List<QualifyingClauseUI> ptr = personListContainer1.getPersonList();
+		
+//		List<QualifyingClause> ptr = personListContainer1.getPersonList();
+		
 		List<QualifyingClause> ptr1 = new ArrayList<>();
 		for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
 			QualifyingClauseUI qcui = (QualifyingClauseUI) iterator.next();
 			QualifyingClause obj1 = new QualifyingClause();
+			if(qcui.getAggFuncName()!=null) {
+				AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggFuncName());
+				obj1.setAggregateFunctions(aggregateFunctions);
+			}
+			
+//		for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
+//			QualifyingClause qcui = (QualifyingClause) iterator.next();
+//			QualifyingClause obj1 = new QualifyingClause();
+//			if(qcui.getAggregateFunctions()!=null) {
+//				AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggregateFunctions().getFunctionName());
+//				obj1.setAggregateFunctions(aggregateFunctions);
+//			}
+			
 			FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldName());
 			ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionValue());
+			
+//			FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldList().getDisplayName());
+//			ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionList().getConditionValue());
+			
 			obj1.setConditionList(cnd);
 			obj1.setFieldList(fldList);
 			obj1.setValue(qcui.getValue());
 			obj1.setNotFlag(qcui.getCondition());
+			
+//			obj1.setNotFlag(qcui.isNotFlag());
+			
 			ptr1.add(obj1);
 		}
 		AggregateFunctions agFun = ruleSimpleApi.searchAggregateFunction(ruleUI.getAggregateFunctions());
@@ -185,12 +229,23 @@ public class RuleController {
 			}
 
 			for (QualifyingClauseUI p : personListContainer1.getPersonList()) {
-				System.out.println("QualifyingClauseValue: " + p.getValue());
-				System.out.println("condition: " + p.getCondition());
-				System.out.println("ConditionValue: " + p.getConditionValue());
-				System.out.println("FieldName: " + p.getFieldName());
+				logger.debug("QualifyingClauseValue: " + p.getValue());
+				logger.debug("condition: " + p.getCondition());
+				logger.debug("ConditionValue: " + p.getConditionValue());
+				logger.debug("FieldName: " + p.getFieldName());
+				logger.debug("Aggregate function: "+p.getAggFuncName());
 
 			}
+			
+//			for (QualifyingClause p : personListContainer1.getPersonList()) {
+//				logger.debug("QualifyingClauseValue: " + p.getValue());
+//				logger.debug("condition: " + p.isNotFlag());
+//				logger.debug("ConditionValue: " + p.getConditionList().getConditionValue());
+//				logger.debug("FieldName: " + p.getFieldList().getDisplayName());
+//				logger.debug("Aggregate function: "+p.getAggregateFunctions().getFunctionName());
+//
+//			}
+			
 			model.addAttribute("id", ruleUI.getId());
 			model.addAttribute("ruleName", ruleUI.getRuleName());
 			System.out.println("***************************" + ruleUI.getRuleName());
@@ -235,6 +290,10 @@ public class RuleController {
 			for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
 				QualifyingClauseUI qcui = (QualifyingClauseUI) iterator.next();
 				QualifyingClause obj1 = new QualifyingClause();
+				if(qcui.getAggFuncName()!=null) {
+					AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggFuncName());
+					obj1.setAggregateFunctions(aggregateFunctions);
+				}
 				FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldName());
 				ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionValue());
 				obj1.setConditionList(cnd);
@@ -243,6 +302,27 @@ public class RuleController {
 				obj1.setNotFlag(qcui.getCondition());
 				// System.out.println(ptr.size());
 				ptr1.add(obj1);
+			
+//			List<QualifyingClause> ptr = personListContainer1.getPersonList();
+//			List<QualifyingClause> ptr1 = new ArrayList<>();
+//			
+//			for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
+//				QualifyingClause qcui = (QualifyingClause) iterator.next();
+//				QualifyingClause obj1 = new QualifyingClause();
+//				if(qcui.getAggregateFunctions()!=null) {
+//					AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggregateFunctions().getFunctionName());
+//					obj1.setAggregateFunctions(aggregateFunctions);
+//				}
+//				
+//				FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldList().getDisplayName());
+//				ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionList().getConditionValue());
+//				obj1.setConditionList(cnd);
+//				obj1.setFieldList(fldList);
+//				obj1.setValue(qcui.getValue());
+//				obj1.setNotFlag(qcui.isNotFlag());
+//				ptr1.add(obj1);
+			
+			
 			}
 			AggregateFunctions agFun = ruleSimpleApi.searchAggregateFunction(ruleUI.getAggregateFunctions());
 

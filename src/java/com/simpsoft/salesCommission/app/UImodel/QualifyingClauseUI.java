@@ -9,6 +9,7 @@ public class QualifyingClauseUI {
 	private int fieldId;
 	private String fn;
 	private boolean condition;
+	private String aggFuncName;
 	
 
 	public String getValue() {
@@ -54,6 +55,21 @@ public QualifyingClauseUI(String value, int conditionId, String conditionValue, 
 		this.condition = condition;
 	}
 
+
+
+public QualifyingClauseUI(String value, int conditionId, String conditionValue, String fieldName, int fieldId,
+		String fn, boolean condition, String aggFuncName) {
+	super();
+	this.value = value;
+	this.conditionId = conditionId;
+	this.conditionValue = conditionValue;
+	this.fieldName = fieldName;
+	this.fieldId = fieldId;
+	this.fn = fn;
+	this.condition = condition;
+	this.aggFuncName = aggFuncName;
+}
+
 public boolean getCondition() {
 	return condition;
 }
@@ -84,6 +100,14 @@ public String getFn() {
 
 public void setFn(String fn) {
 	this.fn = fn;
+}
+
+public String getAggFuncName() {
+	return aggFuncName;
+}
+
+public void setAggFuncName(String aggFuncName) {
+	this.aggFuncName = aggFuncName;
 }
 
 

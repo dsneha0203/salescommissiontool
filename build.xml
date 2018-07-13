@@ -189,6 +189,8 @@
 	</target>
 
 	<!-- Calling Java Main -->
+	
+	<!-- separate target to generate dummy employee data -->
 	<target name="dummyEmpScript" depends="compile, package">
 		<java classname="com.simpsoft.salesCommission.dummyData.dummyEmployee" fork="true"
 	           failonerror="true">
@@ -199,6 +201,8 @@
 		   
 		</java>
 	</target>
+	
+	<!-- separate target to generate dummy product data -->
 	<target name="dummyProductScript" depends="compile, package">
 			<java classname="com.simpsoft.salesCommission.dummyData.dummyProduct" fork="true"
 		           failonerror="true">
@@ -312,7 +316,7 @@
 					<classpath refid="build.class.path" />
 					<classpath path="${temp.dir.classes}" />
 				</java>-->
-		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignment"  fork="true"
+		<!--<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignment"  fork="true"
 									           failonerror="true">
 											<arg value="-h"/>
 											<classpath refid="build.class.path" />
@@ -323,7 +327,7 @@
 											<arg value="-h"/>
 											<classpath refid="build.class.path" />
 											<classpath path="${temp.dir.classes}" />
-										</java>
+										</java>-->
 		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForSplitRule"  fork="true"
 											           failonerror="true">
 													<arg value="-h"/>

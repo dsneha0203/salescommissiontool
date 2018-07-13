@@ -16,6 +16,7 @@ public class RuleUI {
 	private String conditionValue;
 	private String fieldName;
 	private Date setDate;
+	
 	public String getConditionValue() {
 		return conditionValue;
 	}

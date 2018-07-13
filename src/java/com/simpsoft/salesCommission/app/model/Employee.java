@@ -43,9 +43,18 @@ public class Employee {
 	private List<Target> target;
 	
 	
-	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name = "OFC_LOC_ID")
-	private OfficeLocation officeLocation;
+	
+	
+	
+	@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
+	@JoinColumn(name = "EMP_ID")
+	@IndexColumn(name = "detailSrl")
+	private List<CalculationSimple> calcSimpleList;
+	
+	@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
+	@JoinColumn(name = "EMP_ID")
+	@IndexColumn(name = "detailSrl")
+	private List<CalculationComposite> calcCompositeList;
 	
 	public Employee() {
 	}
@@ -168,18 +177,24 @@ public class Employee {
 		this.target = target;
 	}
 
-	/**
-	 * @return the officeLocation
-	 */
-	public OfficeLocation getOfficeLocation() {
-		return officeLocation;
+	
+
+	
+	public List<CalculationSimple> getCalcSimpleList() {
+		return calcSimpleList;
 	}
 
-	/**
-	 * @param officeLocation the officeLocation to set
-	 */
-	public void setOfficeLocation(OfficeLocation officeLocation) {
-		this.officeLocation = officeLocation;
+	public void setCalcSimpleList(List<CalculationSimple> calcSimpleList) {
+		this.calcSimpleList = calcSimpleList;
+	}
+
+	
+	public List<CalculationComposite> getCalcCompositeList() {
+		return calcCompositeList;
+	}
+
+	public void setCalcCompositeList(List<CalculationComposite> calcCompositeList) {
+		this.calcCompositeList = calcCompositeList;
 	}
 
 	public Employee( String empName, int salary) {

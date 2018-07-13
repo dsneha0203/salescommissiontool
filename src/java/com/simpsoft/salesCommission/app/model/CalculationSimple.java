@@ -1,13 +1,19 @@
 package com.simpsoft.salesCommission.app.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Type;
 
 @Entity
@@ -37,6 +43,16 @@ public class CalculationSimple {
 	
 	@Column(name = "ruleOutput")
 	private  String ruleOutput;
+	
+	@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
+	@JoinColumn(name = "CALC_SIMPLE_ID")
+	@IndexColumn(name = "detailSrl")
+	private List<CalculationDetails> calcDetailsList;
+	
+	@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
+	@JoinColumn(name = "CALC_SIMPLE_ID")
+	@IndexColumn(name = "detailSrl")
+	private List<CalcDetailsOrderLineItems> calcDetailsOrderLineItemsList;
 	
 	public CalculationSimple() {
 	}
@@ -138,4 +154,22 @@ public class CalculationSimple {
 	public void setRuleOutput(String ruleOutput) {
 		this.ruleOutput = ruleOutput;
 	}
+
+	public List<CalculationDetails> getCalcDetailsList() {
+		return calcDetailsList;
+	}
+
+	public void setCalcDetailsList(List<CalculationDetails> calcDetailsList) {
+		this.calcDetailsList = calcDetailsList;
+	}
+
+	public List<CalcDetailsOrderLineItems> getCalcDetailsOrderLineItemsList() {
+		return calcDetailsOrderLineItemsList;
+	}
+
+	public void setCalcDetailsOrderLineItemsList(List<CalcDetailsOrderLineItems> calcDetailsOrderLineItemsList) {
+		this.calcDetailsOrderLineItemsList = calcDetailsOrderLineItemsList;
+	}
+	
+	
 }

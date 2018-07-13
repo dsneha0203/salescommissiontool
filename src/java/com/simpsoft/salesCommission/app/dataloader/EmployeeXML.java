@@ -22,9 +22,9 @@ public class EmployeeXML {
 	
 	private List<EmployeeRoleMapXML> employeeRoleMapXml;
 	
-	private OfficeLocation officeLocation;
+//	private OfficeLocation officeLocation;
 	
-	private AddressXML addressXml;
+//	private AddressXML addressXml;
 
 	private List<Target> target;
 
@@ -126,33 +126,33 @@ public class EmployeeXML {
 		this.employeeRoleMapXml = employeeRoleMapXml;
 	}
 
-	/**
-	 * @return the officeLocation
-	 */
-	public OfficeLocation getOfficeLocation() {
-		return officeLocation;
-	}
-
-	/**
-	 * @param officeLocation the officeLocation to set
-	 */
-	public void setOfficeLocation(OfficeLocation officeLocation) {
-		this.officeLocation = officeLocation;
-	}
-
-	/**
-	 * @return the addressXml
-	 */
-	public AddressXML getAddressXml() {
-		return addressXml;
-	}
-
-	/**
-	 * @param addressXml the addressXml to set
-	 */
-	public void setAddressXml(AddressXML addressXml) {
-		this.addressXml = addressXml;
-	}
+//	/**
+//	 * @return the officeLocation
+//	 */
+//	public OfficeLocation getOfficeLocation() {
+//		return officeLocation;
+//	}
+//
+//	/**
+//	 * @param officeLocation the officeLocation to set
+//	 */
+//	public void setOfficeLocation(OfficeLocation officeLocation) {
+//		this.officeLocation = officeLocation;
+//	}
+//
+//	/**
+//	 * @return the addressXml
+//	 */
+//	public AddressXML getAddressXml() {
+//		return addressXml;
+//	}
+//
+//	/**
+//	 * @param addressXml the addressXml to set
+//	 */
+//	public void setAddressXml(AddressXML addressXml) {
+//		this.addressXml = addressXml;
+//	}
 
 	/**
 	 * @return the target

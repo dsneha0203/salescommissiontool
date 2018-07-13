@@ -25,12 +25,15 @@ import com.simpsoft.salesCommission.app.api.OrderAPI;
 import com.simpsoft.salesCommission.app.dataloader.OrderLineItemsXML;
 import com.simpsoft.salesCommission.app.dataloader.OrderRosterXML;
 import com.simpsoft.salesCommission.app.dataloader.OrderXML;
+import com.simpsoft.salesCommission.app.model.Address;
 import com.simpsoft.salesCommission.app.model.Customer;
 import com.simpsoft.salesCommission.app.model.Employee;
+import com.simpsoft.salesCommission.app.model.OfficeLocation;
 import com.simpsoft.salesCommission.app.model.OrderDetail;
 import com.simpsoft.salesCommission.app.model.OrderLineItems;
 import com.simpsoft.salesCommission.app.model.OrderRoster;
 import com.simpsoft.salesCommission.app.model.Product;
+import com.simpsoft.salesCommission.app.model.State;
 
 @Component
 	public class ReadXMLForOrderRoster {	
@@ -72,7 +75,14 @@ import com.simpsoft.salesCommission.app.model.Product;
 				  Customer customer = ordrAPI.searchCustomer(order.getCustomer());
 				  newOrder.setCustomer(customer);
 				  
-				  newOrder.setOrderTotal(order.getOrderTotal());
+				  //newOrder.setOrderTotal(order.getOrderTotal());
+				  OfficeLocation OffLoc = order.getOfficeLocation();
+				  Address address = OffLoc.getAddress();
+				  State state = address.getState();
+				  State newState = ordrAPI.searchState(state.getStateName());
+				  address.setState(newState);
+				  OffLoc.setAddress(address);
+				  newOrder.setOfficeLocation(OffLoc);
 				  
 				  List <OrderLineItemsXML> orderLineItemList = order.getOrderLineItemsXML();
 				  List <OrderLineItems> newOrderLineItemList = new ArrayList<OrderLineItems>();
@@ -90,7 +100,7 @@ import com.simpsoft.salesCommission.app.model.Product;
 					  newOrderLineItem.setRate(orderLineItem.getRate());
 					  newOrderLineItem.setDiscountPercentage(orderLineItem.getDiscountPercentage());
 					  newOrderLineItem.setDutyPercentage(orderLineItem.getDutyPercentage());
-					  newOrderLineItem.setSubtotal(orderLineItem.getSubtotal());
+//					  newOrderLineItem.setSubtotal(orderLineItem.getSubtotal());
 					 
 					  newOrderLineItemList.add(newOrderLineItem);
 				  } 
@@ -168,10 +178,29 @@ import com.simpsoft.salesCommission.app.model.Product;
 										.item(0).getNodeValue();
 								System.out.println("customer :" + customer);
 								
-								long orderTotal = Integer.parseInt(elem1.getElementsByTagName("orderTotal").item(0).getChildNodes()
-										.item(0).getNodeValue());
-								System.out.println("orderTotal :" + orderTotal);
+//								long orderTotal = Integer.parseInt(elem1.getElementsByTagName("orderTotal").item(0).getChildNodes()
+//										.item(0).getNodeValue());
+//								System.out.println("orderTotal :" + orderTotal);
 								
+								String officeName = (elem.getElementsByTagName("OfficeName")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue());
+			                   System.out.println("OfficeName :" + officeName);
+			                   
+			                   int officeCode = Integer.parseInt(elem.getElementsByTagName("OfficeCode")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue());
+			                   System.out.println("OfficeCode :" + officeCode);
+			                   
+			                   String add_line_1 = (elem.getElementsByTagName("add_line_1")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue());
+			                   System.out.println("add_line_1 :" + add_line_1);
+			                   
+			                   String add_line_2 = (elem.getElementsByTagName("add_line_2")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
+			                   System.out.println("add_line_2 :" + add_line_2);
+			                   
+			                   String state = (elem.getElementsByTagName("state")
+			               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
+			                   System.out.println("state :" + state);
 								
 								 List<OrderLineItemsXML> orderLineItemList = new ArrayList<OrderLineItemsXML>();
 									NodeList nodeList2 = elem1.getElementsByTagName("orderLineItem");
@@ -200,36 +229,53 @@ import com.simpsoft.salesCommission.app.model.Product;
 													.item(0).getNodeValue());
 											System.out.println("dutyPercentage :" + dutyPercentage);
 											
-											long subtotal = Integer.parseInt(elem2.getElementsByTagName("subtotal").item(0).getChildNodes()
-													.item(0).getNodeValue());
-											System.out.println("subtotal :" + subtotal);
-
+//											long subtotal = Integer.parseInt(elem2.getElementsByTagName("subtotal").item(0).getChildNodes()
+//													.item(0).getNodeValue());
+//											System.out.println("subtotal :" + subtotal);
+											
+											
+											
+											
 											OrderLineItemsXML orderLineItem = new OrderLineItemsXML();
 											orderLineItem.setProduct(product);
 											orderLineItem.setQuantity(quantity);
 											orderLineItem.setRate(rate);
 											orderLineItem.setDiscountPercentage(discountPercentage);
 											orderLineItem.setDutyPercentage(dutyPercentage);
-											orderLineItem.setSubtotal(subtotal);
+//											orderLineItem.setSubtotal(subtotal);											
 											orderLineItemList.add(orderLineItem); 
 
 										}
 									}
+									Address addr = new Address();
+									addr.setAddrslinen1(add_line_1);
+									addr.setAddrslinen2(add_line_2);
+									State newState = new State();
+									newState.setStateName(state);
+									addr.setState(newState);
+									OfficeLocation offcLoc = new OfficeLocation();
+									offcLoc.setOfficeCode(officeCode);
+									offcLoc.setOfficeName(officeName);
+									offcLoc.setAddress(addr);
+									
 								OrderXML order = new OrderXML();
 								order.setOrderDate(orderDate);
+								 order.setOfficeLocation(offcLoc);
 								order.setSalesRepresentative(salesRep);
 								order.setAdministrator(admin);
 								order.setSupportEngineer(supportEngineer);
 								order.setCustomer(customer);
-								order.setOrderTotal(orderTotal);
+								//order.setOrderTotal(orderTotal);
 								order.setOrderLineItemsXML(orderLineItemList);
+								
 								orderList.add(order);
 
 							}
 						}
-
-	                   OrderRosterXML order = new OrderRosterXML();
-	                   
+						
+						
+						
+	                   OrderRosterXML order = new OrderRosterXML();	                  
 	                   order.setImportDate(date);
 	                   order.setImportedBy(importedBy);
 	                   order.setCountOfOrders(orderCounts);

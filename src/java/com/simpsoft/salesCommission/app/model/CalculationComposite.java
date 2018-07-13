@@ -2,10 +2,13 @@ package com.simpsoft.salesCommission.app.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,6 +18,10 @@ public class CalculationComposite {
 	@GeneratedValue
 	@Column(name = "id")
 	private long id;
+	
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "RULE_ID")
+	private Rule rule;
 	
 	@Column(name = "calStartDate")
 	private Date calStartDate;
@@ -83,4 +90,13 @@ public class CalculationComposite {
 	public void setCompensationAmount(int compensationAmount) {
 		this.compensationAmount = compensationAmount;
 	}
+
+	public Rule getRule() {
+		return rule;
+	}
+
+	public void setRule(Rule rule) {
+		this.rule = rule;
+	}
+	
 }

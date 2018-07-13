@@ -26,6 +26,9 @@ public class CalculationDetails {
 	@Column(name = "ruleOutput")
 	private  String ruleOutput;
 	
+	@Column(name = "baseRuleOutputForRank")
+	private  String baseRuleOutputForRank;
+	
 	public CalculationDetails() {
 	}
 
@@ -84,4 +87,14 @@ public class CalculationDetails {
 	public void setRuleOutput(String ruleOutput) {
 		this.ruleOutput = ruleOutput;
 	}
+
+	public String getBaseRuleOutputForRank() {
+		return baseRuleOutputForRank;
+	}
+
+	public void setBaseRuleOutputForRank(String baseRuleOutputForRank) {
+		this.baseRuleOutputForRank = baseRuleOutputForRank;
+	}
+	
+	
 }

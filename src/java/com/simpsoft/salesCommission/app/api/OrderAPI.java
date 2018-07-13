@@ -34,6 +34,7 @@ import com.simpsoft.salesCommission.app.model.Address;
 import com.simpsoft.salesCommission.app.model.Customer;
 import com.simpsoft.salesCommission.app.model.CustomerType;
 import com.simpsoft.salesCommission.app.model.Employee;
+import com.simpsoft.salesCommission.app.model.OfficeLocation;
 import com.simpsoft.salesCommission.app.model.OrderDetail;
 import com.simpsoft.salesCommission.app.model.OrderLineItems;
 import com.simpsoft.salesCommission.app.model.OrderRoster;
@@ -236,7 +237,27 @@ public class OrderAPI {
 		}
 		return custList.get(0);
 	}
+	
+	private OfficeLocation searchOffLoc(int officeCode) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<OfficeLocation> offList = new ArrayList<>();
+		try {
+			tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(Customer.class);
+			crit.add(Restrictions.eq("officeCode", officeCode));
+			offList = crit.list();
+			tx.commit();
 
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return offList.get(0);
+	}
 	/**
 	 * 
 	 * @param productType
@@ -507,8 +528,13 @@ public class OrderAPI {
 
 				Customer customer = searchCustomer(order.getCustomer());
 				newOrder.setCustomer(customer);
+				
+//				OfficeLocation ofcLoc = searchOffLoc(order.getOfficeLocation().getOfficeCode());
+//				newOrder.setOfficeLocation(ofcLoc);
+				
+				logger.debug("OFFICE CODE= "+order.getOfficeLocation().getOfficeCode());
 
-				newOrder.setOrderTotal(order.getOrderTotal());
+//				newOrder.setOrderTotal(order.getOrderTotal());
 
 				List<OrderLineItemsXML> orderLineItemList = order.getOrderLineItemsXML();
 				List<OrderLineItems> newOrderLineItemList = new ArrayList<OrderLineItems>();
@@ -525,7 +551,7 @@ public class OrderAPI {
 					newOrderLineItem.setRate(orderLineItem.getRate());
 					newOrderLineItem.setDiscountPercentage(orderLineItem.getDiscountPercentage());
 					newOrderLineItem.setDutyPercentage(orderLineItem.getDutyPercentage());
-					newOrderLineItem.setSubtotal(orderLineItem.getSubtotal());
+//					newOrderLineItem.setSubtotal(orderLineItem.getSubtotal());
 
 					newOrderLineItemList.add(newOrderLineItem);
 				}
@@ -541,6 +567,8 @@ public class OrderAPI {
 		}
 
 	}
+
+	
 
 	public static List<OrderRosterXML> parseXML(InputStream is) {
 		
@@ -613,9 +641,29 @@ public class OrderAPI {
 									.getNodeValue();
 							System.out.println("customer :" + customer);
 
-							long orderTotal = Integer.parseInt(elem1.getElementsByTagName("orderTotal").item(0)
-									.getChildNodes().item(0).getNodeValue());
-							System.out.println("orderTotal :" + orderTotal);
+//							long orderTotal = Integer.parseInt(elem1.getElementsByTagName("orderTotal").item(0)
+//									.getChildNodes().item(0).getNodeValue());
+//							System.out.println("orderTotal :" + orderTotal);
+							
+							String officeName = (elem.getElementsByTagName("OfficeName")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue());
+			                   System.out.println("OfficeName :" + officeName);
+			                   
+			                   int officeCode = Integer.parseInt(elem.getElementsByTagName("OfficeCode")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue());
+			                   System.out.println("OfficeCode :" + officeCode);
+			                   
+			                   String add_line_1 = (elem.getElementsByTagName("add_line_1")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue());
+			                   System.out.println("add_line_1 :" + add_line_1);
+			                   
+			                   String add_line_2 = (elem.getElementsByTagName("add_line_2")
+		               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
+			                   System.out.println("add_line_2 :" + add_line_2);
+			                   
+			                   String state = (elem.getElementsByTagName("state")
+			               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
+			                   System.out.println("state :" + state);
 
 							List<OrderLineItemsXML> orderLineItemList = new ArrayList<OrderLineItemsXML>();
 							NodeList nodeList2 = elem1.getElementsByTagName("orderLineItem");
@@ -645,9 +693,9 @@ public class OrderAPI {
 											.item(0).getChildNodes().item(0).getNodeValue());
 									System.out.println("dutyPercentage :" + dutyPercentage);
 
-									long subtotal = Integer.parseInt(elem2.getElementsByTagName("subtotal").item(0)
-											.getChildNodes().item(0).getNodeValue());
-									System.out.println("subtotal :" + subtotal);
+//									long subtotal = Integer.parseInt(elem2.getElementsByTagName("subtotal").item(0)
+//											.getChildNodes().item(0).getNodeValue());
+//									System.out.println("subtotal :" + subtotal);
 
 									OrderLineItemsXML orderLineItem = new OrderLineItemsXML();
 									orderLineItem.setProduct(product);
@@ -655,18 +703,31 @@ public class OrderAPI {
 									orderLineItem.setRate(rate);
 									orderLineItem.setDiscountPercentage(discountPercentage);
 									orderLineItem.setDutyPercentage(dutyPercentage);
-									orderLineItem.setSubtotal(subtotal);
+//									orderLineItem.setSubtotal(subtotal);
 									orderLineItemList.add(orderLineItem);
 
 								}
 							}
+							
+							Address addr = new Address();
+							addr.setAddrslinen1(add_line_1);
+							addr.setAddrslinen2(add_line_2);
+							State newState = new State();
+							newState.setStateName(state);
+							addr.setState(newState);
+							OfficeLocation offcLoc = new OfficeLocation();
+							offcLoc.setOfficeCode(officeCode);
+							offcLoc.setOfficeName(officeName);
+							offcLoc.setAddress(addr);
+							
 							OrderXML order = new OrderXML();
 							order.setOrderDate(orderDate);
+							order.setOfficeLocation(offcLoc);
 							order.setSalesRepresentative(salesRep);
 							order.setAdministrator(admin);
 							order.setSupportEngineer(supportEngineer);
 							order.setCustomer(customer);
-							order.setOrderTotal(orderTotal);
+//							order.setOrderTotal(orderTotal);
 							order.setOrderLineItemsXML(orderLineItemList);
 							orderList.add(order);
 
