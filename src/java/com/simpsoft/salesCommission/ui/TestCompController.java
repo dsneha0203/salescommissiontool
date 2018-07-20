@@ -115,6 +115,7 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 				
 				RuleAssignmentDetails rp = (RuleAssignmentDetails) it1.next();
 				List<RuleAssignmentParameter> ptr2 = rp.getRuleAssignmentParameter();
+				
 				logger.debug("RULE NAME= "+rp.getRule().getRuleName());
 				logger.debug("RULE ID= "+rp.getRule().getId());
 				rl1.add(rp);

@@ -244,7 +244,7 @@ public class OrderAPI {
 		List<OfficeLocation> offList = new ArrayList<>();
 		try {
 			tx = session.beginTransaction();
-			Criteria crit = session.createCriteria(Customer.class);
+			Criteria crit = session.createCriteria(OfficeLocation.class);
 			crit.add(Restrictions.eq("officeCode", officeCode));
 			offList = crit.list();
 			tx.commit();
@@ -459,7 +459,7 @@ public class OrderAPI {
 			newOrderRoster.setOrderDetail(orderRoster.getOrderDetail());
 			session.save(newOrderRoster);
 			tx.commit();
-			logger.debug("CREATED AN CUSTOMER TYPE INTO DATABASE" + newOrderRoster);
+			logger.debug("CREATED AN ORDER ROSTER IN DATABASE" + newOrderRoster);
 		} catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
@@ -529,8 +529,10 @@ public class OrderAPI {
 				Customer customer = searchCustomer(order.getCustomer());
 				newOrder.setCustomer(customer);
 				
-//				OfficeLocation ofcLoc = searchOffLoc(order.getOfficeLocation().getOfficeCode());
-//				newOrder.setOfficeLocation(ofcLoc);
+				newOrder.setSaleType(order.getSaleType());
+				
+				OfficeLocation ofcLoc = searchOffLoc(order.getOfficeLocation().getOfficeCode());
+				newOrder.setOfficeLocation(ofcLoc);
 				
 				logger.debug("OFFICE CODE= "+order.getOfficeLocation().getOfficeCode());
 
@@ -620,50 +622,55 @@ public class OrderAPI {
 							Element elem1 = (Element) node1;
 
 							String date1 = node1.getAttributes().getNamedItem("orderDate").getNodeValue();
-							System.out.println("orderDate :" + date1);
+							logger.debug("orderDate :" + date1);
 							DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 							//Date orderDate = df.parse(orderDate);
 							Date orderDate = df.parse(date1);
 							
 							String salesRep = elem1.getElementsByTagName("salesRep").item(0).getChildNodes().item(0)
 									.getNodeValue();
-							System.out.println("salesRep :" + salesRep);
+							logger.debug("salesRep :" + salesRep);
 
 							String admin = elem1.getElementsByTagName("admin").item(0).getChildNodes().item(0)
 									.getNodeValue();
-							System.out.println("admin :" + admin);
+							logger.debug("admin :" + admin);
 
 							String supportEngineer = elem1.getElementsByTagName("supportEngineer").item(0)
 									.getChildNodes().item(0).getNodeValue();
-							System.out.println("supportEngineer :" + supportEngineer);
+							logger.debug("supportEngineer :" + supportEngineer);
 
 							String customer = elem1.getElementsByTagName("customer").item(0).getChildNodes().item(0)
 									.getNodeValue();
-							System.out.println("customer :" + customer);
+							logger.debug("customer :" + customer);
+							
+							String saleType = elem1.getElementsByTagName("saleType").item(0).getChildNodes().item(0)
+									.getNodeValue();
+							logger.debug("saleType :" + saleType);
+
 
 //							long orderTotal = Integer.parseInt(elem1.getElementsByTagName("orderTotal").item(0)
 //									.getChildNodes().item(0).getNodeValue());
 //							System.out.println("orderTotal :" + orderTotal);
 							
-							String officeName = (elem.getElementsByTagName("OfficeName")
+							String officeName = (elem1.getElementsByTagName("OfficeName")
 		               		 		.item(0).getChildNodes().item(0).getNodeValue());
-			                   System.out.println("OfficeName :" + officeName);
+							logger.debug("OfficeName :" + officeName);
 			                   
-			                   int officeCode = Integer.parseInt(elem.getElementsByTagName("OfficeCode")
+			                   int officeCode = Integer.parseInt(elem1.getElementsByTagName("OfficeCode")
 		               		 		.item(0).getChildNodes().item(0).getNodeValue());
-			                   System.out.println("OfficeCode :" + officeCode);
+			                   logger.debug("OfficeCode :" + officeCode);
 			                   
-			                   String add_line_1 = (elem.getElementsByTagName("add_line_1")
+			                   String add_line_1 = (elem1.getElementsByTagName("add_line_1")
 		               		 		.item(0).getChildNodes().item(0).getNodeValue());
-			                   System.out.println("add_line_1 :" + add_line_1);
+			                   logger.debug("add_line_1 :" + add_line_1);
 			                   
-			                   String add_line_2 = (elem.getElementsByTagName("add_line_2")
+			                   String add_line_2 = (elem1.getElementsByTagName("add_line_2")
 		               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
-			                   System.out.println("add_line_2 :" + add_line_2);
+			                   logger.debug("add_line_2 :" + add_line_2);
 			                   
-			                   String state = (elem.getElementsByTagName("state")
+			                   String state = (elem1.getElementsByTagName("state")
 			               		 		.item(0).getChildNodes().item(0).getNodeValue()); 
-			                   System.out.println("state :" + state);
+			                   logger.debug("state :" + state);
 
 							List<OrderLineItemsXML> orderLineItemList = new ArrayList<OrderLineItemsXML>();
 							NodeList nodeList2 = elem1.getElementsByTagName("orderLineItem");
@@ -674,24 +681,24 @@ public class OrderAPI {
 									Element elem2 = (Element) node2;
 
 									String product = node2.getAttributes().getNamedItem("product").getNodeValue();
-									System.out.println("product :" + product);
+									logger.debug("product :" + product);
 
 									int quantity = Integer.parseInt(elem2.getElementsByTagName("quantity").item(0)
 											.getChildNodes().item(0).getNodeValue());
-									System.out.println("quantity :" + quantity);
+									logger.debug("quantity :" + quantity);
 
 									int rate = Integer.parseInt(elem2.getElementsByTagName("rate").item(0)
 											.getChildNodes().item(0).getNodeValue());
-									System.out.println("rate :" + rate);
+									logger.debug("rate :" + rate);
 
 									int discountPercentage = Integer
 											.parseInt(elem2.getElementsByTagName("discountPercentage").item(0)
 													.getChildNodes().item(0).getNodeValue());
-									System.out.println("discountPercentage :" + discountPercentage);
+									logger.debug("discountPercentage :" + discountPercentage);
 
 									int dutyPercentage = Integer.parseInt(elem2.getElementsByTagName("dutyPercentage")
 											.item(0).getChildNodes().item(0).getNodeValue());
-									System.out.println("dutyPercentage :" + dutyPercentage);
+									logger.debug("dutyPercentage :" + dutyPercentage);
 
 //									long subtotal = Integer.parseInt(elem2.getElementsByTagName("subtotal").item(0)
 //											.getChildNodes().item(0).getNodeValue());
@@ -727,6 +734,7 @@ public class OrderAPI {
 							order.setAdministrator(admin);
 							order.setSupportEngineer(supportEngineer);
 							order.setCustomer(customer);
+							order.setSaleType(saleType);
 //							order.setOrderTotal(orderTotal);
 							order.setOrderLineItemsXML(orderLineItemList);
 							orderList.add(order);

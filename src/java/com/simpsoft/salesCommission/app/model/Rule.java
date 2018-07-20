@@ -41,7 +41,7 @@ public class Rule {
 	@JoinColumn(name = "RULE_ID")
 	@IndexColumn(name = "detailSrl")
 	private List<RuleParameter> ruleParameter;
-
+	
 	@Column(name = "connectionType")
 	private String connectionType;
 
@@ -179,6 +179,8 @@ public class Rule {
 	public void setRuleParameter(List<RuleParameter> ruleParameter) {
 		this.ruleParameter = ruleParameter;
 	}
+	
+	
 	
 	public void clearRuleParameter(List<RuleParameter> ruleParameter) {
 	   // this.ruleParameter.clear();

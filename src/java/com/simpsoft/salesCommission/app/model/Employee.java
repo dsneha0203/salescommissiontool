@@ -42,10 +42,6 @@ public class Employee {
 	@IndexColumn(name = "detailSrl")
 	private List<Target> target;
 	
-	
-	
-	
-	
 	@OneToMany(cascade = { CascadeType.ALL },fetch = FetchType.EAGER)
 	@JoinColumn(name = "EMP_ID")
 	@IndexColumn(name = "detailSrl")

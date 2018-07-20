@@ -229,11 +229,16 @@ public class RuleAPI {
 			logger.debug("Edit Condition: " + p.isNotFlag());
 			logger.debug("Edit ConditionValue: " + p.getConditionList().getConditionValue());
 			logger.debug("Edit FieldName: " + p.getFieldList().getDisplayName());
-			logger.debug("Edit Aggregate function: "+p.getAggregateFunctions().getFunctionName());
+			if(p.getAggregateFunctions() != null) {
+				logger.debug("Edit Aggregate function: "+p.getAggregateFunctions().getFunctionName());
+			}
 		}
 //		newsimp.setQualifyingClause(simpRule.getQualifyingClause());
-		newsimp.setAggregateFunctions(simpRule.getAggregateFunctions());
-
+		if(simpRule.getAggregateFunctions() != null) {
+			newsimp.setAggregateFunctions(simpRule.getAggregateFunctions());
+		}else {
+			newsimp.setAggregateFunctions(null);
+		}
 		session.merge(newsimp);
 
 		return newsimp;

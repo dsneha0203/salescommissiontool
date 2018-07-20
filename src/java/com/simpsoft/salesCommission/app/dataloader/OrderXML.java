@@ -23,6 +23,8 @@ public class OrderXML {
 	
 	private String customer;
 	
+	private String saleType;
+	
 	//private  long orderTotal;
 	
 	private List<OrderLineItemsXML> orderLineItemsXML;
@@ -114,6 +116,8 @@ public class OrderXML {
 	public void setCustomer(String customer) {
 		this.customer = customer;
 	}
+	
+	
 
 //	/**
 //	 * @return the orderTotal
@@ -128,6 +132,14 @@ public class OrderXML {
 //	public void setOrderTotal(long orderTotal) {
 //		this.orderTotal = orderTotal;
 //	}
+
+	public String getSaleType() {
+		return saleType;
+	}
+
+	public void setSaleType(String saleType) {
+		this.saleType = saleType;
+	}
 
 	/**
 	 * @return the orderLineItemsXML

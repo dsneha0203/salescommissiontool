@@ -50,6 +50,9 @@ public class OrderDetail {
 	@Column(name = "orderTotal")
 	private  long orderTotal;
 	
+	@Column(name = "saleType")
+	private  String saleType;
+	
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "ORDER_ID")
 	@IndexColumn(name = "detailSrl")
@@ -183,4 +186,15 @@ public class OrderDetail {
 	public void setOfficeLocation(OfficeLocation officeLocation) {
 		this.officeLocation = officeLocation;
 	}
+
+	public String getSaleType() {
+		return saleType;
+	}
+
+	public void setSaleType(String saleType) {
+		this.saleType = saleType;
+	}
+
+	
+	
 }
