@@ -137,18 +137,10 @@ overflow: auto;
 	    }
 	}
 	function beforeSubmit() {
-		if(document.getElementById("repeats_check").checked){
-			if(document.getElementById("freq").value == ""){
-				 alert('Select frequency!');
-				 return false;
-			}else{
-				alert('wait your table is updating....!!');
-				return true;
-			}
-		}else{
+	
 	    alert('wait your table is updating....!!');
 	    return true;
-		}
+		
 	}
 	$(document).ready( function() {
 	    var config = {
@@ -185,6 +177,8 @@ overflow: auto;
 	    	 $("#check_role").show(500);
 	    	
 	    }
+	    
+	   
 	});
 	
 	
@@ -208,9 +202,24 @@ overflow: auto;
 	        $('#submit').val( '!' + $('#submit').val() );
 	    }
 	}
-	function beforeSubmit() {
-	    alert('wait....!!');
+	function beforeSubmit1() {
+		if(document.getElementById("repeats_check").checked){
+			if(document.getElementById("freq").value == ""){
+				 alert('Select frequency!');
+				 return false;
+			}
+			else if(document.getElementById("repeats_check").checked && document.getElementById("fixed_check").checked ){
+				 alert('Select either Fixed or Repeats!');
+				 return false;
+			}
+			else{
+				alert('wait your table is updating....!!');
+				return true;
+			}
+		}else{
+	    alert('wait your table is updating....!!');
 	    return true;
+		}
 	}
 	
 	
@@ -233,12 +242,10 @@ overflow: auto;
 	        indexedPropertyMemberNames : 'id,ruleName,fixed,repeats,frequency,Startdate,endDate,ruleAssignmentParameter.parameterName,ruleAssignmentParameter.overwriteValue,ruleAssignmentParameter.targetDefinition.displayName',
 	        rowAddedListener : rowAdded,
 	        rowRemovedListener : rowRemoved,
-	        beforeSubmit : beforeSubmit
+	        beforeSubmit : beforeSubmit1
 	    };
 	    new DynamicListHelper(config);
-	    
-	   
-	    
+	  
 	});
  
 </script>
@@ -360,20 +367,36 @@ overflow: auto;
 						<c:forEach items="${List2}" var="as" varStatus="vs">
 							
 							<tr class="rule">
-								
+								<script>
+								 $("#repeats_checkbox").click(function() {
+							    	  $("#fixed_checkbox").attr("checked", false); //uncheck all checkboxes
+							    	  $(this).attr("checked", true);  //check the clicked one
+							    	  $("#freq_select").attr("disabled",false);
+							    	});
+							    
+							    $("#fixed_checkbox").click(function() {
+							    	  $("#repeats_checkbox").attr("checked", false); //uncheck all checkboxes
+							    	  $(this).attr("checked", true);  //check the clicked one
+							    	  $("#freq_select").attr("disabled",true);
+							    	  $("#freq_select").val("");
+							    	}); 
+							   
+								</script>
 								 <td><input type="hidden" name="ruleList[${vs.index}].id" value="${as.rule.id}" /> ${as.rule.id}</td>
                         		<td><input type="hidden" name="ruleList[${vs.index}].ruleName" value="${as.rule.ruleName}" /> ${as.rule.ruleName}</td>
-                        		
-								<td>&nbsp;&nbsp;<input type="checkbox" name="ruleList[${vs.index}].fixed" id="fixed_checkbox" value="fixed"
+                        		<c:set var="fixed_checkbox" value="ruleList[${vs.index}].fixed"/>
+                        		<td>&nbsp;&nbsp;<input type="checkbox" name="ruleList[${vs.index}].fixed" id="fixed_checkbox" value="fixed"
 								<c:if test="${as.validityType eq 'fixed' }">
 								checked
 								</c:if> ></td>
+								
 								<td>&nbsp;&nbsp; <input type="checkbox" name="ruleList[${vs.index}].repeats" value="repeats" id="repeats_checkbox" 
 								<c:if test="${as.validityType eq 'repeats'}">
 								checked
 								</c:if>
-								>						
-  									<select name="ruleList[${vs.index}].frequency"  > 
+								>	
+											
+  									<select name="ruleList[${vs.index}].frequency" id="freq_select" > 
 											<option value="${as.frequency.frequencyName }">--${as.frequency.frequencyName }--</option>
 										<c:forEach items="${listfrequency}" var="freq">
 											<option value="${freq.frequencyName}" />
@@ -410,8 +433,9 @@ overflow: auto;
 									</table>
 								</td>	
 								<td><a href="#" class="removeRule">Remove</a></td>
-							
+								
 							</tr>
+							
 							</c:forEach>
 							
 						</tbody></table><br>

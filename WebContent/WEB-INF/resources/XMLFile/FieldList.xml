@@ -30,5 +30,9 @@
 	
 	<FieldList fieldName="field_8">
 	  <DisplayName>Product Name</DisplayName>
+	</FieldList>
+
+	<FieldList fieldName="field_9">
+	  <DisplayName>Sale Type</DisplayName>
 	</FieldList>	
 </FieldLists>

@@ -65,24 +65,41 @@ display:none;
 				return true;
 			}
 
+			
 			$(document)
-					.ready(
-							function() {
-								var config = {
-									rowClass : 'person',
-									addRowId : 'addPerson1',
-									removeRowClass : 'removePerson1',
-									formId : 'personListForm2',
-									rowContainerId : 'personListContainer1',
-									indexedPropertyName : 'personList',
-									indexedPropertyMemberNames : 'aggFuncName,fieldName,condition,conditionValue,value',
-									rowAddedListener : rowAdded,
-									rowRemovedListener : rowRemoved1,
-									beforeSubmit : beforeSubmit1
-								};
-								new DynamicListHelper(config);
-							});
-
+			.ready(
+					function() {
+						var config = {
+							rowClass : 'person',
+							addRowId : 'addPersonNonAgg',
+							removeRowClass : 'removePersonNonAgg',
+							formId : 'personListFormNonAgg',
+							rowContainerId : 'personListContainer1',
+							indexedPropertyName : 'personList',
+							indexedPropertyMemberNames : 'aggFuncName,fieldName,condition,conditionValue,value',
+							rowAddedListener : rowAdded,
+							rowRemovedListener : rowRemoved1,
+							//beforeSubmit : beforeSubmit1
+						};
+						new DynamicListHelper(config);
+					});
+			$(document)
+			.ready(
+					function() {
+						var config = {
+							rowClass : 'person1',
+							addRowId : 'addPerson1',
+							removeRowClass : 'removePerson1',
+							formId : 'personListForm2',
+							rowContainerId : 'personListContainer2',
+							indexedPropertyName : 'personList',
+							indexedPropertyMemberNames : 'aggFuncName,fieldName,condition,conditionValue,value',
+							rowAddedListener : rowAdded,
+							rowRemovedListener : rowRemoved1,
+							beforeSubmit : beforeSubmit1
+						};
+						new DynamicListHelper(config);
+					});
 			function rowAdded(rowElement) {
 				//clear the imput fields for the row
 				$(rowElement).find("input").val('');
@@ -212,7 +229,7 @@ display:none;
 					<tr>
 						<td><b>Parameters</b></td>
 						<td>
-
+							
 							<table id="personListForm1">
 								<tbody id="personListContainer">
 
@@ -229,10 +246,11 @@ display:none;
 
 
 								</tbody>
-							</table> <a href="#" id="addPerson">Add Parameters</a>&nbsp;&nbsp; <a
-							href="?f=">Reset List</a>
+							</table> <a href="#" id="addPerson">Add Parameters</a><!-- &nbsp;&nbsp; <a href="?f=">Reset
+								List</a> -->
 
-						</TD>
+						</td>
+						
 					</tr>
 
 					<tr>
@@ -332,26 +350,16 @@ display:none;
 					<tr>
 						<td><b>Qualifying Clause</b></td>
 						<td>
-
-							<table id="personListForm2">
+						<div>
+						<strong>Simple</strong>
+							<table id="personListFormNonAgg">
 								<tbody id="personListContainer1">
-
+									
 
 									<tr class="person defaultRow">
-									<td>&nbsp;Aggregate function&nbsp;
-									<select name="personList[].aggFuncName">
-									<option value="">
-													<c:out value="------" />
-												</option>
-									<c:forEach
-												items="${listRule1}" var="rule">
-												<option value="${rule.functionName}">
-													<c:out value="${rule.functionName}" />
-												</option>
-											</c:forEach>
-									</select></td>
-									
-										<td>&nbsp;Field Name&nbsp;<select
+									<td>
+									<input type="hidden" name="personList[].aggFuncName" value="" >
+									&nbsp;Field Name&nbsp;<select
 											name="personList[].fieldName">
 												<c:forEach items="${listRule2}" var="rule">
 													<option value="${rule.displayName}">
@@ -383,13 +391,72 @@ display:none;
 												</c:forEach></select>
 										<td>&nbsp;Value&nbsp;<input type="text"
 											name="personList[].value" required></td>
+										<td><a href="#" class="removePersonNonAgg">Remove</a></td>
+
+									</tr>
+
+								</tbody>
+							</table> <a href="#" id="addPersonNonAgg">Add</a>
+							<!-- &nbsp;&nbsp; <a href="?f=">Reset
+								List</a> -->
+							</div>
+							<br>
+							<div>
+						<strong>Aggregate Qualifying Clause</strong>
+							  <table id="personListForm2">
+								<tbody id="personListContainer2">
+									
+
+									<tr class="person1 defaultRow">
+									<td>&nbsp;Aggregate function&nbsp;
+									<select name="personList[].aggFuncName">
+									
+									<c:forEach
+												items="${listRule1}" var="rule">
+												<option value="${rule.functionName}">
+													<c:out value="${rule.functionName}" />
+												</option>
+											</c:forEach>
+									</select></td>
+									
+										<td>&nbsp;Field Name&nbsp;<select
+											name="personList[].fieldName">
+												<c:forEach items="${listRule2}" var="rule">
+													<option value="${rule.displayName}">
+														<c:out value="${rule.displayName}" />
+													</option>
+												</c:forEach>
+										</select></td>
+
+										<td>&nbsp;Not&nbsp;
+												<select name="personList[].condition">
+															<option value="true">
+															<c:out value="true" />
+															<option value="false">
+															<c:out value="false" />
+														</option>
+												
+												</select>
+										</td>
+
+										<td>&nbsp;Condition&nbsp;<select
+											name="personList[].conditionValue"><c:forEach
+													items="${listRule3}" var="rule">
+													<option value="${rule.conditionValue}">
+														<c:out value="${rule.conditionValue}" />
+													</option>
+												</c:forEach></select>
+										<td>&nbsp;Value&nbsp;<input type="text"
+											name="personList[].value" required></td>
 										<td><a href="#" class="removePerson1">Remove</a></td>
 
 									</tr>
 
 								</tbody>
-							</table> <a href="#" id="addPerson1">Add</a>&nbsp;&nbsp; <a href="?f=">Reset
-								List</a>
+							</table> <a href="#" id="addPerson1">Add</a>
+							<!-- &nbsp;&nbsp; <a href="?f=">Reset
+								List</a> -->
+								</div>
 						</td>
 					</tr>
 

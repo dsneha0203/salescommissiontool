@@ -110,6 +110,16 @@ public void setAggFuncName(String aggFuncName) {
 	this.aggFuncName = aggFuncName;
 }
 
+public QualifyingClauseUI(String value, String conditionValue, String fieldName, boolean condition,
+		String aggFuncName) {
+	super();
+	this.value = value;
+	this.conditionValue = conditionValue;
+	this.fieldName = fieldName;
+	this.condition = condition;
+	this.aggFuncName = aggFuncName;
+}
+
 
 
 

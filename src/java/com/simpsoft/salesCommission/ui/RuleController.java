@@ -2,8 +2,10 @@
 package com.simpsoft.salesCommission.ui;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -51,7 +53,7 @@ public class RuleController {
 
 			session.setAttribute("personListContainer", getDummyPersonListContainer());
 			session.setAttribute("personListContainer1", getDummyPersonListContainer1());
-		
+			session.setAttribute("personListContainer2", getDummyPersonListContainer1());
 		
 
 		model.addAttribute("listRule1", ruleSimpleApi.listOfAggregateFunctions());
@@ -82,7 +84,7 @@ public class RuleController {
 	@RequestMapping(value = "/submitSimpRule", method = RequestMethod.POST)
 	public String addRule(@ModelAttribute("SpringWeb") RuleUI ruleUI, PersonListContainer personListContainer,
 			PersonListContainer1 personListContainer1, HttpSession session, ModelMap model) {
-			
+		
 		System.out.println("*********************" + ruleUI.getId());
 		if (ruleUI.getId() != 0) {
 		
@@ -100,6 +102,14 @@ public class RuleController {
 
 		}
 		
+//		for (QualifyingClauseUI p : personListContainer2.getPersonList()) {
+//			logger.debug("QualifyingClauseValue: " + p.getValue());
+//			logger.debug("condition: " + p.getCondition());
+//			logger.debug("ConditionValue: " + p.getConditionValue());
+//			logger.debug("FieldName: " + p.getFieldName());
+//			logger.debug("Aggregate function: "+p.getAggFuncName());
+//
+//		}
 
 		
 		model.addAttribute("id", ruleUI.getId());
@@ -155,9 +165,7 @@ public class RuleController {
 
 		RuleSimple ruleSimple = rule.getRuleSimple();
 		List<QualifyingClauseUI> ptr = personListContainer1.getPersonList();
-		
-//		List<QualifyingClause> ptr = personListContainer1.getPersonList();
-		
+		//List<QualifyingClauseUI> ptr_1 = personListContainer2.getPersonList();
 		List<QualifyingClause> ptr1 = new ArrayList<>();
 		for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
 			QualifyingClauseUI qcui = (QualifyingClauseUI) iterator.next();
@@ -186,7 +194,33 @@ public class RuleController {
 			
 			ptr1.add(obj1);
 		}
-		
+//		for (Iterator iterator = ptr_1.iterator(); iterator.hasNext();) {
+//			QualifyingClauseUI qcui = (QualifyingClauseUI) iterator.next();
+//			QualifyingClause obj1 = new QualifyingClause();
+//			if(qcui.getAggFuncName()!=null) {
+//				AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggFuncName());
+//				obj1.setAggregateFunctions(aggregateFunctions);
+//			}
+//			if(qcui.getAggFuncName().equals("")) {
+//				obj1.setAggregateFunctions(null);
+//			}
+//			
+//
+//			
+//			FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldName());
+//			ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionValue());
+//			
+//
+//			
+//			obj1.setConditionList(cnd);
+//			obj1.setFieldList(fldList);
+//			obj1.setValue(qcui.getValue());
+//			obj1.setNotFlag(qcui.getCondition());
+//			
+//
+//			
+//			ptr1.add(obj1);
+//		}
 		logger.debug("---- QUAL CLAUSE LIST THAT IS ADDED ----");
 		for(QualifyingClause clause : ptr1) {
 			logger.debug("NOT FLAG= "+ clause.isNotFlag());
@@ -320,6 +354,282 @@ public class RuleController {
 		// logger.info("A NEW rule HAS CREATED" + rule);
 		return "redirect:/ruleList";
 	}
+	
+	
+	@RequestMapping(value = "/updateSimpRule", method = RequestMethod.POST)
+	public String updateSimpRule(@ModelAttribute("SpringWeb") RuleUI ruleUI, PersonListContainer personListContainer,
+			PersonListContainer1 personListContainer1, HttpSession session, ModelMap model) {
+		logger.debug("------------UPDATING---------");	
+		System.out.println("*********************" + ruleUI.getId());
+		long id = ruleUI.getId();
+		if (ruleUI.getId() != 0) {
+		
+		for (RuleParameter R : personListContainer.getPersonList1()) {
+			System.out.println("ParameterName: " + R.getParameterName());
+			System.out.println("ParameterValue: " + R.getParameterValue());
+		}
+
+		for (QualifyingClauseUI p : personListContainer1.getPersonList()) {
+			logger.debug("QualifyingClauseValue: " + p.getValue());
+			logger.debug("condition: " + p.getCondition());
+			logger.debug("ConditionValue: " + p.getConditionValue());
+			logger.debug("FieldName: " + p.getFieldName());
+			logger.debug("Aggregate function: "+p.getAggFuncName());
+
+		}
+		
+//		for (QualifyingClauseUI p : personListContainer2.getPersonList()) {
+//			logger.debug("QualifyingClauseValue: " + p.getValue());
+//			logger.debug("condition: " + p.getCondition());
+//			logger.debug("ConditionValue: " + p.getConditionValue());
+//			logger.debug("FieldName: " + p.getFieldName());
+//			logger.debug("Aggregate function: "+p.getAggFuncName());
+//
+//		}
+
+		
+		model.addAttribute("id", ruleUI.getId());
+		model.addAttribute("ruleName", ruleUI.getRuleName());
+		System.out.println("***************************" + ruleUI.getRuleName());
+		model.addAttribute("description", ruleUI.getDescription());
+		System.out.println("***************************" + ruleUI.getDescription());
+		model.addAttribute("ruleDetails", ruleUI.getRuleDetails());
+		model.addAttribute("ruleType", ruleUI.getRuleType());
+
+		model.addAttribute("rankCount", ruleUI.getRankCount());
+		model.addAttribute("rankType", ruleUI.getRankType());
+		model.addAttribute("populationType", ruleUI.getPopulationType());
+		model.addAttribute("populationUpto", ruleUI.getPopulationUpto());
+
+		model.addAttribute("compensationType", ruleUI.getCompensationType());
+		model.addAttribute("fixedCompValue", ruleUI.getFixedCompValue());
+		model.addAttribute("compensationFormula", ruleUI.getCompensationFormula());
+		model.addAttribute("compensationParameter", ruleUI.getCompensationParameter());
+		model.addAttribute("calculationMode", ruleUI.getCalculationMode());
+		System.out.println("***************************" + ruleUI.getCalculationMode());
+		model.addAttribute("aggregateFunctions", ruleUI.getAggregateFunctions());
+		System.out.println("***************************" + ruleUI.getAggregateFunctions());
+		model.addAttribute("field", ruleUI.getField());
+		System.out.println("***************************" + ruleUI.getField());
+		
+		
+		System.out.println(id);
+		Rule rule = ruleApi.getRule(id);
+
+		rule.setRuleName(ruleUI.getRuleName());
+		rule.setDescription(ruleUI.getDescription());
+		rule.setRuleDetails(ruleUI.getRuleDetails());
+		rule.setRuleType(ruleUI.getRuleType());
+		rule.setCompensationType(ruleUI.getCompensationType());
+		rule.setFixedCompValue(ruleUI.getFixedCompValue());
+		rule.setCompensationFormula(ruleUI.getCompensationFormula());
+		rule.setCompensationParameter(ruleUI.getCompensationParameter());
+
+		
+		List<RuleParameter> rp1 = personListContainer.getPersonList1();
+		List<RuleParameter> rp = new ArrayList<>();
+		for (Iterator iterator = rp1.iterator(); iterator.hasNext();) {
+			RuleParameter rpm = (RuleParameter) iterator.next();
+			RuleParameter obj1 = new RuleParameter();
+			obj1.setParameterName(rpm.getParameterName());
+			obj1.setParameterValue(rpm.getParameterValue());
+			rp.add(obj1);
+		}
+		
+		rule.setRuleParameter(rp);
+		
+
+		RuleSimple ruleSimple = rule.getRuleSimple();
+		List<QualifyingClauseUI> ptr = personListContainer1.getPersonList();
+		//List<QualifyingClauseUI> ptr_1 = personListContainer2.getPersonList();
+		List<QualifyingClause> ptr1 = new ArrayList<>();
+		for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
+			QualifyingClauseUI qcui = (QualifyingClauseUI) iterator.next();
+			QualifyingClause obj1 = new QualifyingClause();
+			if(qcui.getAggFuncName()!=null) {
+				AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggFuncName());
+				obj1.setAggregateFunctions(aggregateFunctions);
+			}
+			if(qcui.getAggFuncName().equals("")) {
+				obj1.setAggregateFunctions(null);
+			}
+			
+
+			
+			FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldName());
+			ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionValue());
+			
+
+			
+			obj1.setConditionList(cnd);
+			obj1.setFieldList(fldList);
+			obj1.setValue(qcui.getValue());
+			obj1.setNotFlag(qcui.getCondition());
+			
+
+			
+			ptr1.add(obj1);
+		}
+//		for (Iterator iterator = ptr_1.iterator(); iterator.hasNext();) {
+//			QualifyingClauseUI qcui = (QualifyingClauseUI) iterator.next();
+//			QualifyingClause obj1 = new QualifyingClause();
+//			if(qcui.getAggFuncName()!=null) {
+//				AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggFuncName());
+//				obj1.setAggregateFunctions(aggregateFunctions);
+//			}
+//			if(qcui.getAggFuncName().equals("")) {
+//				obj1.setAggregateFunctions(null);
+//			}
+//			
+//
+//			
+//			FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldName());
+//			ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionValue());
+//			
+//
+//			
+//			obj1.setConditionList(cnd);
+//			obj1.setFieldList(fldList);
+//			obj1.setValue(qcui.getValue());
+//			obj1.setNotFlag(qcui.getCondition());
+//			
+//
+//			
+//			ptr1.add(obj1);
+//		}
+		logger.debug("---- QUAL CLAUSE LIST THAT IS ADDED ----");
+		for(QualifyingClause clause : ptr1) {
+			logger.debug("NOT FLAG= "+ clause.isNotFlag());
+			logger.debug("VALUE= "+clause.getValue());
+			if(clause.getAggregateFunctions() != null) {
+				logger.debug("AGG FUNC NAME= "+clause.getAggregateFunctions().getFunctionName());
+				logger.debug("AGG FUNC ID= "+clause.getAggregateFunctions().getId());
+			}			
+			logger.debug("COND NAME= "+clause.getConditionList().getConditionValue());
+			logger.debug("COND ID=" + clause.getConditionList().getId());
+			logger.debug("FIELD NAME= "+clause.getFieldList().getDisplayName());
+			logger.debug("FIELD ID= "+clause.getFieldList().getId());
+		}
+		
+		AggregateFunctions agFun = ruleSimpleApi.searchAggregateFunction(ruleUI.getAggregateFunctions());
+
+		ruleSimple.setQualifyingClause(ptr1);
+		ruleSimple.setRankCount(ruleUI.getRankCount());
+		ruleSimple.setRankingType(ruleUI.getRankType());
+		ruleSimple.setPopulationType(ruleUI.getPopulationType());
+		ruleSimple.setPopulationUpto(ruleUI.getPopulationUpto());
+		ruleSimple.setCalculationMode(ruleUI.getCalculationMode());
+		ruleSimple.setAggregateFunctions(agFun);
+		ruleSimple.setField(ruleUI.getField());
+
+		rule.setRuleSimple(ruleSimple);
+		personListContainer1.getPersonList().clear();
+	
+
+		ruleApi.editRule(rule);
+		}
+		
+		else{
+			
+			for (RuleParameter p : personListContainer.getPersonList1()) {
+				System.out.println("ParameterName: " + p.getParameterName());
+				System.out.println("ParameterValue: " + p.getParameterValue());
+			}
+
+			for (QualifyingClauseUI p : personListContainer1.getPersonList()) {
+				logger.debug("QualifyingClauseValue: " + p.getValue());
+				logger.debug("condition: " + p.getCondition());
+				logger.debug("ConditionValue: " + p.getConditionValue());
+				logger.debug("FieldName: " + p.getFieldName());
+				logger.debug("Aggregate function: "+p.getAggFuncName());
+
+			}
+			
+
+			model.addAttribute("id", ruleUI.getId());
+			model.addAttribute("ruleName", ruleUI.getRuleName());
+			System.out.println("***************************" + ruleUI.getRuleName());
+			model.addAttribute("description", ruleUI.getDescription());
+			System.out.println("***************************" + ruleUI.getDescription());
+			model.addAttribute("ruleDetails", ruleUI.getRuleDetails());
+			model.addAttribute("ruleType", ruleUI.getRuleType());
+
+			model.addAttribute("rankCount", ruleUI.getRankCount());
+			model.addAttribute("rankType", ruleUI.getRankType());
+			model.addAttribute("populationType", ruleUI.getPopulationType());
+			model.addAttribute("populationUpto", ruleUI.getPopulationUpto());
+
+			model.addAttribute("compensationType", ruleUI.getCompensationType());
+			model.addAttribute("fixedCompValue", ruleUI.getFixedCompValue());
+			model.addAttribute("compensationFormula", ruleUI.getCompensationFormula());
+			model.addAttribute("compensationParameter", ruleUI.getCompensationParameter());
+			model.addAttribute("calculationMode", ruleUI.getCalculationMode());
+			System.out.println("***************************" + ruleUI.getCalculationMode());
+			model.addAttribute("aggregateFunctions", ruleUI.getAggregateFunctions());
+			System.out.println("***************************" + ruleUI.getAggregateFunctions());
+			model.addAttribute("field", ruleUI.getField());
+			System.out.println("***************************" + ruleUI.getField());
+
+			Rule rule = new Rule();
+
+			rule.setId(ruleUI.getId());
+			rule.setRuleName(ruleUI.getRuleName());
+			rule.setDescription(ruleUI.getDescription());
+			rule.setRuleDetails(ruleUI.getRuleDetails());
+			rule.setRuleType(ruleUI.getRuleType());
+			rule.setCompensationType(ruleUI.getCompensationType());
+			rule.setFixedCompValue(ruleUI.getFixedCompValue());
+			rule.setCompensationFormula(ruleUI.getCompensationFormula());
+			rule.setCompensationParameter(ruleUI.getCompensationParameter());
+			rule.setRuleParameter(personListContainer.getPersonList1());
+			
+
+			RuleSimple ruleSimple = new RuleSimple();
+			List<QualifyingClauseUI> ptr = personListContainer1.getPersonList();
+			List<QualifyingClause> ptr1 = new ArrayList<>();
+			for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
+				QualifyingClauseUI qcui = (QualifyingClauseUI) iterator.next();
+				QualifyingClause obj1 = new QualifyingClause();
+				if(qcui.getAggFuncName()!=null) {
+					AggregateFunctions aggregateFunctions = ruleSimpleApi.searchAggregateFunction(qcui.getAggFuncName());
+					obj1.setAggregateFunctions(aggregateFunctions);
+				}
+				if(qcui.getAggFuncName().equals("")) {
+					obj1.setAggregateFunctions(null);
+				}
+				FieldList fldList = ruleSimpleApi.searchFieldList(qcui.getFieldName());
+				ConditionList cnd = ruleSimpleApi.searchCondition(qcui.getConditionValue());
+				obj1.setConditionList(cnd);
+				obj1.setFieldList(fldList);
+				obj1.setValue(qcui.getValue());
+				obj1.setNotFlag(qcui.getCondition());
+				// System.out.println(ptr.size());
+				ptr1.add(obj1);
+			
+
+			
+			
+			}
+			AggregateFunctions agFun = ruleSimpleApi.searchAggregateFunction(ruleUI.getAggregateFunctions());
+
+			ruleSimple.setQualifyingClause(ptr1);
+			ruleSimple.setRankCount(ruleUI.getRankCount());
+			ruleSimple.setRankingType(ruleUI.getRankType());
+			ruleSimple.setPopulationType(ruleUI.getPopulationType());
+			ruleSimple.setPopulationUpto(ruleUI.getPopulationUpto());
+			ruleSimple.setCalculationMode(ruleUI.getCalculationMode());
+			ruleSimple.setAggregateFunctions(agFun);
+			ruleSimple.setField(ruleUI.getField());
+
+			rule.setRuleSimple(ruleSimple);
+			personListContainer1.getPersonList().clear();
+
+			ruleApi.createRule(rule);
+		
+		}
+		// logger.info("A NEW rule HAS CREATED" + rule);
+		return "redirect:/editSimple/"+id;
+	}
 
 
 	@RequestMapping(value = "/editSimple/{id}", method = RequestMethod.GET)
@@ -331,14 +641,26 @@ public class RuleController {
 		Rule qRule = ruleApi.getRule(id);
 		model.addAttribute("listRule4", qRule);
 		RuleSimple sRule = qRule.getRuleSimple();
+		
 		List<QualifyingClause> qList = sRule.getQualifyingClause();
+		Set<QualifyingClause> uniqueList = new HashSet<>(qList);
+		List<QualifyingClause> uniqueQualList = new ArrayList<>(uniqueList);
+		
+		
+		List<QualifyingClause> qualiCListNonAgg = new ArrayList<QualifyingClause>();
 		List<QualifyingClause> qualiCList = new ArrayList<QualifyingClause>();
-		for (Iterator iterator = qList.iterator(); iterator.hasNext();) {
+		for (Iterator iterator = uniqueQualList.iterator(); iterator.hasNext();) {
 			QualifyingClause qcui = (QualifyingClause) iterator.next();
 		      System.out.println(qcui.getValue());
 		      System.out.println(qcui.isNotFlag());
-		  qualiCList.add(qcui);
+		      if(qcui.getAggregateFunctions() == null || qcui.getAggregateFunctions().getFunctionName().equals("") ) {
+		    	  qualiCListNonAgg.add(qcui);
+		      }else {
+		    	  qualiCList.add(qcui);
+		      }
+		 
 		}
+		model.addAttribute("qualifyingListNonAgg",qualiCListNonAgg);
 		model.addAttribute("qualifyingList",qualiCList);
 		
 		
