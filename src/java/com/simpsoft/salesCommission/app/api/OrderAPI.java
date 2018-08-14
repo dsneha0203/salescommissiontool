@@ -958,4 +958,39 @@ public class OrderAPI {
 		return prod_sub_type_list;
 		
 	}
+	
+	public void deleteOrderRoster(long rosterId) {
+		Session session = sessionFactory.openSession();
+		
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			OrderRoster ors = (OrderRoster)session.get(OrderRoster.class, rosterId);
+			List<OrderDetail> detailList = ors.getOrderDetail();
+			for(OrderDetail detail : detailList) {
+				List<OrderLineItems> items = detail.getOrderLineItems();
+				for(OrderLineItems lineItems: items) {
+					List<OrderLineItemsSplit> itemsSplits = lineItems.getOrderLineItemsSplit();
+					for(OrderLineItemsSplit itemsSplit: itemsSplits) {
+						String hql = "delete from OrderLineItemsSplit where id= :id";
+						session.createQuery(hql).setLong("id", itemsSplit.getId()).executeUpdate();
+					}
+					String hql = "delete from OrderLineItems where id= :id";
+					session.createQuery(hql).setLong("id", lineItems.getId()).executeUpdate();
+				}
+				String hql = "delete from OrderDetail where id= :id";
+				session.createQuery(hql).setLong("id", detail.getId()).executeUpdate();
+			}
+			
+			String hql = "delete from OrderRoster where id= :id";
+			session.createQuery(hql).setLong("id", ors.getId()).executeUpdate();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+	}
 }

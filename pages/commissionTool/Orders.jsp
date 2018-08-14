@@ -93,14 +93,14 @@ $(document)
 		<div id="example">
 
 			<table id="grid">
-				<colgroup>
+				<!--<colgroup>
 					<col />
 					<col />
 					<col style="width: 110px" />
 					<col style="width: 120px" />
 					<col style="width: 130px" />
 					<col />
-				</colgroup>
+				</colgroup>-->
 				<thead>
 					<tr>
 						<th data-field="ImportId">Import Id</th>
@@ -131,7 +131,8 @@ $(document)
 							<td>${order.importedBy.employeeName}</td>
 							<td>${order.status}</td>
 							<td><a href="/CommissionTool/verifyOrder/${order.id}"><input type="button"
-						value="Verify"></a></td>
+						value="Verify"></a>&nbsp;&nbsp;<a href="/CommissionTool/deleteOrder/${order.id}"><input type="button"
+						value="Delete"></a></td>
 
 						</tr>
 					

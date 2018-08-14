@@ -211,6 +211,16 @@ public class OrderController {
 		splitRuleApi.assignSplitRule(ors);
 		return "redirect:/importOrders";
 	}
+	
+	@RequestMapping(value = "/deleteOrder/{id}", method = RequestMethod.GET)
+	public String deleteOrder(@PathVariable("id") int id, ImportId Id, HttpServletRequest request,
+			HttpServletResponse response, ModelMap model) throws ServletException, IOException {
+		
+		orderApi.deleteOrderRoster(id);
+		
+		return "redirect:/importOrders";
+	}
+	
 
 	@RequestMapping(value = "/lineItemDetails/{id}", method = RequestMethod.GET)
 	public String OrderLineItems(@PathVariable("id") int id, DetailsId Id, HttpServletRequest request,
