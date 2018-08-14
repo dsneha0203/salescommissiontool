@@ -22,6 +22,9 @@ public class OrderLineItemsSplit {
 	@JoinColumn(name = "BEN_ID")
 	private Employee beneficiary;
 	
+	@Column(name = "beneficiaryType")
+	private String beneficiaryType;
+	
 	@OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JoinColumn(name = "SPLT_RUL_ID")
 	private SplitRule splitRule;
@@ -65,6 +68,16 @@ public class OrderLineItemsSplit {
 	 */
 	public void setBeneficiary(Employee beneficiary) {
 		this.beneficiary = beneficiary;
+	}
+	
+	
+
+	public String getBeneficiaryType() {
+		return beneficiaryType;
+	}
+
+	public void setBeneficiaryType(String beneficiaryType) {
+		this.beneficiaryType = beneficiaryType;
 	}
 
 	/**

@@ -79,7 +79,8 @@
 						<th data-field="Rate">Rate</th>
 						<th data-field="DisCountPercentage">DiscountPercentage</th>
 						<th data-field="DutyPercentage">DutyPercentage</th>
-						<th data-field="subTotal">subTotal</th>
+						<th data-field="subTotal">SubTotal</th>
+						<th data-field="Details">Details</th>
 						
 					</tr>
 				</thead>
@@ -102,6 +103,8 @@
 						<c:set var="dut_percent" value="${orLineItems.dutyPercentage}"/>
 						<c:set var="subTotal" value="${(1+(dut_percent/100))*((1-(dis_percent/100))*(qty*rate)) }"/>
 						<td>Rs.${subTotal}</td>
+						<td><a href="/CommissionTool/lineItemSplitDetails/${orLineItems.id }"><input type="button" 
+						 value="Details"></a></td>
 					
 					</tr>
 					

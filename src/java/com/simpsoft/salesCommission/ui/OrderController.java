@@ -46,6 +46,7 @@ import com.simpsoft.salesCommission.app.model.RuleParameter;
 import com.simpsoft.salesCommission.app.model.SplitQualifyingClause;
 import com.simpsoft.salesCommission.app.model.SplitRule;
 import com.simpsoft.salesCommission.app.model.SplitRuleBeneficiary;
+import com.simpsoft.salesCommission.app.model.OrderLineItemsSplit;
 
 @Controller
 public class OrderController {
@@ -217,7 +218,7 @@ public class OrderController {
 		OrderDetail ord1 = orderApi.getOrderDetail(id);
 		List<OrderLineItems> ordLi = ord1.getOrderLineItems();
 		List<OrderLineItems> ordLi2 = new ArrayList<OrderLineItems>();
-
+		request.getSession().setAttribute("ordDetailId", id);
 		Iterator it = ordLi.iterator();
 		while (it.hasNext()) {
 			OrderLineItems ordLi1 = (OrderLineItems) it.next();
@@ -227,6 +228,17 @@ public class OrderController {
 		}
 		model.addAttribute("OrderLineItems", ordLi2);
 		return "LineItems";
+
+	}
+	
+	@RequestMapping(value = "/lineItemSplitDetails/{id}", method = RequestMethod.GET)
+	public String OrderLineItemsSplit(@PathVariable("id") int id, DetailsId Id, HttpServletRequest request,
+			HttpServletResponse response, ModelMap model) {
+		OrderLineItems orderLineItem = orderApi.getOrderLineItem(id);
+		List<OrderLineItemsSplit> splitlist = orderLineItem.getOrderLineItemsSplit();
+		model.addAttribute("splitList",splitlist);
+		request.getSession().setAttribute("lineItemId", id);
+		return "lineItemsSplitDetails";
 
 	}
 

@@ -16,6 +16,10 @@ public class OrderXML {
 	private AddressXML addressXml;
 	
 	private String salesRepresentative;
+	
+	private String manager;
+	
+	private String secondLvlMgr;
 
 	private String supportEngineer;
 	
@@ -73,6 +77,24 @@ public class OrderXML {
 	 */
 	public void setSalesRepresentative(String salesRepresentative) {
 		this.salesRepresentative = salesRepresentative;
+	}
+
+	
+	
+	public String getManager() {
+		return manager;
+	}
+
+	public void setManager(String manager) {
+		this.manager = manager;
+	}
+
+	public String getSecondLvlMgr() {
+		return secondLvlMgr;
+	}
+
+	public void setSecondLvlMgr(String secondLvlMgr) {
+		this.secondLvlMgr = secondLvlMgr;
 	}
 
 	/**

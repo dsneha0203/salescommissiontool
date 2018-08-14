@@ -15,6 +15,8 @@ public class OrderLineItemsXML {
 	private  int discountPercentage;
 	
 	private  int dutyPercentage;
+	
+	private String splitRule;
 
 //	private  long subtotal;
 	
@@ -105,6 +107,16 @@ public class OrderLineItemsXML {
 	public void setDutyPercentage(int dutyPercentage) {
 		this.dutyPercentage = dutyPercentage;
 	}
+
+	public String getSplitRule() {
+		return splitRule;
+	}
+
+	public void setSplitRule(String splitRule) {
+		this.splitRule = splitRule;
+	}
+	
+	
 
 //	/**
 //	 * @return the subtotal

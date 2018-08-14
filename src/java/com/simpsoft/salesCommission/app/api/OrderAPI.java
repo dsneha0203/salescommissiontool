@@ -37,11 +37,13 @@ import com.simpsoft.salesCommission.app.model.Employee;
 import com.simpsoft.salesCommission.app.model.OfficeLocation;
 import com.simpsoft.salesCommission.app.model.OrderDetail;
 import com.simpsoft.salesCommission.app.model.OrderLineItems;
+import com.simpsoft.salesCommission.app.model.OrderLineItemsSplit;
 import com.simpsoft.salesCommission.app.model.OrderRoster;
 import com.simpsoft.salesCommission.app.model.Product;
 import com.simpsoft.salesCommission.app.model.ProductSubType;
 import com.simpsoft.salesCommission.app.model.ProductType;
 import com.simpsoft.salesCommission.app.model.Role;
+import com.simpsoft.salesCommission.app.model.SplitRule;
 import com.simpsoft.salesCommission.app.model.State;
 
 @Component
@@ -439,6 +441,28 @@ public class OrderAPI {
 		}
 		return productList.get(0);
 	}
+	
+	
+	public static SplitRule searchSplitRule(String splitRule) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<SplitRule> splitRuleList = new ArrayList<>();
+		try {
+			tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(SplitRule.class);
+			crit.add(Restrictions.eq("splitRuleName", splitRule));
+			splitRuleList = crit.list();
+			tx.commit();
+
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return splitRuleList.get(0);
+	}
 
 	/**
 	 * Method for creating order roster
@@ -519,6 +543,20 @@ public class OrderAPI {
 
 				Employee salesRepresentative = searchEmployee(order.getSalesRepresentative());
 				newOrder.setSalesRepresentative(salesRepresentative);
+				
+				if(!order.getManager().equals("null")) {
+				Employee manager = searchEmployee(order.getManager());
+				newOrder.setManager(manager);
+				}else {
+					newOrder.setManager(null);
+				}
+				
+				if(!order.getSecondLvlMgr().equals("null")) {
+				Employee secLvlMgr = searchEmployee(order.getSecondLvlMgr());
+				newOrder.setSecondLevelManager(secLvlMgr);
+				}else {
+					newOrder.setSecondLevelManager(null);
+				}
 
 				Employee administrator = searchEmployee(order.getAdministrator());
 				newOrder.setAdministrator(administrator);
@@ -553,6 +591,54 @@ public class OrderAPI {
 					newOrderLineItem.setRate(orderLineItem.getRate());
 					newOrderLineItem.setDiscountPercentage(orderLineItem.getDiscountPercentage());
 					newOrderLineItem.setDutyPercentage(orderLineItem.getDutyPercentage());
+					
+					List<OrderLineItemsSplit> itemsSplits = new ArrayList<>();
+					if(!order.getManager().equals("null")) {
+						OrderLineItemsSplit orderLineItemsSplit = new OrderLineItemsSplit();
+						SplitRule splitRule = searchSplitRule(orderLineItem.getSplitRule());
+						orderLineItemsSplit.setSplitRule(splitRule);
+						orderLineItemsSplit.setBeneficiary(searchEmployee(order.getManager()));
+						orderLineItemsSplit.setBeneficiaryType("MANAGER");
+						itemsSplits.add(orderLineItemsSplit);
+						
+					}
+					if(!order.getSecondLvlMgr().equals("null")) {
+						OrderLineItemsSplit orderLineItemsSplit = new OrderLineItemsSplit();
+						SplitRule splitRule = searchSplitRule(orderLineItem.getSplitRule());
+						orderLineItemsSplit.setSplitRule(splitRule);
+						orderLineItemsSplit.setBeneficiary(searchEmployee(order.getSupportEngineer()));
+						orderLineItemsSplit.setBeneficiaryType("ENGINEER");
+						itemsSplits.add(orderLineItemsSplit);
+					}
+					if(!order.getSecondLvlMgr().equals("null")) {
+						OrderLineItemsSplit orderLineItemsSplit = new OrderLineItemsSplit();
+						SplitRule splitRule = searchSplitRule(orderLineItem.getSplitRule());
+						orderLineItemsSplit.setSplitRule(splitRule);
+						orderLineItemsSplit.setBeneficiary(searchEmployee(order.getSecondLvlMgr()));
+						orderLineItemsSplit.setBeneficiaryType("SECOND LEVEL MANAGER");
+						itemsSplits.add(orderLineItemsSplit);
+					}
+					if(!order.getSalesRepresentative().equals("null")) {
+						OrderLineItemsSplit orderLineItemsSplit = new OrderLineItemsSplit();
+						SplitRule splitRule = searchSplitRule(orderLineItem.getSplitRule());
+						orderLineItemsSplit.setSplitRule(splitRule);
+						orderLineItemsSplit.setBeneficiary(searchEmployee(order.getSalesRepresentative()));
+						orderLineItemsSplit.setBeneficiaryType("SALES REPRESENTATIVE");
+						itemsSplits.add(orderLineItemsSplit);
+					}
+					if(!order.getAdministrator().equals("null")) {
+						OrderLineItemsSplit orderLineItemsSplit = new OrderLineItemsSplit();
+						SplitRule splitRule = searchSplitRule(orderLineItem.getSplitRule());
+						orderLineItemsSplit.setSplitRule(splitRule);
+						orderLineItemsSplit.setBeneficiary(searchEmployee(order.getAdministrator()));
+						orderLineItemsSplit.setBeneficiaryType("ADMINISTRATOR");
+						itemsSplits.add(orderLineItemsSplit);
+					}
+					
+					
+					newOrderLineItem.setOrderLineItemsSplit(itemsSplits);
+					
+					
 //					newOrderLineItem.setSubtotal(orderLineItem.getSubtotal());
 
 					newOrderLineItemList.add(newOrderLineItem);
@@ -627,9 +713,19 @@ public class OrderAPI {
 							//Date orderDate = df.parse(orderDate);
 							Date orderDate = df.parse(date1);
 							
+							
+							
 							String salesRep = elem1.getElementsByTagName("salesRep").item(0).getChildNodes().item(0)
 									.getNodeValue();
 							logger.debug("salesRep :" + salesRep);
+							
+							String manager = elem1.getElementsByTagName("manager").item(0).getChildNodes().item(0)
+									.getNodeValue();
+							logger.debug("manager :" + manager);
+							
+							String secondLvlMgr = elem1.getElementsByTagName("secondLvlMgr").item(0).getChildNodes().item(0)
+									.getNodeValue();
+							logger.debug("secondLvlMgr :" + secondLvlMgr);
 
 							String admin = elem1.getElementsByTagName("admin").item(0).getChildNodes().item(0)
 									.getNodeValue();
@@ -699,6 +795,10 @@ public class OrderAPI {
 									int dutyPercentage = Integer.parseInt(elem2.getElementsByTagName("dutyPercentage")
 											.item(0).getChildNodes().item(0).getNodeValue());
 									logger.debug("dutyPercentage :" + dutyPercentage);
+									
+									String splitRule=elem1.getElementsByTagName("splitRule").item(0).getChildNodes().item(0)
+											.getNodeValue();
+									logger.debug("splitRule :" + splitRule);
 
 //									long subtotal = Integer.parseInt(elem2.getElementsByTagName("subtotal").item(0)
 //											.getChildNodes().item(0).getNodeValue());
@@ -710,6 +810,7 @@ public class OrderAPI {
 									orderLineItem.setRate(rate);
 									orderLineItem.setDiscountPercentage(discountPercentage);
 									orderLineItem.setDutyPercentage(dutyPercentage);
+									orderLineItem.setSplitRule(splitRule);
 //									orderLineItem.setSubtotal(subtotal);
 									orderLineItemList.add(orderLineItem);
 
@@ -731,6 +832,8 @@ public class OrderAPI {
 							order.setOrderDate(orderDate);
 							order.setOfficeLocation(offcLoc);
 							order.setSalesRepresentative(salesRep);
+							order.setManager(manager);
+							order.setSecondLvlMgr(secondLvlMgr);
 							order.setAdministrator(admin);
 							order.setSupportEngineer(supportEngineer);
 							order.setCustomer(customer);
@@ -824,6 +927,27 @@ public class OrderAPI {
 		}
 		return newOrderDetail;
 	}
+	
+	public OrderLineItems getOrderLineItem(long lineItemID) {
+
+		OrderLineItems newOrderLineItem = new OrderLineItems();
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			newOrderLineItem = (OrderLineItems) session.get(OrderLineItems.class, lineItemID);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return newOrderLineItem;
+	}
+	
+	
 
 	public List<Product> listOfProductSubTypes(){
 		Session session = sessionFactory.openSession();

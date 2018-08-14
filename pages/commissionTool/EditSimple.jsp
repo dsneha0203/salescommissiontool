@@ -377,8 +377,7 @@ table td, table th {
 											<option value="${listRule4.ruleSimple.field}">---${listRule4.ruleSimple.field}---</option>
 											<option VALUE="Order Total">Order Total</option>
 											<option value="Quantity">Quantity</option>
-											<option value="Discount Percentage">Discount Percentage</option>
-											<option VALUE="Line Item Total">Line Item Total</option>
+											
 									</select></td>
 							</table></td>
 					</tr>

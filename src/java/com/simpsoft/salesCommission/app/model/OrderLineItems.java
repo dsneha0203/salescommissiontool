@@ -24,8 +24,8 @@ public class OrderLineItems {
 	@Column(name = "id")
 	private long id;
 
-	@Column(name = "orderDate")
-	private Date orderDate;
+//	@Column(name = "orderDate")
+//	private Date orderDate;
 
 	@OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
 	@JoinColumn(name = "PROD_ID")
@@ -55,6 +55,9 @@ public class OrderLineItems {
 	@IndexColumn(name = "detailSrl")
 	private List<OrderLineItemsSplit> orderLineItemsSplit;
 	
+	
+	
+	
 	public OrderLineItems() {
 	}
 
@@ -75,16 +78,16 @@ public class OrderLineItems {
 	/**
 	 * @return the orderDate
 	 */
-	public Date getOrderDate() {
-		return orderDate;
-	}
+//	public Date getOrderDate() {
+//		return orderDate;
+//	}
 
 	/**
 	 * @param orderDate the orderDate to set
 	 */
-	public void setOrderDate(Date orderDate) {
-		this.orderDate = orderDate;
-	}
+//	public void setOrderDate(Date orderDate) {
+//		this.orderDate = orderDate;
+//	}
 
 	/**
 	 * @return the product

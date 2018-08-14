@@ -341,8 +341,7 @@ display:none;
 											</c:forEach>-->
 											<option VALUE="Order Total">Order Total</option>
 											<option value="Quantity">Quantity</option>
-											<option value="Discount Percentage">Discount Percentage</option>
-											<option VALUE="Line Item Total">Line Item Total</option>
+											
 									</select></td>
 							</table></td>
 					</tr>

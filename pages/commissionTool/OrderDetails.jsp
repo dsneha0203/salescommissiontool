@@ -96,7 +96,7 @@ function openWindow(){
 						<th data-field="productTotal">Product Total</th>
 						<th data-field="serviceTotal">Service Total</th>
 						<th data-field="orderTotal">Order Total</th>
-						<th data-field="Details">Details</th>
+						<th data-field="Details">Details</th> 
 						
 					</tr>
 				</thead>

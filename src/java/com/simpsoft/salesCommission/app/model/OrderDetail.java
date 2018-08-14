@@ -34,6 +34,14 @@ public class OrderDetail {
 	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH}, orphanRemoval = true)
 	@JoinColumn(name = "SALES_REP_ID")
 	private Employee salesRepresentative;
+	
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH}, orphanRemoval = true)
+	@JoinColumn(name = "MANAGER_ID")
+	private Employee manager;
+	
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH}, orphanRemoval = true)
+	@JoinColumn(name = "SECOND_LEVEL_MANAGER_ID")
+	private Employee secondLevelManager;
 
 	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH}, orphanRemoval = true)
 	@JoinColumn(name = "SUPP_ENG_ID")
@@ -101,6 +109,24 @@ public class OrderDetail {
 	 */
 	public void setSalesRepresentative(Employee salesRepresentative) {
 		this.salesRepresentative = salesRepresentative;
+	}
+
+	
+	
+	public Employee getManager() {
+		return manager;
+	}
+
+	public void setManager(Employee manager) {
+		this.manager = manager;
+	}
+
+	public Employee getSecondLevelManager() {
+		return secondLevelManager;
+	}
+
+	public void setSecondLevelManager(Employee secondLevelManager) {
+		this.secondLevelManager = secondLevelManager;
 	}
 
 	/**
