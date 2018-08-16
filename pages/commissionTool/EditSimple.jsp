@@ -417,9 +417,14 @@ table td, table th {
 								&nbsp;FieldName&nbsp;<select
 												name="personListNonAgg[].fieldName" required>
 													<option value="${quali.fieldList.displayName}">---${quali.fieldList.displayName}---</option>
-													<c:forEach items="${listRule2}" var="rule">
-														<option value="${rule.displayName}">
-															<c:out value="${rule.displayName}" />
+													<!--<c:forEach items="${listRule2}" var="rule">
+													<option value="${rule.displayName}">
+														<c:out value="${rule.displayName}" />
+													</option>
+												</c:forEach>-->
+												<c:forEach items="${fieldNameList}" var="fieldName">
+													<option value="${fieldName}">
+															<c:out value="${fieldName}" />
 														</option>
 													</c:forEach>
 											</select>&nbsp;
@@ -444,9 +449,15 @@ table td, table th {
 											<td>Condition&nbsp;<select
 												name="personListNonAgg[].conditionValue">
 													<option value="${quali.conditionList.conditionValue}">---${quali.conditionList.conditionValue}---</option>
-													<c:forEach items="${listRule3}" var="rule">
+													<!--<c:forEach items="${listRule3}" var="rule">
 														<option value="${rule.conditionValue}">
 															<c:out value="${rule.conditionValue}" />
+														</option>
+													</c:forEach>-->
+													
+													<c:forEach items="${condNameList}" var="condName">
+													<option value="${condName}">
+															<c:out value="${condName}" />
 														</option>
 													</c:forEach>
 											</select>
@@ -465,9 +476,14 @@ table td, table th {
 											<input type="hidden" name="personListNonAgg[].aggFuncName" value="" >
 											&nbsp;Field Name&nbsp;<select
 												name="personListNonAgg[].fieldName" required>
-													<c:forEach items="${listRule2}" var="rule">
-														<option value="${rule.displayName}">
-															<c:out value="${rule.displayName}" />
+													<!--<c:forEach items="${listRule2}" var="rule">
+													<option value="${rule.displayName}">
+														<c:out value="${rule.displayName}" />
+													</option>
+												</c:forEach>-->
+												<c:forEach items="${fieldNameList}" var="fieldName">
+													<option value="${fieldName}">
+															<c:out value="${fieldName}" />
 														</option>
 													</c:forEach>
 											</select>&nbsp;
@@ -491,9 +507,15 @@ table td, table th {
 
 											<td>&nbsp;Condition&nbsp;<select
 												name="personListNonAgg[].conditionValue">
-													<c:forEach items="${listRule3}" var="rule">
+													<!--<c:forEach items="${listRule3}" var="rule">
 														<option value="${rule.conditionValue}">
 															<c:out value="${rule.conditionValue}" />
+														</option>
+													</c:forEach>-->
+													
+													<c:forEach items="${condNameList}" var="condName">
+													<option value="${condName}">
+															<c:out value="${condName}" />
 														</option>
 													</c:forEach>
 											</select>&nbsp;
@@ -533,9 +555,14 @@ table td, table th {
 											<td>&nbsp;FieldName&nbsp;<select
 												name="personList[].fieldName">
 													<option value="${quali.fieldList.displayName}">---${quali.fieldList.displayName}---</option>
-													<c:forEach items="${listRule2}" var="rule">
-														<option value="${rule.displayName}">
-															<c:out value="${rule.displayName}" />
+													<!--<c:forEach items="${listRule2}" var="rule">
+													<option value="${rule.displayName}">
+														<c:out value="${rule.displayName}" />
+													</option>
+												</c:forEach>-->
+												<c:forEach items="${fieldNameList}" var="fieldName">
+													<option value="${fieldName}">
+															<c:out value="${fieldName}" />
 														</option>
 													</c:forEach>
 											</select>&nbsp;
@@ -561,9 +588,14 @@ table td, table th {
 											<td>Condition&nbsp;<select
 												name="personList[].conditionValue">
 													<option value="${quali.conditionList.conditionValue}">---${quali.conditionList.conditionValue}---</option>
-													<c:forEach items="${listRule3}" var="rule">
+													<!--<c:forEach items="${listRule3}" var="rule">
 														<option value="${rule.conditionValue}">
 															<c:out value="${rule.conditionValue}" />
+														</option>
+													</c:forEach>-->
+													<c:forEach items="${condNameList}" var="condName">
+													<option value="${condName}">
+															<c:out value="${condName}" />
 														</option>
 													</c:forEach>
 											</select>
@@ -590,11 +622,16 @@ table td, table th {
 									
 										<td>&nbsp;Field Name&nbsp;<select
 											name="personList[].fieldName">
-												<c:forEach items="${listRule2}" var="rule">
+												<!--<c:forEach items="${listRule2}" var="rule">
 													<option value="${rule.displayName}">
 														<c:out value="${rule.displayName}" />
 													</option>
-												</c:forEach>
+												</c:forEach>-->
+												<c:forEach items="${fieldNameList}" var="fieldName">
+													<option value="${fieldName}">
+															<c:out value="${fieldName}" />
+														</option>
+													</c:forEach>
 										</select></td>
 
 										<td>&nbsp;Not&nbsp;
@@ -609,12 +646,19 @@ table td, table th {
 										</td>
 
 										<td>&nbsp;Condition&nbsp;<select
-											name="personList[].conditionValue"><c:forEach
+											name="personList[].conditionValue">
+											<!--<c:forEach
 													items="${listRule3}" var="rule">
 													<option value="${rule.conditionValue}">
 														<c:out value="${rule.conditionValue}" />
 													</option>
-												</c:forEach></select>
+												</c:forEach>-->
+												<c:forEach items="${condNameList}" var="condName">
+													<option value="${condName}">
+															<c:out value="${condName}" />
+														</option>
+													</c:forEach>
+												</select>
 										<td>&nbsp;Value&nbsp;<input type="text"
 											name="personList[].value" required></td>
 										<td><a href="#" class="removePerson1">Remove</a></td>

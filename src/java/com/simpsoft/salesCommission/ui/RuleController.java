@@ -4,6 +4,7 @@ package com.simpsoft.salesCommission.ui;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,6 +60,27 @@ public class RuleController {
 		model.addAttribute("listRule1", ruleSimpleApi.listOfAggregateFunctions());
 		model.addAttribute("listRule2", ruleSimpleApi.listOfFields());
 		model.addAttribute("listRule3", ruleSimpleApi.listOfConditions());
+		
+		List<FieldList> fieldList = ruleSimpleApi.listOfFields();
+		logger.debug("SIZE OF FIELD LIST= "+fieldList.size());
+		LinkedHashSet<String> fieldNames = new LinkedHashSet<String>();
+		for(FieldList f : fieldList) {
+			fieldNames.add(f.getDisplayName());
+		}
+		ArrayList<String> uniqueFieldNameList = new ArrayList<String>(fieldNames);
+		logger.debug("SIZE OF UNIQUE FIELD NAME LIST= "+uniqueFieldNameList.size());
+		model.addAttribute("fieldNameList", uniqueFieldNameList);
+		
+		
+		List<ConditionList> condList = ruleSimpleApi.listOfConditions();
+		LinkedHashSet<String> condNames = new LinkedHashSet<String>();
+		for(ConditionList c : condList) {
+			condNames.add(c.getConditionValue());
+		}
+		ArrayList<String> uniqueCondNameList = new ArrayList<String>(condNames);
+		logger.debug("SIZE OF UNIQUE CONDITION NAME LIST= "+uniqueCondNameList.size());
+		model.addAttribute("condNameList", uniqueCondNameList);
+		
 		System.out.println(".......servlet running.......");
 		return "simpRuleDetails";
 	}
@@ -638,6 +660,28 @@ public class RuleController {
 		model.addAttribute("listRule1", ruleSimpleApi.listOfAggregateFunctions());
 		model.addAttribute("listRule2", ruleSimpleApi.listOfFields());
 		model.addAttribute("listRule3", ruleSimpleApi.listOfConditions());
+		
+		List<FieldList> fieldList = ruleSimpleApi.listOfFields();
+		logger.debug("SIZE OF FIELD LIST= "+fieldList.size());
+		LinkedHashSet<String> fieldNames = new LinkedHashSet<String>();
+		for(FieldList f : fieldList) {
+			fieldNames.add(f.getDisplayName());
+		}
+		ArrayList<String> uniqueFieldNameList = new ArrayList<String>(fieldNames);
+		logger.debug("SIZE OF UNIQUE FIELD NAME LIST= "+uniqueFieldNameList.size());
+		model.addAttribute("fieldNameList", uniqueFieldNameList);
+		
+		
+		List<ConditionList> condList = ruleSimpleApi.listOfConditions();
+		LinkedHashSet<String> condNames = new LinkedHashSet<String>();
+		for(ConditionList c : condList) {
+			condNames.add(c.getConditionValue());
+		}
+		ArrayList<String> uniqueCondNameList = new ArrayList<String>(condNames);
+		logger.debug("SIZE OF UNIQUE CONDITION NAME LIST= "+uniqueCondNameList.size());
+		model.addAttribute("condNameList", uniqueCondNameList);
+		
+		
 		Rule qRule = ruleApi.getRule(id);
 		model.addAttribute("listRule4", qRule);
 		RuleSimple sRule = qRule.getRuleSimple();
@@ -683,6 +727,9 @@ public class RuleController {
 
 		session.setAttribute("personListContainer1", getDummyPersonListContainer1());
 		model.addAttribute("personListContainer1", (PersonListContainer1) session.getAttribute("personListContainer1"));
+		
+		session.setAttribute("personListContainer2", getDummyPersonListContainer1());
+		model.addAttribute("personListContainer2", (PersonListContainer1) session.getAttribute("personListContainer2"));
 		
 		return "EditSimple";
 	}
