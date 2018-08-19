@@ -23,10 +23,12 @@ public class RuleComposite {
 	@Column(name = "id")
 	private long id;
 	
+
+	
 	@ManyToMany(cascade = {CascadeType.MERGE},fetch = FetchType.EAGER)
-    @JoinTable(name="RULE_COMPRULE", 
+    @JoinTable(name="RULE_COMPOSITE", 
                 joinColumns={@JoinColumn(name="RULE_COMP_ID")}, 
-                inverseJoinColumns={@JoinColumn(name="RULE_ID")})
+                inverseJoinColumns={@JoinColumn(name="RULE_ID")})	
 	@IndexColumn(name = "detailSrl")
     private List<Rule> compJoinRule;
 	
@@ -58,6 +60,7 @@ public class RuleComposite {
 	public void setCompJoinRule(List<Rule> compJoinRule) {
 		this.compJoinRule = compJoinRule;
 	}
+
 
 
 }

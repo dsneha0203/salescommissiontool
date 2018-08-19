@@ -337,7 +337,7 @@ overflow: auto;
 				
 				<table id="customers" border="1">
 					 <thead>
-						<h3 align="center">Selected Rule</h3>
+						<h3 align="center">Assigned Rule(s)</h3>
 						<tr>
 							<th data-field="id">ID&nbsp;&nbsp;&nbsp;</th>
 							<th data-field="ruleName">RuleName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -496,7 +496,9 @@ overflow: auto;
 						</tr>
 						</c:forEach>
 					  </tbody>  
-					  <td><input type="submit" value="Create"></td> </table>  
+					  <!--<td><input type="submit" value="Create"></td>   -->
+					  
+					  </table>  
 					  </form:form> 
 			<br>
 			

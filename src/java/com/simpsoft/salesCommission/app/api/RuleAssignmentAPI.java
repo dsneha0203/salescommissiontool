@@ -15,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.simpsoft.salesCommission.app.dataloader.RuleCompositeXML;
 import com.simpsoft.salesCommission.app.model.Employee;
 import com.simpsoft.salesCommission.app.model.Frequency;
 import com.simpsoft.salesCommission.app.model.Role;
@@ -61,6 +60,25 @@ public class RuleAssignmentAPI {
 			}else{
 			newRuleAss.setRole(ruleAss.getRole());
 			}
+			
+			logger.debug("----RULE ASSIGNMENT DETAILS TO BE ADDED----");
+			for(Iterator itr=ruleAss.getRuleAssignmentDetails().iterator(); itr.hasNext(); ) {
+				RuleAssignmentDetails assignmentDetails = (RuleAssignmentDetails)itr.next();
+				//logger.debug("ID= "+assignmentDetails.getId());
+				logger.debug("RULE NAME= "+assignmentDetails.getRule().getRuleName());
+				logger.debug("VALIDITY TYPE= "+assignmentDetails.getValidityType());
+				logger.debug("START DATE= "+assignmentDetails.getStartDate());
+				logger.debug("END DATE= "+assignmentDetails.getEndDate());
+				
+				for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
+					logger.debug("----RULE ASSIGNMENT PARAMETERS TO BE ADDED----");
+					RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
+					logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
+					logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
+					logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
+					
+				}
+			
 			List<RuleAssignmentDetails>  newRuleAssignmentDetailsList = new ArrayList<RuleAssignmentDetails>();
 			List<RuleAssignmentDetails>  ruleAssDtl = ruleAss.getRuleAssignmentDetails();
 			for (Iterator iterator = ruleAssDtl.iterator(); iterator.hasNext();) {
@@ -75,13 +93,14 @@ public class RuleAssignmentAPI {
 				newRuleAssignmentDetails.setRule(ruleAssignmentDetails.getRule());
 				newRuleAssignmentDetailsList.add(newRuleAssignmentDetails);
 			}
-		//	List<RuleAssignmentDetails> newRuleAssignmentDetails = editRuleAssignmentDetails(session,ruleAss.getRuleAssignmentDetails());
+		
 			newRuleAss.setRuleAssignmentDetails(newRuleAssignmentDetailsList);
-			//newRuleAss.setRuleAssignmentDetails(ruleAss.getRuleAssignmentDetails());
+			
 			session.save(newRuleAss);
 			tx.commit();
-			logger.debug("CREATED AN RULE ASSIGNMENT INTO DATABASE" + newRuleAss);
-		} catch (HibernateException e) {
+			logger.debug("CREATED A RULE ASSIGNMENT INTO DATABASE" + newRuleAss);
+			}
+		}catch (HibernateException e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
@@ -139,6 +158,8 @@ public class RuleAssignmentAPI {
 				newRuleAss.setRole(ruleAss.getRole());
 				
 			}
+			
+			
 			logger.debug("----RULE ASSIGNMENT DETAILS TO BE CLEARED----");
 			for(Iterator itr=newRuleAss.getRuleAssignmentDetails().iterator(); itr.hasNext(); ) {
 				RuleAssignmentDetails assignmentDetails = (RuleAssignmentDetails)itr.next();
@@ -153,10 +174,23 @@ public class RuleAssignmentAPI {
 					logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
 					logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
 					logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
+					
+				
 				}
+				
+				
 			}
+			
+		
+			
+			
+			
 			newRuleAss.clearRuleAssignmentDetails(newRuleAss.getRuleAssignmentDetails());
-			List<RuleAssignmentDetails>  newRuleAssignmentDetailsList = new ArrayList<RuleAssignmentDetails>();
+			
+			
+			
+			
+			
 			List<RuleAssignmentDetails>  ruleAssDtl = ruleAss.getRuleAssignmentDetails();
 			logger.debug("----RULE ASSIGNMENT DETAILS NOW ADDED----");
 			for(Iterator itr=ruleAssDtl.iterator(); itr.hasNext(); ) {
@@ -166,30 +200,24 @@ public class RuleAssignmentAPI {
 				logger.debug("VALIDITY TYPE= "+assignmentDetails.getValidityType());
 				logger.debug("START DATE= "+assignmentDetails.getStartDate());
 				logger.debug("END DATE= "+assignmentDetails.getEndDate());
+				
 				for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
 					RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
 					logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
 					logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
 					logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
+					
 				}
+				
 			}
-//			for (Iterator iterator = ruleAssDtl.iterator(); iterator.hasNext();) {
-//
-//				RuleAssignmentDetails ruleAssignmentDetails = (RuleAssignmentDetails) iterator.next();
-//				RuleAssignmentDetails newRuleAssignmentDetails = new RuleAssignmentDetails();
-//				newRuleAssignmentDetails.setValidityType(ruleAssignmentDetails.getValidityType());
-//				newRuleAssignmentDetails.setFrequency(ruleAssignmentDetails.getFrequency());
-//				newRuleAssignmentDetails.setStartDate(ruleAssignmentDetails.getStartDate());
-//				newRuleAssignmentDetails.setEndDate(ruleAssignmentDetails.getEndDate());
-//				newRuleAssignmentDetails.setRuleAssignmentParameter(ruleAssignmentDetails.getRuleAssignmentParameter());
-//				newRuleAssignmentDetails.setRule(ruleAssignmentDetails.getRule());
-//				newRuleAssignmentDetailsList.add(newRuleAssignmentDetails);
-//			}
-		
-			
-//			newRuleAss.addRuleAssignmentDetails(newRuleAssignmentDetailsList);
+
 			newRuleAss.addRuleAssignmentDetails(ruleAssDtl);
+
 			session.merge(newRuleAss);
+			
+			
+	
+			
 			tx.commit();
 			logger.debug("EDITED A RULE ASSIGNMENT INTO DATABASE" + newRuleAss);
 		} catch (HibernateException e) {
@@ -734,4 +762,4 @@ public class RuleAssignmentAPI {
 	}
 	
 	
-}
+}	

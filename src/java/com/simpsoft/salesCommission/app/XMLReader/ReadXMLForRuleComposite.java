@@ -66,7 +66,9 @@ public class ReadXMLForRuleComposite {
 				listOfJoinRules.add(simple);
 			}
 			
+			
 			compRule.setCompJoinRule(listOfJoinRules);
+//			compRule.setCompJoinRuleList(listOfJoinRules);
 			newRule.setRuleComposite(compRule); 
 			ruleAPI.createRule(newRule);
 		}

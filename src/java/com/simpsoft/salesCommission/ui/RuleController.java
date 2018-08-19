@@ -738,7 +738,7 @@ public class RuleController {
 	public String compRule(ModelMap map, HttpSession session, HttpServletRequest request, String message) {
 		map.addAttribute("listSimpRule", ruleApi.listOfRules(RuleType.Simple));
 
-			session.setAttribute("personListContainer", getDummyPersonListContainer3());
+			//session.setAttribute("personListContainer", getDummyPersonListContainer3());
 			session.setAttribute("personListContainer2", getDummyPersonListContainer2());
 
 		return "ruleDetails";
@@ -775,6 +775,7 @@ public class RuleController {
 		model.addAttribute("description", ruleUI.getDescription());
 		model.addAttribute("ruleType", ruleUI.getRuleType());		
 		model.addAttribute("connectionType", ruleUI.getConnectionType());
+		logger.debug("CONNECTION TYPE= "+ ruleUI.getConnectionType());
 		model.addAttribute("compensationType", ruleUI.getCompensationType());
 		model.addAttribute("fixedCompValue", ruleUI.getFixedCompValue());
 		model.addAttribute("compensationFormula", ruleUI.getCompensationFormula());
@@ -790,6 +791,7 @@ public class RuleController {
 			Rule  rulSimple = ruleApi.searchRuleByName(person1.getSimpRule());
 			ruleObj.add(rulSimple);
 			ruleComp.setCompJoinRule(ruleObj);
+//			ruleComp.setCompJoinRuleList(ruleObj);
 			rule.setRuleComposite(ruleComp);
 		}
 
@@ -856,7 +858,7 @@ public class RuleController {
 			ruleApi.createRule(rule);
 			
 		}
-		return "redirect:/ruleList";
+		return "redirect:/editComposite/"+ruleUI.getId();
 	}
 
 	@RequestMapping(value = "/ruleList", method = RequestMethod.GET)
@@ -894,9 +896,9 @@ public class RuleController {
 	    }
 	  model.addAttribute("parList",parameterList);
 	    
-		if (session.getAttribute("personListContainer") == null)
-			session.setAttribute("personListContainer", getDummyPersonListContainer3());
-		model.addAttribute("personListContainer", (PersonListContainer) session.getAttribute("personListContainer"));
+//		if (session.getAttribute("personListContainer") == null)
+//			session.setAttribute("personListContainer", getDummyPersonListContainer3());
+//		model.addAttribute("personListContainer", (PersonListContainer) session.getAttribute("personListContainer"));
 
 		session.setAttribute("personListContainer2", getDummyPersonListContainer2());
 		model.addAttribute("personListContainer2", (PersonListContainer2) session.getAttribute("personListContainer2"));

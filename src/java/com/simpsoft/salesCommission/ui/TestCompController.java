@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -245,27 +246,115 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 		model.addAttribute("assempName", assnmnt.getEmpName());
 		logger.debug("name: " + assnmnt.getEmpName());
 
-		for (RuleAssUI rul1 : ruleListContainer.getRuleList()) {
-			logger.debug("Id:   " + rul1.getId());
-			logger.debug("RuleName:  " + rul1.getRuleName());
-			logger.debug("Fixed:  " + rul1.getFixed());
-			logger.debug("Repeats:  " + rul1.getRepeats());
-			logger.debug("Frequency:  " + rul1.getFrequency());
-			logger.debug("StartDate:  " + rul1.getStartdate());
-			logger.debug("EndDate:  " + rul1.getEndDate());
-			for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
-				logger.debug("ParameterName: " + rul2.getParameterName());
-				logger.debug("OverwriteValue: " + rul2.getOverwriteValue());
+		List<RuleAssUI> newRuleListContainer = new ArrayList<>();
+		logger.debug("----UPDATE LIST----");
+		int counter=0;
+		for (ListIterator<RuleAssUI> itr=ruleListContainer.getRuleList().listIterator(); itr.hasNext();) {
+			RuleAssUI assUI = new RuleAssUI();
+			RuleAssUI rul1 = (RuleAssUI) itr.next();
+			if(rul1.getId() != 0) {
+				logger.debug("Id:   " + rul1.getId());
+				assUI.setId(rul1.getId());
+				logger.debug("RuleName:  " + rul1.getRuleName());
+				assUI.setRuleName(rul1.getRuleName());
+				logger.debug("Fixed:  " + rul1.getFixed());
+				assUI.setFixed(rul1.getFixed());
+				logger.debug("Repeats:  " + rul1.getRepeats());
+				assUI.setRepeats(rul1.getRepeats());
+				logger.debug("Frequency:  " + rul1.getFrequency());
+				assUI.setFrequency(rul1.getFrequency());
+				logger.debug("StartDate:  " + rul1.getStartdate());
+				assUI.setStartdate(rul1.getStartdate());
+				logger.debug("EndDate:  " + rul1.getEndDate());
+				assUI.setEndDate(rul1.getEndDate());
+				List<RuleAssignmentParameter> assignmentParameters = new ArrayList<>();
+					if(rul1.getRuleAssignmentParameter() != null) {						
+						if(counter==0) {
+							for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
+								RuleAssignmentParameter assignmentParameter = new RuleAssignmentParameter();
+								logger.debug("ParameterName: " + rul2.getParameterName());
+								assignmentParameter.setParameterName(rul2.getParameterName());
+								logger.debug("OverwriteValue: " + rul2.getOverwriteValue());
+								assignmentParameter.setOverwriteValue(rul2.getOverwriteValue());
+								if(rul2.getTargetDefinition() != null) {
+									logger.debug("TargetDefinition: " + rul2.getTargetDefinition().getDisplayName());
+									assignmentParameter.setTargetDefinition(rul2.getTargetDefinition());
+								}
+								assignmentParameters.add(assignmentParameter);
+							}
+						}else {
+							
+							RuleAssUI rul = (RuleAssUI) itr.next();
+							for (RuleAssignmentParameter rul2 : rul.getRuleAssignmentParameter()) {
+								RuleAssignmentParameter assignmentParameter = new RuleAssignmentParameter();
+								logger.debug("ParameterName: " + rul2.getParameterName());
+								assignmentParameter.setParameterName(rul2.getParameterName());
+								logger.debug("OverwriteValue: " + rul2.getOverwriteValue());
+								assignmentParameter.setOverwriteValue(rul2.getOverwriteValue());
+								if(rul2.getTargetDefinition() != null) {
+									logger.debug("TargetDefinition: " + rul2.getTargetDefinition().getDisplayName());
+									assignmentParameter.setTargetDefinition(rul2.getTargetDefinition());
+								}
+								assignmentParameters.add(assignmentParameter);
+							}
+						}
+						
+					}else {
+						RuleAssUI rul2 = (RuleAssUI) itr.next();
+						for (RuleAssignmentParameter rul3 : rul2.getRuleAssignmentParameter()) {
+							RuleAssignmentParameter assignmentParameter = new RuleAssignmentParameter();
+							logger.debug("ParameterName: " + rul3.getParameterName());
+							assignmentParameter.setParameterName(rul3.getParameterName());
+							logger.debug("OverwriteValue: " + rul3.getOverwriteValue());
+							assignmentParameter.setOverwriteValue(rul3.getOverwriteValue());
+							if(rul3.getTargetDefinition() != null) {
+								logger.debug("TargetDefinition: " + rul3.getTargetDefinition().getDisplayName());
+								assignmentParameter.setTargetDefinition(rul3.getTargetDefinition());
+							}
+							assignmentParameters.add(assignmentParameter);
+						}
+						itr.previous();
+						counter++;
+					}
+					
+					assUI.setRuleAssignmentParameter(assignmentParameters);
+			}
+			
+			if(assUI.getId() != 0) {
+			newRuleListContainer.add(assUI);
 			}
 		}
+		
+		logger.debug("---NEW RULE LIST CONTAINER----");
+		for(Iterator itr3 = newRuleListContainer.iterator(); itr3.hasNext(); ) {
+			RuleAssUI assUI = (RuleAssUI) itr3.next();
+			logger.debug("Id:   " + assUI.getId());
+			logger.debug("RuleName:  " + assUI.getRuleName());
+			logger.debug("Fixed:  " + assUI.getFixed());
+			logger.debug("Repeats:  " + assUI.getRepeats());
+			logger.debug("Frequency:  " + assUI.getFrequency());
+			logger.debug("StartDate:  " + assUI.getStartdate());
+			logger.debug("EndDate:  " + assUI.getEndDate());
+			for (RuleAssignmentParameter rul2 : assUI.getRuleAssignmentParameter()) {
+				logger.debug("ParameterName: " + rul2.getParameterName());
+				logger.debug("OverwriteValue: " + rul2.getOverwriteValue());
+				if(rul2.getTargetDefinition() != null) {
+					logger.debug("TargetDefinition: " + rul2.getTargetDefinition().getDisplayName());
+				}
+			}			
+			
+		}
+		
 
-		List<RuleAssUI> rul = ruleListContainer.getRuleList();
+
 		List<RuleAssignmentDetails> rp = new ArrayList<>();
-		for (Iterator iterator = rul.iterator(); iterator.hasNext();) {
-			RuleAssUI rpm = (RuleAssUI) iterator.next();
-			Rule rule = ruleApi.searchRuleByName(rpm.getRuleName());
+		for (ListIterator<RuleAssUI> itr=newRuleListContainer.listIterator(); itr.hasNext();) {
+			RuleAssUI rpm = (RuleAssUI) itr.next();
+			if(rpm.getRuleName() != null) {
+			Rule rule = ruleApi.searchRuleByName(rpm.getRuleName());			
 			RuleAssignmentDetails rass = new RuleAssignmentDetails();
 			rass.setRule(rule);
+			
 			String fixed = rpm.getFixed();
 			String repeats = rpm.getRepeats();
 			String frequency = rpm.getFrequency();
@@ -280,53 +369,55 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			rass.setEndDate(rpm.getEndDate());
 			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
 			List<RuleAssignmentParameter> ruleParamList = new ArrayList<>();
-			for(Iterator iterator1 = rpm1.iterator(); iterator1.hasNext();) {
-				RuleAssignmentParameter ruleAssParam = (RuleAssignmentParameter) iterator1.next();
-				String paramValue = (ruleAssApi.getParamValue(ruleAssParam.getParameterName())).getParameterValue();
-				logger.debug("PARAM VALUE= "+paramValue);
-				logger.debug("OVERWRITE ="+ruleAssParam.getOverwriteValue());
-				if(!ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
-					logger.debug("TARGET DEF NAME= "+ruleAssParam.getTargetDefinition().getDisplayName());
-				}else {
-					logger.debug("TARGET DEF NAME= null");
-				}
-				if(ruleAssParam.getOverwriteValue().equals("")) {
-					logger.debug("VALUE TYPE= DEFAULT");
-					ruleAssParam.setValueType("default");
-					ruleAssParam.setOverwriteValue(paramValue);
-					
-					if( ruleAssParam.getTargetDefinition().getDisplayName().equals("")){
-						ruleAssParam.setTargetDefinition(null);
+			
+				for(Iterator iterator1 = rpm1.iterator(); iterator1.hasNext();) {
+					RuleAssignmentParameter ruleAssParam = (RuleAssignmentParameter) iterator1.next();
+					String paramValue = (ruleAssApi.getParamValue(ruleAssParam.getParameterName())).getParameterValue();
+					logger.debug("PARAM VALUE= "+paramValue);
+					logger.debug("OVERWRITE ="+ruleAssParam.getOverwriteValue());
+					if(!ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
+						logger.debug("TARGET DEF NAME= "+ruleAssParam.getTargetDefinition().getDisplayName());
 					}else {
+						logger.debug("TARGET DEF NAME= null");
+					}
+					if(ruleAssParam.getOverwriteValue().equals("")) {
+						logger.debug("VALUE TYPE= DEFAULT");
+						ruleAssParam.setValueType("default");
+						ruleAssParam.setOverwriteValue(paramValue);
+						
+						if( ruleAssParam.getTargetDefinition().getDisplayName().equals("")){
+							ruleAssParam.setTargetDefinition(null);
+						}else {
+							logger.debug("OVERLAY VALUE= "+ruleAssParam.getTargetDefinition().getDisplayName());
+							logger.debug("VALUE TYPE= OVERLAY");
+							ruleAssParam.setValueType("overlay");
+							TargetDefinition tgd = ruleAssApi.searchTargetDef(ruleAssParam.getTargetDefinition().getDisplayName());
+							ruleAssParam.setTargetDefinition(tgd);
+						}
+					}
+					else if(!(ruleAssParam.getOverwriteValue().equals(paramValue)) && ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
+						logger.debug("OVERWRITE VALUE= "+ruleAssParam.getOverwriteValue());
+						logger.debug("VALUE TYPE= OVERWRITE");
+						ruleAssParam.setValueType("overwrite");
+						ruleAssParam.setTargetDefinition(null);
+					}
+					else if( !(ruleAssParam.getTargetDefinition().getDisplayName().equals(""))) {
 						logger.debug("OVERLAY VALUE= "+ruleAssParam.getTargetDefinition().getDisplayName());
 						logger.debug("VALUE TYPE= OVERLAY");
 						ruleAssParam.setValueType("overlay");
 						TargetDefinition tgd = ruleAssApi.searchTargetDef(ruleAssParam.getTargetDefinition().getDisplayName());
 						ruleAssParam.setTargetDefinition(tgd);
 					}
+					
+					
+					ruleParamList.add(ruleAssParam);
+					
 				}
-				else if(!(ruleAssParam.getOverwriteValue().equals(paramValue)) && ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
-					logger.debug("OVERWRITE VALUE= "+ruleAssParam.getOverwriteValue());
-					logger.debug("VALUE TYPE= OVERWRITE");
-					ruleAssParam.setValueType("overwrite");
-					ruleAssParam.setTargetDefinition(null);
-				}
-				else if( !(ruleAssParam.getTargetDefinition().getDisplayName().equals(""))) {
-					logger.debug("OVERLAY VALUE= "+ruleAssParam.getTargetDefinition().getDisplayName());
-					logger.debug("VALUE TYPE= OVERLAY");
-					ruleAssParam.setValueType("overlay");
-					TargetDefinition tgd = ruleAssApi.searchTargetDef(ruleAssParam.getTargetDefinition().getDisplayName());
-					ruleAssParam.setTargetDefinition(tgd);
-				}
-				
-				
-				ruleParamList.add(ruleAssParam);
-				
-			}
-						
-			//rass.setRuleAssignmentParameter(rpm1);
+					
+			
 			rass.setRuleAssignmentParameter(ruleParamList);
 			rp.add(rass);
+			}
 		}
 
 		long assIdForRole = assnmnt.getId();
@@ -355,17 +446,9 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String create(@ModelAttribute("SpringWeb") RuleListContainer1 ruleListContainer, RuleAssEmpRoleUI ruleAssEmpRole,ModelMap model, 
 			HttpServletRequest request, HttpSession session,SessionStatus status) {
-		
+		logger.debug("-----IN CREATE METHOD----");
 		model.addAttribute("text2", ruleAssEmpRole.getEmpName());
 		logger.debug("EmpName: " + ruleAssEmpRole.getEmpName());
-//		if(!ruleAssEmpRole.getEmpName().equals("")) {
-//		empApi.searchEmployee(ruleAssEmpRole.getEmpName());
-//		List<Employee> employee = empApi.searchEmployeesByName(ruleAssEmpRole.getEmpName());
-//		for (Iterator iterator = employee.iterator(); iterator.hasNext();) {
-//			Employee emp = (Employee) iterator.next();
-//			long empId = emp.getId();
-//		}
-//		}
 		
 		model.addAttribute("roleNameCompAsg", ruleAssEmpRole.getRoleName());
 		logger.debug("Rolename: " +  ruleAssEmpRole.getRoleName());
@@ -473,7 +556,6 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 				
 			}
 						
-			//rass.setRuleAssignmentParameter(rpm1);
 			rass.setRuleAssignmentParameter(ruleParamList);
 			rp.add(rass);
 		}
@@ -484,10 +566,7 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			if(ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()) !=null) {
 				logger.debug("RULE ASSIGNMENT FOR EMP ALREADY EXISTS");
 				logger.debug("RULE ASSG ID= "+ ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()).getId() );
-//			//get rule assignment id of this emp id
-//			long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId()).getId();
-//			logger.debug("EXISTING ID FOR EMP= "+existingRuleAsgId);
-//			ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+
 				RuleAssignment ruleAssg = ruleAssApi.getPreviousRuleAssignmentForEmp(emp.getId());
 				List<RuleAssignmentDetails> rulesAssgDetailList = ruleAssg.getRuleAssignmentDetails();
 				rulesAssgDetailList.addAll(rp);
@@ -503,9 +582,7 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			if(ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()) !=null) {
 				logger.debug("RULE ASSIGNMENT FOR ROLE ALREADY EXISTS");
 				logger.debug("RULE ASSG ID= "+ ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()).getId() );
-//				long existingRuleAsgId = ruleAssApi.getPreviousRuleAssignmentForRole(role.getId()).getId();
-//				logger.debug("EXISTING ID FOR ROLE= "+existingRuleAsgId);
-//				ruleAssApi.editRuleAssignment(ras,existingRuleAsgId);
+
 			
 			//get previous rule assignment for role
 			RuleAssignment ruleAssg = ruleAssApi.getPreviousRuleAssignmentForRole(role.getId());
@@ -520,24 +597,7 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			
 	}
 		
-		
-		
-//		if (EmpName != null) {
-//			RuleAssignment ruleAss = ruleAssApi.getRuleAssignment(assIdForRole);
-//			//Role role = roleApi.searchRole(assnmnt.getName());
-//			//ruleAss.setRuleAssignmentDetails(rp);
-//			//ruleAss.setRole(role);
-//			//ruleAssApi.editRuleAssignment(ruleAss);
-//		} else {
-//			//RuleAssignment ruleAss = ruleAssApi.getRuleAssignment(assIdForEmp);
-//			//Employee emp = empApi.searchEmployee(assnmnt.getEmpName());
-//			//ruleAss.setRuleAssignmentDetails(rp);
-//			//ruleAss.setEmployee(emp);
-//			//ruleAssApi.editRuleAssignment(ruleAss);
-//		}
-		
-//		logger.debug("EMPLOYEE NAME= "+ruleAssEmpRole.getEmpName());
-//		logger.debug("ROLE NAME= "+ruleAssEmpRole.getRoleName());
+
 	
 	return "redirect:/compplan";
 }
@@ -592,7 +652,159 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 		AddRuleUI object2 = new AddRuleUI();
 		object2.setId(obj2.getId());
 		request.getSession().setAttribute("Id", object2);
-		return "redirect:/compplan";
+		return "redirect:/compplancreate";
+		
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/compplancreate", method = RequestMethod.GET)
+	public ModelAndView listRulesCreate(ModelMap model, HttpServletRequest request, HttpSession session,
+			SessionStatus status) {
+
+		model.addAttribute("listRole", roleApi.listOfRoles());
+		model.addAttribute("listRules", ruleApi.listOfRules());
+		model.addAttribute("listfrequency", ruleAssApi.listOfFrequency());
+		model.addAttribute("targetlist", empApi.listOfTargetDefinitions());
+
+		if (session.getAttribute("ruleListContainer") == null)
+			session.setAttribute("ruleListContainer", getDummyRuleListContainer());
+		model.addAttribute("ruleListContainer", (RuleListContainer) session.getAttribute("ruleListContainer"));
+		
+		
+
+		/*---------------------------Finding compensation assignment for role------------------------------*/
+		
+		
+		RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
+		
+		if (object != null) {
+			logger.debug("ROLE UI SESSION ATTRIBUTE= "+object.getRoleName());
+			Role roleasign = roleApi.searchRoleByName(object.getRoleName());
+			model.addAttribute("rlelist", roleasign);
+			logger.debug("THE VALUE IS= " + roleasign.getRoleName());
+			
+			
+			
+			
+			
+			
+			
+			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object.getRoleName());
+			if(rAssdtail != null) {
+			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
+			if(ptr1 != null) {
+			ArrayList<RuleAssignmentDetails> rl1 = new ArrayList<RuleAssignmentDetails>();
+			//ArrayList<Role> rleName = new ArrayList<Role>();
+			model.addAttribute("assObj", rAssdtail);
+			
+			//List<RuleAssignmentParameter> parameterList = new ArrayList<RuleAssignmentParameter>();
+			
+			Iterator<RuleAssignmentDetails> it1 = ptr1.iterator();
+			while (it1.hasNext()) {
+				
+				RuleAssignmentDetails rp = (RuleAssignmentDetails) it1.next();
+				List<RuleAssignmentParameter> ptr2 = rp.getRuleAssignmentParameter();
+				
+				logger.debug("RULE NAME= "+rp.getRule().getRuleName());
+				logger.debug("RULE ID= "+rp.getRule().getId());
+				rl1.add(rp);
+			}
+			model.addAttribute("List2", rl1);
+			
+			status.setComplete();
+			session.removeAttribute("roleNameCompAsg");
+			return new ModelAndView("compPlanCreate");
+			
+					}
+				}else {
+				
+					return new ModelAndView("compPlanCreate");
+				
+				}
+			
+			
+			
+			
+			}
+	
+		/*-----------------------------------Finding compensation assignment for Employee------------------------------------*/
+		
+		
+		EmployeeUI object1 = (EmployeeUI) request.getSession().getAttribute("EmployeeName");
+
+		if (object1 != null) {
+			Employee empChosen = empApi.searchEmployee(object1.getEmployeeName());
+			if(empChosen != null) {
+			model.addAttribute("empNameChosen",empChosen.getEmployeeName());
+			RuleAssignment rAssdtail = ruleAssApi.searchAssignedRule(object1.getEmployeeName());
+			if(rAssdtail != null) {
+			List<RuleAssignmentDetails> ptr1 = rAssdtail.getRuleAssignmentDetails();
+			if(ptr1 != null) {
+			ArrayList<Employee> empName = new ArrayList<Employee>();
+			model.addAttribute("assObj1", rAssdtail);
+			ArrayList<RuleAssignmentDetails> rl1 = new ArrayList<RuleAssignmentDetails>();
+
+			Iterator<RuleAssignmentDetails> it1 = ptr1.iterator();
+			while (it1.hasNext()) {
+				List<Employee> rasd = empApi.searchEmployeesByName(object1.getEmployeeName());
+				List<Employee> ptr = empApi.listEmployees();
+				Iterator<Employee> it3 = rasd.iterator();
+				while (it3.hasNext()) {
+					Employee e = (Employee) it3.next();
+					System.out.println(e.getEmployeeName());
+					empName.add(e);
+				}
+				RuleAssignmentDetails rp = (RuleAssignmentDetails) it1.next();
+				List<RuleAssignmentParameter> ptr2 = rp.getRuleAssignmentParameter();
+				System.out.println(rp.getRule().getRuleName());
+				System.out.println(rp.getRule().getId());
+				rl1.add(rp);
+			}
+			model.addAttribute("List2", rl1);
+			model.addAttribute("empList", empName);
+			status.setComplete();
+			session.removeAttribute("EmployeeName");
+			//return new ModelAndView("CompPlan");
+			return new ModelAndView("compPlanCreate");
+			}
+			}else {
+				//return new ModelAndView("CompPlan");
+				return new ModelAndView("compPlanCreate");
+			}
+			
+			}else {
+				JOptionPane.showMessageDialog(null, 
+                        "This employee does not exist in the database!", 
+                        "Cannot find employee", 
+                        JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	
+	
+		/*-----------------------------------creating table for compensation plan against ruleId------------------------------------*/
+		AddRuleUI object2 = (AddRuleUI) request.getSession().getAttribute("Id");
+		if (object2 != null) {
+			Rule rul = ruleApi.getRule(object2.getId());
+			ArrayList<Rule> rl1 = new ArrayList<Rule>();
+			List<RuleParameter> ptr2 = rul.getRuleParameter();
+			Iterator it = ptr2.iterator();
+			while (it.hasNext()) {
+				RuleParameter r = (RuleParameter) it.next();
+				System.out.println(r.getParameterName());
+				System.out.println(r.getParameterValue());
+			}
+			rl1.add(rul);
+			model.addAttribute("ruleList", rl1);
+			status.setComplete();
+			session.removeAttribute("Id");
+			
+			return new ModelAndView("compPlanCreate");
+			
+		}
+		
+		return new ModelAndView("compPlanCreate");
 		
 	}
 	

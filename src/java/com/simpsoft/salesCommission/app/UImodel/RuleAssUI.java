@@ -11,6 +11,10 @@ public class RuleAssUI {
 	private String fixed;
 	private String repeats;
 	private String frequency;
+	private List<RuleAssignmentParameter> ruleAssignmentParameter ;
+	
+	
+	
 	public String getFrequency() {
 		return frequency;
 	}
@@ -40,7 +44,7 @@ public class RuleAssUI {
 		this.repeats = repeats;
 	}
 	
-	private List<RuleAssignmentParameter> ruleAssignmentParameter ;
+	
 	
 	
 	public Date getEndDate() {
@@ -84,18 +88,18 @@ public class RuleAssUI {
 	
 	public RuleAssUI(){		
 	}
-	public RuleAssUI(int id,String ruleName,String fixed,String repeats,Date Startdate,Date endDate,String overwrite, String frequency){
-		this.id=id;
-		this.ruleName=ruleName;
-		this.fixed=fixed;
-		this.repeats=repeats;
-		//this.ValidityType=ValidityType;
-		this.Startdate=Startdate;
-		this.endDate=endDate;
-	//	this.overwrite=overwrite;
-		this.frequency=frequency;
-		
-	}
+//	public RuleAssUI(int id,String ruleName,String fixed,String repeats,Date Startdate,Date endDate,String overwrite, String frequency){
+//		this.id=id;
+//		this.ruleName=ruleName;
+//		this.fixed=fixed;
+//		this.repeats=repeats;
+//		//this.ValidityType=ValidityType;
+//		this.Startdate=Startdate;
+//		this.endDate=endDate;
+//	//	this.overwrite=overwrite;
+//		this.frequency=frequency;
+//		
+//	}
 	public RuleAssUI(int id, String ruleName, String fixed, String repeats, String frequency, Date startdate,
 			Date endDate, List<RuleAssignmentParameter> ruleAssignmentParameter) {
 		

@@ -50,6 +50,7 @@ table td, table th {
 			}
 
 			function beforeSubmit() {
+				
 				alert('submitting....');
 				return true;
 			}
@@ -98,7 +99,7 @@ table td, table th {
 			$(document)
 					.ready(
 							function() {
-								var config = {
+								/*var config = {
 									rowClass : 'ruleParameter',
 									addRowId : 'addPerson',
 									removeRowClass : 'removePerson',
@@ -110,7 +111,31 @@ table td, table th {
 									rowRemovedListener : rowRemoved,
 									beforeSubmit : beforeSubmit
 								};
-								new DynamicListHelper(config);
+								new DynamicListHelper(config);*/
+								
+								
+								 var rad_fixed = document.getElementById("compensationTypeFixed");
+									
+									if(rad_fixed.checked){
+									document.getElementById("fixedCompValue").disabled=false;
+									document.getElementById("fixedCompValue").required=true;
+									document.getElementById("compensationFormula").disabled=true;
+									document.getElementById("compensationParameter").disabled=true;	
+									
+									}		
+								
+									var rad_variable = document.getElementById("compensationTypeVariable");
+									
+									
+									
+									if(rad_variable.checked){
+										document.getElementById("fixedCompValue").disabled=true;
+										document.getElementById("fixedCompValue").required=false;
+										document.getElementById("compensationFormula").disabled=false;
+										document.getElementById("compensationFormula").required=true;
+										document.getElementById("compensationParameter").disabled=false;	
+										document.getElementById("compensationParameter").required=true;
+									}
 							});
 
 			var count = "1";
@@ -198,12 +223,12 @@ table td, table th {
 						</tr>
 						<tr>
 							<td><b>Rules connected as: </b></td>
-							<td><input type="radio" name="connectionType"
+							<td><input type="radio" name="connectionType" id="allConType"
 								${listRule1.connectionType=='All'?'checked':''}
-								value="${listRule1.connectionType}">&nbsp;All&nbsp; <input
-								type="radio" name="connectionType"
+								value="All">&nbsp;All&nbsp; <input
+								type="radio" name="connectionType" id="anyConType"
 								${listRule1.connectionType=='Any'?'checked':''}
-								value="${listRule1.connectionType}">&nbsp;Any&nbsp;</td>
+								value="Any">&nbsp;Any&nbsp;</td>
 						</tr>
 
 
@@ -253,7 +278,7 @@ table td, table th {
 							</td>
 						</tr>
 
-						<tr>
+						<!-- <tr>
 							<td><b>Rule Parameter</b></td>
 							<td>
 								<table>
@@ -290,7 +315,7 @@ table td, table th {
 
 							</td>
 
-						</tr>
+						</tr> -->
 
 						<!-- 	
 				<tr>
@@ -309,22 +334,24 @@ table td, table th {
 								<table>
 									<tr>
 										<td><input type="radio" name="compensationType"
-											value="Fixed"
+											value="Fixed"  id="compensationTypeFixed" onchange="enableFixed()"
 											${listRule1.compensationType=='Fixed'?'checked':''}>Fixed</td>
-										<td><input type="text" size="20" name="fixedCompValue"
-											value="${listRule1.fixedCompValue}"></input></td>
+										<td><input type="number" size="20" name="fixedCompValue"
+											value="${listRule1.fixedCompValue}"  id="fixedCompValue" required></input></td>
 									</tr>
 									<tr>
 										<td valign="top"><input type="radio"
-											name="compensationType" value="Variable"
-											${listRule1.compensationType=='Variable'?'checked':''}>Variable&nbsp;
+											name="compensationType" value="Variable" id="compensationTypeVariable"
+											${listRule1.compensationType=='Variable'?'checked':''} onchange="enableVariable()">Variable&nbsp;
 										</td>
 										<td>Apply formula <input type="text" size="20"
 											name="compensationFormula"
-											value="${listRule1.compensationFormula}"><br /> <br />
+											value="${listRule1.compensationFormula}" 
+											id="compensationFormula" ><br /> <br />
 											&nbsp;&nbsp;&nbsp;Parameters <input type="text" size="20"
 											name="compensationParameter"
-											value="${listRule1.compensationParameter}">
+											value="${listRule1.compensationParameter}" 
+											id="compensationParameter" >
 										</td>
 									</tr>
 								</table>
@@ -333,6 +360,40 @@ table td, table th {
 
 
 					</table>
+					
+					<script>
+				function enableFixed(){
+					
+					var rad_fixed = document.getElementById("compensationTypeFixed");
+					
+					if(rad_fixed.checked){
+					document.getElementById("fixedCompValue").disabled=false;
+					document.getElementById("fixedCompValue").required=true;
+					document.getElementById("compensationFormula").disabled=true;
+					document.getElementById("compensationParameter").disabled=true;	
+					document.getElementById("compensationFormula").value="";
+					document.getElementById("compensationParameter").value="";	
+					
+					}		
+				}
+				function enableVariable(){
+					
+				
+					var rad_variable = document.getElementById("compensationTypeVariable");
+					
+				
+					
+					if(rad_variable.checked){
+						document.getElementById("fixedCompValue").disabled=true;
+						document.getElementById("fixedCompValue").value="0";
+						document.getElementById("fixedCompValue").required=false;
+						document.getElementById("compensationFormula").disabled=false;
+						document.getElementById("compensationFormula").required=true;
+						document.getElementById("compensationParameter").disabled=false;	
+						document.getElementById("compensationParameter").required=true;
+					}
+				}
+						</script>
 					<br />
 					<div align="center">
 						<input type="submit" value="Update"> <a

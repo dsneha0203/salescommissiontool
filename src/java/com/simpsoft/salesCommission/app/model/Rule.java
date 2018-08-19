@@ -37,6 +37,8 @@ public class Rule {
 	@JoinColumn(name = "RULE_COMP_ID")
 	private RuleComposite ruleComposite;
 	
+	
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "RULE_ID")
 	@IndexColumn(name = "detailSrl")
@@ -164,6 +166,9 @@ public class Rule {
 	public void setRuleComposite(RuleComposite ruleComposite) {
 		this.ruleComposite = ruleComposite;
 	}
+	
+	
+
 
 	/**
 	 * @return the ruleParameter

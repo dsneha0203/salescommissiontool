@@ -99,7 +99,7 @@ table td, table th {
 						     return true;
 						 }
 
-						 $(document).ready( function() {
+						 /*$(document).ready( function() {
 						     var config = {
 						         rowClass : 'ruleParameter',
 						         addRowId : 'addPerson',
@@ -113,7 +113,7 @@ table td, table th {
 						         beforeSubmit : beforeSubmit
 						     };
 						     new DynamicListHelper(config);
-						 });
+						 });*/
 
 		     
 				
@@ -218,7 +218,7 @@ var count = "1";
 					</td>
 				</tr>
 				
-				<tr>
+				<!--  <tr>
 					<td><b>Rule Parameter</b></td>
 					<td>
 						<table id="personListForm1">
@@ -239,7 +239,7 @@ var count = "1";
 
 					</td>
 
-				</tr>
+				</tr>-->
 				
 
 					<tr>
@@ -282,6 +282,8 @@ var count = "1";
 					document.getElementById("fixedCompValue").required=true;
 					document.getElementById("compensationFormula").disabled=true;
 					document.getElementById("compensationParameter").disabled=true;	
+					document.getElementById("compensationFormula").value="";
+					document.getElementById("compensationParameter").value="";	
 					
 					}		
 				}
@@ -294,6 +296,7 @@ var count = "1";
 					
 					if(rad_variable.checked){
 						document.getElementById("fixedCompValue").disabled=true;
+						document.getElementById("fixedCompValue").value="0";
 						document.getElementById("fixedCompValue").required=false;
 						document.getElementById("compensationFormula").disabled=false;
 						document.getElementById("compensationFormula").required=true;

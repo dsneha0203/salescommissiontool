@@ -513,34 +513,37 @@ display:none;
 					</tr>
 				</table>
 						<script>
-							function enableFixed(){
-								
-								var rad_fixed = document.getElementById("compensationTypeFixed");
-								
-								if(rad_fixed.checked){
-								document.getElementById("fixedCompValue").disabled=false;
-								document.getElementById("fixedCompValue").required=true;
-								document.getElementById("compensationFormula").disabled=true;
-								document.getElementById("compensationParameter").disabled=true;	
-								
-								}		
-							}
-							function enableVariable(){
-								
-							
-								var rad_variable = document.getElementById("compensationTypeVariable");
-								
-							
-								
-								if(rad_variable.checked){
-									document.getElementById("fixedCompValue").disabled=true;
-									document.getElementById("fixedCompValue").required=false;
-									document.getElementById("compensationFormula").disabled=false;
-									document.getElementById("compensationFormula").required=true;
-									document.getElementById("compensationParameter").disabled=false;	
-									document.getElementById("compensationParameter").required=true;
-								}
-							}
+				function enableFixed(){
+					
+					var rad_fixed = document.getElementById("compensationTypeFixed");
+					
+					if(rad_fixed.checked){
+					document.getElementById("fixedCompValue").disabled=false;
+					document.getElementById("fixedCompValue").required=true;
+					document.getElementById("compensationFormula").disabled=true;
+					document.getElementById("compensationParameter").disabled=true;	
+					document.getElementById("compensationFormula").value="";
+					document.getElementById("compensationParameter").value="";	
+					
+					}		
+				}
+				function enableVariable(){
+					
+				
+					var rad_variable = document.getElementById("compensationTypeVariable");
+					
+				
+					
+					if(rad_variable.checked){
+						document.getElementById("fixedCompValue").disabled=true;
+						document.getElementById("fixedCompValue").value="0";
+						document.getElementById("fixedCompValue").required=false;
+						document.getElementById("compensationFormula").disabled=false;
+						document.getElementById("compensationFormula").required=true;
+						document.getElementById("compensationParameter").disabled=false;	
+						document.getElementById("compensationParameter").required=true;
+					}
+				}
 						</script>
 				<br />
 				<div align="center">

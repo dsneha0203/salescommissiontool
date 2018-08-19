@@ -326,6 +326,9 @@ function checkDate(){
 				<br />
 				<div align="center">
 					<input type="submit" value="Update">
+					<a
+						href="/CommissionTool/employeeList"> <input type="button"
+						value="Cancel" /></a>
 				</div>
 </form:form>
 			</div>
