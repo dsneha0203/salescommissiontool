@@ -8,7 +8,7 @@
 		<CompensationValue>0</CompensationValue>
 		<CompensationFormula>Param 1 * .6 + Param 2 * .7 - Param 3</CompensationFormula>
 		<CompensationParameter>Param 1,Param 2,Param 3</CompensationParameter>
-	 	<RuleParameters>
+	 	<!--<RuleParameters>
 			<RuleParameter ParameterName="Param 1">
 				<ParameterValue>600</ParameterValue>
 			</RuleParameter>
@@ -18,7 +18,7 @@
 			<RuleParameter ParameterName="Param 3">
 				<ParameterValue>1750</ParameterValue>
 			</RuleParameter>
-		</RuleParameters>  
+		</RuleParameters>    -->
 		<RuleComposite>
 			<RuleType>c</RuleType>
 			<ConnectionType>all</ConnectionType>
@@ -36,7 +36,7 @@
 		<CompensationValue>20000</CompensationValue>
 		<CompensationFormula>null</CompensationFormula>
 		<CompensationParameter>null</CompensationParameter>
-	 	<RuleParameters>
+	 	<!-- <RuleParameters>
 			<RuleParameter ParameterName="Param 89">
 				<ParameterValue>600</ParameterValue>
 			</RuleParameter>
@@ -46,7 +46,7 @@
 			<RuleParameter ParameterName="Param 32">
 				<ParameterValue>1750</ParameterValue>
 			</RuleParameter>
-		</RuleParameters>  
+		</RuleParameters>   -->
 		<RuleComposite>
 			<RuleType>c</RuleType>
 			<ConnectionType>any</ConnectionType>

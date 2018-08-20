@@ -214,23 +214,28 @@
 			</java>
 		</target>
 	
-	<!-- separate target to upload rule assignment to role and employee -->
-	<target name="uploadRuleAssgToEmpAndRole" depends="compile, package">
-		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignment"  fork="true"
+	
+	<!-- separate target to upload rules  -->
+	<target name="uploadRule" depends="compile, package">
+		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRule"  fork="true"
 											           failonerror="true">
 													<arg value="-h"/>
 													<classpath refid="build.class.path" />
 													<classpath path="${temp.dir.classes}" />
-												</java>
-		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleAssignmentToRole"  fork="true"
-											           failonerror="true">
-													<arg value="-h"/>
-													<classpath refid="build.class.path" />
-													<classpath path="${temp.dir.classes}" />
-												</java> 
+												</java>	
+		
+		</target>
 	
-	</target>
-	
+	<!-- separate target to upload composite rules  -->
+	<target name="uploadCompRule" depends="compile, package">
+		<java classname="com.simpsoft.salesCommission.app.XMLReader.ReadXMLForRuleComposite"  fork="true"
+															           failonerror="true">
+																	<arg value="-h"/>
+																	<classpath refid="build.class.path" />
+																	<classpath path="${temp.dir.classes}" />
+																</java> 
+			
+			</target>
 	
 	
 	<target name="callJava" depends="restore_db,compile, package">

@@ -415,10 +415,10 @@ overflow: auto;
 										<c:forEach items="${as.ruleAssignmentParameter}" var="asss" varStatus="assignments">
 											<tr >
 											  <td><input type="hidden" name="ruleList[${vs.index}].ruleAssignmentParameter[${assignments.index}].parameterName" value="${asss.parameterName}" /> ${asss.parameterName}</td>
-                                                <td>${asss.overwriteValue}</td>
+                                                <td>${asss.defaultValue}</td>
 												
 										
-											    <td>&nbsp;<input type="number" name="ruleList[${vs.index}].ruleAssignmentParameter[${assignments.index}].overwriteValue" value="" size="7" height="0.01">&nbsp;or&nbsp; 
+											    <td>&nbsp;<input type="number" name="ruleList[${vs.index}].ruleAssignmentParameter[${assignments.index}].overwriteValue" value="${asss.overwriteValue}" size="7" height="0.01">&nbsp;or&nbsp; 
 												<select name="ruleList[${vs.index}].ruleAssignmentParameter[${assignments.index}].targetDefinition.displayName" >
 																<option value="${asss.targetDefinition.displayName }">--${asss.targetDefinition.displayName }--</option>
 														<c:forEach items="${targetlist}" var="target">

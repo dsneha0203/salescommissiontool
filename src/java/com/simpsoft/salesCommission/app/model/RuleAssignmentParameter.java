@@ -26,6 +26,9 @@ public class RuleAssignmentParameter {
 	@Column(name = "valueType")
 	private String valueType;
 
+	@Column(name = "defaultValue")
+	private String defaultValue;
+	
 	@Column(name = "overwriteValue")
 	private String overwriteValue;
 
@@ -76,6 +79,16 @@ public class RuleAssignmentParameter {
 	 */
 	public void setValueType(String valueType) {
 		this.valueType = valueType;
+	}
+	
+	
+
+	public String getDefaultValue() {
+		return defaultValue;
+	}
+
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 
 	/**

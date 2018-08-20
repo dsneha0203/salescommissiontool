@@ -57,7 +57,7 @@ public class ReadXMLForRuleComposite {
 			newRule.setFixedCompValue(ruleComp.getFixedCompValue());
 			newRule.setRuleType(ruleComp.getRuleType());
 			newRule.setConnectionType(ruleComp.getConnectionType());
-			newRule.setRuleParameter(ruleComp.getRuleParameter());
+//			newRule.setRuleParameter(ruleComp.getRuleParameter());
 			List<Rule> listOfRules = ruleComp.getCompJoinRule();
 			List<Rule> listOfJoinRules = new ArrayList<Rule>();
 			for (Iterator iterator1 = listOfRules.iterator(); iterator1.hasNext();) {
@@ -123,30 +123,30 @@ public class ReadXMLForRuleComposite {
 							.item(0).getNodeValue());
 					 System.out.println("compensationParameter :" + compensationParameter);
 					
-					List<RuleParameter> rulesParameter = new ArrayList<RuleParameter>();
-					NodeList nodeList1 = elem.getElementsByTagName("RuleParameter");
-					for (int j = 0; j < nodeList1.getLength(); j++) {
-						Node node1 = nodeList1.item(j);
-
-						if (node1.getNodeType() == Node.ELEMENT_NODE) {
-							Element elem1 = (Element) node1;
-
-							String parameterName = node1.getAttributes().getNamedItem("ParameterName").getNodeValue();
-
-							System.out.println("param name :" + parameterName);
-
-							String parameterValue = elem1.getElementsByTagName("ParameterValue").item(0).getChildNodes()
-									.item(0).getNodeValue();
-
-							System.out.println("param value :" + parameterValue);
-
-							RuleParameter rp = new RuleParameter();
-							rp.setParameterName(parameterName);
-							rp.setParameterValue(parameterValue);
-							rulesParameter.add(rp);
-
-						}
-					}
+//					List<RuleParameter> rulesParameter = new ArrayList<RuleParameter>();
+//					NodeList nodeList1 = elem.getElementsByTagName("RuleParameter");
+//					for (int j = 0; j < nodeList1.getLength(); j++) {
+//						Node node1 = nodeList1.item(j);
+//
+//						if (node1.getNodeType() == Node.ELEMENT_NODE) {
+//							Element elem1 = (Element) node1;
+//
+//							String parameterName = node1.getAttributes().getNamedItem("ParameterName").getNodeValue();
+//
+//							System.out.println("param name :" + parameterName);
+//
+//							String parameterValue = elem1.getElementsByTagName("ParameterValue").item(0).getChildNodes()
+//									.item(0).getNodeValue();
+//
+//							System.out.println("param value :" + parameterValue);
+//
+//							RuleParameter rp = new RuleParameter();
+//							rp.setParameterName(parameterName);
+//							rp.setParameterValue(parameterValue);
+//							rulesParameter.add(rp);
+//
+//						}
+//					}
 						List<Rule> rulesList = new ArrayList<Rule>();
 						NodeList nodeList2 = elem.getElementsByTagName("SimpleRule");
 						for (int k = 0; k < nodeList2.getLength(); k++) {
@@ -172,7 +172,7 @@ public class ReadXMLForRuleComposite {
 					ruleCompXML.setRuleName(ruleName);
 					ruleCompXML.setDescription(description);
 					ruleCompXML.setRuleType(ruleType);
-					ruleCompXML.setRuleParameter(rulesParameter);
+//					ruleCompXML.setRuleParameter(rulesParameter);
 					ruleCompXML.setCompensationType(compensationType);
 					ruleCompXML.setFixedCompValue(CompensationValue);
 					ruleCompXML.setCompensationFormula(compensationFormula);

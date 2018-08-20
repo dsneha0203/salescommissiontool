@@ -602,7 +602,7 @@ public class OrderAPI {
 						itemsSplits.add(orderLineItemsSplit);
 						
 					}
-					if(!order.getSecondLvlMgr().equals("null")) {
+					if(!order.getSupportEngineer().equals("null")) {
 						OrderLineItemsSplit orderLineItemsSplit = new OrderLineItemsSplit();
 						SplitRule splitRule = searchSplitRule(orderLineItem.getSplitRule());
 						orderLineItemsSplit.setSplitRule(splitRule);

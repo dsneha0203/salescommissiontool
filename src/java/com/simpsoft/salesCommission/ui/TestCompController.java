@@ -367,6 +367,7 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			}
 			rass.setStartDate(rpm.getStartdate());
 			rass.setEndDate(rpm.getEndDate());
+			if(rpm.getRuleAssignmentParameter() != null) {
 			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
 			List<RuleAssignmentParameter> ruleParamList = new ArrayList<>();
 			
@@ -374,6 +375,7 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 					RuleAssignmentParameter ruleAssParam = (RuleAssignmentParameter) iterator1.next();
 					String paramValue = (ruleAssApi.getParamValue(ruleAssParam.getParameterName())).getParameterValue();
 					logger.debug("PARAM VALUE= "+paramValue);
+					ruleAssParam.setDefaultValue(paramValue);
 					logger.debug("OVERWRITE ="+ruleAssParam.getOverwriteValue());
 					if(!ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
 						logger.debug("TARGET DEF NAME= "+ruleAssParam.getTargetDefinition().getDisplayName());
@@ -383,7 +385,8 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 					if(ruleAssParam.getOverwriteValue().equals("")) {
 						logger.debug("VALUE TYPE= DEFAULT");
 						ruleAssParam.setValueType("default");
-						ruleAssParam.setOverwriteValue(paramValue);
+						//ruleAssParam.setOverwriteValue(paramValue);
+						ruleAssParam.setOverwriteValue(null);
 						
 						if( ruleAssParam.getTargetDefinition().getDisplayName().equals("")){
 							ruleAssParam.setTargetDefinition(null);
@@ -416,6 +419,10 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 					
 			
 			rass.setRuleAssignmentParameter(ruleParamList);
+			}else {
+				rass.setRuleAssignmentParameter(null);
+			}
+			
 			rp.add(rass);
 			}
 		}
@@ -463,13 +470,16 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			logger.debug("Frequency:  " + rul1.getFrequency());
 			logger.debug("StartDate:  " + rul1.getStartdate());
 			logger.debug("EndDate:  " + rul1.getEndDate());
-			for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
-				logger.debug("ParameterName: " + rul2.getParameterName());
-				logger.debug("overwriteValue: " + rul2.getOverwriteValue());
-				if(!rul2.getTargetDefinition().getDisplayName().equals("")) {
-					logger.debug("target def name: "+rul2.getTargetDefinition().getDisplayName());
+			if(rul1.getRuleAssignmentParameter() != null) {
+				for (RuleAssignmentParameter rul2 : rul1.getRuleAssignmentParameter()) {
+					logger.debug("ParameterName: " + rul2.getParameterName());
+					logger.debug("overwriteValue: " + rul2.getOverwriteValue());
+					if(!rul2.getTargetDefinition().getDisplayName().equals("")) {
+						logger.debug("target def name: "+rul2.getTargetDefinition().getDisplayName());
+					}
 				}
 			}
+		
 		}
 		List<RuleAss1UI> rul = ruleListContainer.getRuleList1();
 		List<RuleAssignmentDetails> rp = new ArrayList<>();
@@ -509,6 +519,8 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			rass.setEndDate(rpm.getEndDate());
 			logger.debug("END DATE ASSIGNED= "+rass.getEndDate());
 			
+			
+			if(rpm.getRuleAssignmentParameter() != null) {
 			List<RuleAssignmentParameter> rpm1 = rpm.getRuleAssignmentParameter();
 			
 			List<RuleAssignmentParameter> ruleParamList = new ArrayList<>();
@@ -516,6 +528,7 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 				RuleAssignmentParameter ruleAssParam = (RuleAssignmentParameter) iterator1.next();
 				String paramValue = (ruleAssApi.getParamValue(ruleAssParam.getParameterName())).getParameterValue();
 				logger.debug("PARAM VALUE= "+paramValue);
+				ruleAssParam.setDefaultValue(paramValue);
 				logger.debug("OVERWRITE ="+ruleAssParam.getOverwriteValue());
 				if(!ruleAssParam.getTargetDefinition().getDisplayName().equals("")) {
 					logger.debug("TARGET DEF NAME= "+ruleAssParam.getTargetDefinition().getDisplayName());
@@ -525,7 +538,8 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 				if(ruleAssParam.getOverwriteValue().equals("")) {
 					logger.debug("VALUE TYPE= DEFAULT");
 					ruleAssParam.setValueType("default");
-					ruleAssParam.setOverwriteValue(paramValue);
+					//ruleAssParam.setOverwriteValue(paramValue);
+					ruleAssParam.setOverwriteValue(null);
 					
 					if( ruleAssParam.getTargetDefinition().getDisplayName().equals("")){
 						ruleAssParam.setTargetDefinition(null);
@@ -557,6 +571,11 @@ RoleUI object = (RoleUI) request.getSession().getAttribute("roleNameCompAsg");
 			}
 						
 			rass.setRuleAssignmentParameter(ruleParamList);
+			}
+			else {
+				rass.setRuleAssignmentParameter(null);
+			}
+			
 			rp.add(rass);
 		}
 		

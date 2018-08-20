@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -758,7 +759,7 @@ public class RuleController {
 	}
 
 	@RequestMapping(value = "/submitCompRule", method = RequestMethod.POST)
-	public String addRule2(@ModelAttribute("SpringWeb") RuleUI ruleUI, PersonListContainer personListContainer, PersonListContainer2 personListContainer2,
+	public String addRule2(ModelMap map,@ModelAttribute("SpringWeb") RuleUI ruleUI, PersonListContainer personListContainer, PersonListContainer2 personListContainer2,
 			HttpSession session, ModelMap model) {
 		
 		if(ruleUI.getId() != 0){
@@ -784,29 +785,55 @@ public class RuleController {
 		Rule rule = ruleApi.getRule(id);
 		//RuleSimple ruleSimple = new RuleSimple();
 		List<Person1> ptr = personListContainer2.getPersonList();
-		List<Rule> ruleObj = new ArrayList<Rule>();
-		for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
-			Person1 person1 = (Person1) iterator.next();
-			RuleComposite ruleComp = new RuleComposite();
-			Rule  rulSimple = ruleApi.searchRuleByName(person1.getSimpRule());
-			ruleObj.add(rulSimple);
-			ruleComp.setCompJoinRule(ruleObj);
-//			ruleComp.setCompJoinRuleList(ruleObj);
-			rule.setRuleComposite(ruleComp);
-		}
+		if(ptr.isEmpty()) {
+			JOptionPane.showMessageDialog(null, 
+                    "Select a simple rule!", 
+                    "Cannot save composite rule", 
+                    JOptionPane.WARNING_MESSAGE);
+			return "redirect:/editComposite/"+ruleUI.getId();
+		}else {
+				List<Rule> ruleObj = new ArrayList<Rule>();
+				for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
+					Person1 person1 = (Person1) iterator.next();
+					RuleComposite ruleComp = new RuleComposite();
+					Rule  rulSimple = ruleApi.searchRuleByName(person1.getSimpRule());
+					if(!ruleObj.isEmpty()) {
+						for(Rule rule2 : ruleObj) {
+							if(rule2.getRuleName().equals(rulSimple.getRuleName())) {
+								JOptionPane.showMessageDialog(null, 
+					                    "Cannot save the same simple rule multiple times!", 
+					                    "Cannot save composite rule", 
+					                    JOptionPane.WARNING_MESSAGE);
+								
 
-		rule.setId(ruleUI.getId());
-		rule.setRuleName(ruleUI.getRuleName());
-		rule.setDescription(ruleUI.getDescription());
-		rule.setRuleType(ruleUI.getRuleType());
-		rule.setConnectionType(ruleUI.getConnectionType());
-		rule.setCompensationType(ruleUI.getCompensationType());
-		rule.setFixedCompValue(ruleUI.getFixedCompValue());
-		rule.setCompensationFormula(ruleUI.getCompensationFormula());
-		rule.setCompensationParameter(ruleUI.getCompensationParameter());
-		rule.setRuleParameter(personListContainer.getPersonList1());
-
-		ruleApi.editRule(rule);
+								return "redirect:/editComposite/"+ruleUI.getId();
+							}
+						}
+						ruleObj.add(rulSimple);
+						ruleComp.setCompJoinRule(ruleObj);
+						rule.setRuleComposite(ruleComp);
+						
+					}else {
+						ruleObj.add(rulSimple);
+						ruleComp.setCompJoinRule(ruleObj);
+						rule.setRuleComposite(ruleComp);
+					}
+					
+				}
+		
+				rule.setId(ruleUI.getId());
+				rule.setRuleName(ruleUI.getRuleName());
+				rule.setDescription(ruleUI.getDescription());
+				rule.setRuleType(ruleUI.getRuleType());
+				rule.setConnectionType(ruleUI.getConnectionType());
+				rule.setCompensationType(ruleUI.getCompensationType());
+				rule.setFixedCompValue(ruleUI.getFixedCompValue());
+				rule.setCompensationFormula(ruleUI.getCompensationFormula());
+				rule.setCompensationParameter(ruleUI.getCompensationParameter());
+				rule.setRuleParameter(personListContainer.getPersonList1());
+		
+				ruleApi.editRule(rule);
+			}
 		}
 		
 		else{
@@ -834,31 +861,66 @@ public class RuleController {
 			Rule rule = new Rule();
 			//RuleSimple ruleSimple = new RuleSimple();
 			List<Person1> ptr = personListContainer2.getPersonList();
-			List<Rule> ruleObj = new ArrayList<Rule>();
-			for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
-				Person1 person1 = (Person1) iterator.next();
-				RuleComposite ruleComp = new RuleComposite();
-				Rule  rulSimple = ruleApi.searchRuleByName(person1.getSimpRule());
-				ruleObj.add(rulSimple);
-				ruleComp.setCompJoinRule(ruleObj);
-				rule.setRuleComposite(ruleComp);
-			}
-
-			rule.setId(ruleUI.getId());
-			rule.setRuleName(ruleUI.getRuleName());
-			rule.setDescription(ruleUI.getDescription());
-			rule.setRuleType(ruleUI.getRuleType());
-			rule.setConnectionType(ruleUI.getConnectionType());
-			rule.setCompensationType(ruleUI.getCompensationType());
-			rule.setFixedCompValue(ruleUI.getFixedCompValue());
-			rule.setCompensationFormula(ruleUI.getCompensationFormula());
-			rule.setCompensationParameter(ruleUI.getCompensationParameter());
-			rule.setRuleParameter(personListContainer.getPersonList1());
-
-			ruleApi.createRule(rule);
 			
+			if(ptr.isEmpty()) {
+				JOptionPane.showMessageDialog(null, 
+	                    "Select a simple rule!", 
+	                    "Cannot save composite rule", 
+	                    JOptionPane.WARNING_MESSAGE);
+				map.addAttribute("listSimpRule", ruleApi.listOfRules(RuleType.Simple));
+				session.setAttribute("personListContainer2", getDummyPersonListContainer2());
+
+			return "ruleDetails";
+			}else {
+				List<Rule> ruleObj = new ArrayList<Rule>();
+				for (Iterator iterator = ptr.iterator(); iterator.hasNext();) {
+					Person1 person1 = (Person1) iterator.next();
+					RuleComposite ruleComp = new RuleComposite();
+					Rule  rulSimple = ruleApi.searchRuleByName(person1.getSimpRule());
+					if(!ruleObj.isEmpty()) {
+						for(Rule rule2 : ruleObj) {
+							if(rule2.getRuleName().equals(rulSimple.getRuleName())) {
+								JOptionPane.showMessageDialog(null, 
+					                    "Cannot save the same simple rule multiple times!", 
+					                    "Cannot save composite rule", 
+					                    JOptionPane.WARNING_MESSAGE);
+								
+
+								map.addAttribute("listSimpRule", ruleApi.listOfRules(RuleType.Simple));
+								session.setAttribute("personListContainer2", getDummyPersonListContainer2());
+
+							return "ruleDetails";
+							}
+						}						
+						ruleObj.add(rulSimple);
+						ruleComp.setCompJoinRule(ruleObj);
+						rule.setRuleComposite(ruleComp);
+						
+					}else {
+						ruleObj.add(rulSimple);
+						ruleComp.setCompJoinRule(ruleObj);
+						rule.setRuleComposite(ruleComp);
+					}
+					
+				}
+	
+				rule.setId(ruleUI.getId());
+				rule.setRuleName(ruleUI.getRuleName());
+				rule.setDescription(ruleUI.getDescription());
+				rule.setRuleType(ruleUI.getRuleType());
+				rule.setConnectionType(ruleUI.getConnectionType());
+				rule.setCompensationType(ruleUI.getCompensationType());
+				rule.setFixedCompValue(ruleUI.getFixedCompValue());
+				rule.setCompensationFormula(ruleUI.getCompensationFormula());
+				rule.setCompensationParameter(ruleUI.getCompensationParameter());
+				rule.setRuleParameter(personListContainer.getPersonList1());
+	
+				ruleApi.createRule(rule);
+			}
 		}
 		return "redirect:/editComposite/"+ruleUI.getId();
+
+		
 	}
 
 	@RequestMapping(value = "/ruleList", method = RequestMethod.GET)
@@ -885,16 +947,16 @@ public class RuleController {
 	    }
 	    model.addAttribute("rName",ruleName);
 		
-	    List<RuleParameter> ptr = rule1.getRuleParameter();
-	    List<RuleParameter> parameterList = new ArrayList<RuleParameter>();
-		Iterator it = ptr.iterator();	 
-	    while(it.hasNext()) {
-	    	RuleParameter rp = (RuleParameter)it.next();
-	      System.out.println(rp.getParameterName());
-	      System.out.println(rp.getParameterValue());
-	      parameterList.add(rp);
-	    }
-	  model.addAttribute("parList",parameterList);
+//	    List<RuleParameter> ptr = rule1.getRuleParameter();
+//	    List<RuleParameter> parameterList = new ArrayList<RuleParameter>();
+//		Iterator it = ptr.iterator();	 
+//	    while(it.hasNext()) {
+//	    	RuleParameter rp = (RuleParameter)it.next();
+//	      System.out.println(rp.getParameterName());
+//	      System.out.println(rp.getParameterValue());
+//	      parameterList.add(rp);
+//	    }
+//	  model.addAttribute("parList",parameterList);
 	    
 //		if (session.getAttribute("personListContainer") == null)
 //			session.setAttribute("personListContainer", getDummyPersonListContainer3());

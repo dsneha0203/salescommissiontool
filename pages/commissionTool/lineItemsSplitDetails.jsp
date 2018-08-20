@@ -78,6 +78,7 @@ function openWindow(){
 				<thead>
 					<tr>
 						<th data-field="lineItemId">Order Line Item Id</th>
+						<th data-field="orderLineItemSplitRuleId">Order Line Item Split Id</th>
 						<th data-field="splitRuleId">Split Rule Id</th>
 						<th data-field="benefId">Beneficiary Id</th>
 						<th data-field="benefType">Beneficiary Type</th>
@@ -94,6 +95,7 @@ function openWindow(){
 						
 						<td>${sessionScope.lineItemId}</td>
 						<td>${splitListItems.id}</td>
+						<td>${splitListItems.splitRule.id }</td>
 						<td>${splitListItems.beneficiary.id}</td>
 						<td>${splitListItems.beneficiaryType}</td>
 						<td>${splitListItems.splitQuantity}</td>

@@ -69,16 +69,21 @@ public class RuleAssignmentAPI {
 				logger.debug("VALIDITY TYPE= "+assignmentDetails.getValidityType());
 				logger.debug("START DATE= "+assignmentDetails.getStartDate());
 				logger.debug("END DATE= "+assignmentDetails.getEndDate());
-				
-				for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
-					logger.debug("----RULE ASSIGNMENT PARAMETERS TO BE ADDED----");
-					RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
-					logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
-					logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
-					logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
-					
+				if(assignmentDetails.getRuleAssignmentParameter() != null) {
+					for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
+						logger.debug("----RULE ASSIGNMENT PARAMETERS TO BE ADDED----");
+						RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
+						logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
+						if(assignmentParameter.getOverwriteValue() != null) {
+							logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
+						}else {
+							logger.debug("OVERWRITE VALUE= null");
+						}
+						
+						logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
+						
+					}
 				}
-			
 			List<RuleAssignmentDetails>  newRuleAssignmentDetailsList = new ArrayList<RuleAssignmentDetails>();
 			List<RuleAssignmentDetails>  ruleAssDtl = ruleAss.getRuleAssignmentDetails();
 			for (Iterator iterator = ruleAssDtl.iterator(); iterator.hasNext();) {
@@ -89,7 +94,12 @@ public class RuleAssignmentAPI {
 				newRuleAssignmentDetails.setFrequency(ruleAssignmentDetails.getFrequency());
 				newRuleAssignmentDetails.setStartDate(ruleAssignmentDetails.getStartDate());
 				newRuleAssignmentDetails.setEndDate(ruleAssignmentDetails.getEndDate());
-				newRuleAssignmentDetails.setRuleAssignmentParameter(ruleAssignmentDetails.getRuleAssignmentParameter());
+				if(ruleAssignmentDetails.getRuleAssignmentParameter() != null) {
+					newRuleAssignmentDetails.setRuleAssignmentParameter(ruleAssignmentDetails.getRuleAssignmentParameter());
+				}else {
+					newRuleAssignmentDetails.setRuleAssignmentParameter(null);
+				}
+				
 				newRuleAssignmentDetails.setRule(ruleAssignmentDetails.getRule());
 				newRuleAssignmentDetailsList.add(newRuleAssignmentDetails);
 			}
@@ -169,15 +179,20 @@ public class RuleAssignmentAPI {
 				logger.debug("VALIDITY TYPE= "+assignmentDetails.getValidityType());
 				logger.debug("START DATE= "+assignmentDetails.getStartDate());
 				logger.debug("END DATE= "+assignmentDetails.getEndDate());
-				for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
-					RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
-					logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
-					logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
-					logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
+				if(assignmentDetails.getRuleAssignmentParameter() != null) {
+					for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
+						RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
+						logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
+						if(assignmentParameter.getOverwriteValue() != null) {
+							logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
+						}else {
+							logger.debug("OVERWRITE VALUE= null");
+						}
+						logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
+						
 					
-				
+					}
 				}
-				
 				
 			}
 			
@@ -200,15 +215,19 @@ public class RuleAssignmentAPI {
 				logger.debug("VALIDITY TYPE= "+assignmentDetails.getValidityType());
 				logger.debug("START DATE= "+assignmentDetails.getStartDate());
 				logger.debug("END DATE= "+assignmentDetails.getEndDate());
-				
-				for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
-					RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
-					logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
-					logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
-					logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
-					
+				if(assignmentDetails.getRuleAssignmentParameter() != null) {
+					for(Iterator itr1 = assignmentDetails.getRuleAssignmentParameter().iterator(); itr1.hasNext();) {
+						RuleAssignmentParameter assignmentParameter = (RuleAssignmentParameter)itr1.next();
+						logger.debug("PARAM NAME= "+assignmentParameter.getParameterName());
+						if(assignmentParameter.getOverwriteValue() != null) {
+							logger.debug("OVERWRITE VALUE= "+assignmentParameter.getOverwriteValue());
+						}else {
+							logger.debug("OVERWRITE VALUE= null");
+						}
+						logger.debug("VALUE TYPE= "+assignmentParameter.getValueType());
+						
+					}
 				}
-				
 			}
 
 			newRuleAss.addRuleAssignmentDetails(ruleAssDtl);
