@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import com.simpsoft.salesCommission.app.UImodel.QualifyingClauseUI;
 import com.simpsoft.salesCommission.app.model.QualifyingClause;
 import com.simpsoft.salesCommission.app.model.Rule;
+import com.simpsoft.salesCommission.app.model.RuleComposite;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
 import com.simpsoft.salesCommission.app.model.RuleSimple;
 import com.simpsoft.salesCommission.app.model.RuleType;
@@ -387,4 +388,47 @@ public class RuleAPI {
 		}
 	}
 
+	//find composite rule
+public RuleComposite findCompRule(long ruleID) {
+		
+		Rule newRule = new Rule();
+		RuleComposite ruleComp = null;
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			newRule = (Rule) session.get(Rule.class, ruleID);
+			ruleComp = newRule.getRuleComposite();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return ruleComp;
+	}
+	
+	//find simple rule
+public RuleSimple findSimpleRule(long ruleID) {
+		
+		Rule newRule = new Rule();
+		RuleSimple ruleSimple = null;
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			newRule = (Rule) session.get(Rule.class, ruleID);
+			ruleSimple = newRule.getRuleSimple();
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return ruleSimple;
+	}
 }

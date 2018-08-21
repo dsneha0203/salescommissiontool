@@ -1,6 +1,7 @@
 package com.simpsoft.salesCommission.app.api;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -15,6 +16,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.simpsoft.salesCommission.app.model.CalculationRoster;
 import com.simpsoft.salesCommission.app.model.Employee;
 import com.simpsoft.salesCommission.app.model.Frequency;
 import com.simpsoft.salesCommission.app.model.Role;
@@ -22,6 +24,7 @@ import com.simpsoft.salesCommission.app.model.Rule;
 import com.simpsoft.salesCommission.app.model.RuleAssignment;
 import com.simpsoft.salesCommission.app.model.RuleAssignmentDetails;
 import com.simpsoft.salesCommission.app.model.RuleAssignmentParameter;
+import com.simpsoft.salesCommission.app.model.RuleComposite;
 import com.simpsoft.salesCommission.app.model.RuleParameter;
 import com.simpsoft.salesCommission.app.model.TargetDefinition;
 
@@ -143,6 +146,26 @@ public class RuleAssignmentAPI {
 			session.close();
 		}
 		return newRuleAss;
+	}
+	
+	//get rule assignment detail
+	public RuleAssignmentDetails getRuleAssignmentDetail(long ruleAssDetID) {
+		RuleAssignmentDetails newRuleAssDet = new RuleAssignmentDetails();
+
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			newRuleAssDet = (RuleAssignmentDetails) session.get(RuleAssignmentDetails.class, ruleAssDetID);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return newRuleAssDet;
 	}
 	
 	/**
@@ -522,10 +545,10 @@ public class RuleAssignmentAPI {
 		return ruleList;
 	}
 
-	private RuleAssignment searchAssignedRuleForEmployee(String queryName) {
+	public RuleAssignment searchAssignedRuleForEmployee(String queryName) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;
-		RuleAssignment ruleAssignment = new RuleAssignment();
+		RuleAssignment ruleAssignment = null;
 		try {
 			tx = session.beginTransaction();
 			Criteria crit = session.createCriteria(RuleAssignment.class);
@@ -779,6 +802,53 @@ public class RuleAssignmentAPI {
 		List ruleAsgList = session.createQuery("FROM RuleAssignment").list();		
 		return ruleAsgList;
 	}
+	
+	public void saveDates(Date startdate, Date enddate) {
+		logger.debug("---IN SAVE DATE METHOD---");
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		CalculationRoster calculationRoster = new CalculationRoster();
+		try {
+			tx = session.beginTransaction();
+			calculationRoster.setStartDate(startdate);
+			calculationRoster.setEndDate(enddate);
+			session.save(calculationRoster);
+			tx.commit();
+			logger.debug("---SAVED---");
+		}catch(HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		}finally {
+			session.close();
+	
+		}
+	}
+	
+	// find list of simple rules of a composite rule
+	public List<Rule> getSimpleRuleList(long id){
+		List<Rule> simpleRuleList = null;
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		tx = session.beginTransaction();
+		
+		List compRules = session.createQuery("FROM RuleComposite").list();
+		for (Iterator iterator = compRules.iterator(); iterator.hasNext();) {
+					
+					RuleComposite ruleComp = (RuleComposite) iterator.next();
+					if(ruleComp.getId() == id){
+						simpleRuleList = ruleComp.getCompJoinRule();
+						break;
+					}  
+		}
+		
+		for(Rule rule: simpleRuleList) {
+			logger.debug("simple rule in list ="+ rule.getRuleName());
+		}
+		return simpleRuleList;
+	}
+	
+	
 	
 	
 }	

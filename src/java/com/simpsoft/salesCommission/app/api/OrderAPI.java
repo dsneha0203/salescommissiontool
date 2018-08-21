@@ -993,4 +993,42 @@ public class OrderAPI {
 			session.close();
 		}
 	}
+	
+	// list of all order line split data
+		public List<OrderLineItemsSplit> listLineSplits() {
+			Session session = sessionFactory.openSession();
+			Transaction tx = null;
+			tx = session.beginTransaction();
+			List lineSplits = session.createQuery("FROM OrderLineItemsSplit").list();			
+			return lineSplits;
+		}
+		
+	// find list of all order line split data for an employee
+		public List<OrderLineItemsSplit> getLineItemSplitListForEmp(long empId){
+			List<OrderLineItemsSplit> itemsSplitsForEmp = new ArrayList<>();
+			Session session = sessionFactory.openSession();
+			Transaction tx = null;
+			try {
+				tx = session.beginTransaction();
+				List lineSplits = session.createQuery("FROM OrderLineItemsSplit").list();
+				for(Iterator iterator = lineSplits.iterator(); iterator.hasNext();) {
+					OrderLineItemsSplit itemsSplit = (OrderLineItemsSplit)iterator.next();
+					if(itemsSplit.getBeneficiary().getId() == empId) {
+						itemsSplitsForEmp.add(itemsSplit);
+					}
+				}
+			} catch (HibernateException e) {
+				if (tx != null)
+					tx.rollback();
+				e.printStackTrace();
+			} finally {
+				session.close();
+			}
+			if(itemsSplitsForEmp.isEmpty()) {
+				return null;
+			}else {
+				return itemsSplitsForEmp;
+			}
+			
+		}
 }
