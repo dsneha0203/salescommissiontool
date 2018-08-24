@@ -18,7 +18,7 @@ public class OrderLineItemsXML {
 	
 	private String splitRule;
 
-//	private  long subtotal;
+	private  float subtotal;
 	
     public OrderLineItemsXML() {
 		
@@ -118,17 +118,17 @@ public class OrderLineItemsXML {
 	
 	
 
-//	/**
-//	 * @return the subtotal
-//	 */
-//	public long getSubtotal() {
-//		return subtotal;
-//	}
-//
-//	/**
-//	 * @param subtotal the subtotal to set
-//	 */
-//	public void setSubtotal(long subtotal) {
-//		this.subtotal = subtotal;
-//	}
+	/**
+	 * @return the subtotal
+	 */
+	public float getSubtotal() {
+		return subtotal;
+	}
+
+	/**
+	 * @param subtotal the subtotal to set
+	 */
+	public void setSubtotal(float subtotal) {
+		this.subtotal = subtotal;
+	}
 }

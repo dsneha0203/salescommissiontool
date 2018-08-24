@@ -108,13 +108,13 @@ public class EmployeeAPI {
 		tx = session.beginTransaction();
 		List employees = session.createQuery("FROM Employee").list();
 
-		for (Iterator iterator = employees.iterator(); iterator.hasNext();) {
-			Employee employee = (Employee) iterator.next();
-			// logger.debug("GET THE EMPLOYEE DETAILS FROM DATABASE" +
-			// employee.getFirstName()+ employee.getLastName()
-			// +employee.getSalary() );
-
-		}
+//		for (Iterator iterator = employees.iterator(); iterator.hasNext();) {
+//			Employee employee = (Employee) iterator.next();
+//			// logger.debug("GET THE EMPLOYEE DETAILS FROM DATABASE" +
+//			// employee.getFirstName()+ employee.getLastName()
+//			// +employee.getSalary() );
+//
+//		}
 		return employees;
 	}
 	
@@ -160,6 +160,31 @@ public class EmployeeAPI {
 		tx = session.beginTransaction();
 		Criteria crit = session.createCriteria(Employee.class);
 		crit.add(Restrictions.eq("employeeName", empName));
+		empList = crit.list();
+				tx.commit();
+
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		if(empList.isEmpty()) {
+			return null;
+		}else {
+		return empList.get(0);
+		}
+	}
+	
+	public Employee searchEmployeeById(long empID) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		List<Employee> empList = new ArrayList<>();
+		try {
+		tx = session.beginTransaction();
+		Criteria crit = session.createCriteria(Employee.class);
+		crit.add(Restrictions.eq("id", empID));
 		empList = crit.list();
 				tx.commit();
 

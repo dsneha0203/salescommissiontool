@@ -123,6 +123,7 @@
 								<td>${emp1.employeeName}</td>
 								<td>${emp1.startDate}</td>
 								<td><input type="checkbox" value="${emp1.employeeName}" name="select" id="select" onclick="sendData();"></td>	  
+								<!-- <td><input type="checkbox" value="${emp1.id}" name="select" id="select" onclick="sendData();"></td> -->
 							</tr>						
 					</c:forEach>	
 				</table> 

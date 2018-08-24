@@ -220,9 +220,14 @@ overflow: auto;
 					 return false;
 				}else{
 					if(document.getElementById("emp_rad").checked){
-						if(document.getElementById("text2").value== ""){
+						if(document.getElementById("text1").value== ""){
 							alert('Choose employee!');
 							 return false;
+						}else{
+							 document.getElementById("text2").value=document.getElementById("text1").value;
+							
+							 alert('wait your table is updating....!!');
+							return true;
 						}
 					}else{
 						 var e = document.getElementById("role_op");
@@ -244,9 +249,14 @@ overflow: auto;
 				 return false;
 			}else{
 				if(document.getElementById("emp_rad").checked){
-					if(document.getElementById("text2").value==""){
+					if(document.getElementById("text1").value==""){
 						alert('Choose employee!');
 						 return false;
+					}else{
+						 document.getElementById("text2").value=document.getElementById("text1").value;
+							
+						 alert('wait your table is updating....!!');
+						return true;
 					}
 				}else{
 					if(document.getElementById("role_op").options[document.getElementById("role_op").selectedIndex].value=="" 

@@ -2,6 +2,16 @@ package com.simpsoft.salesCommission.app.UImodel;
 
 public class RuleAssEmpRoleUI {
 	private String empName;
+	private long empId;
+	
+	
+	
+	public long getEmpId() {
+		return empId;
+	}
+	public void setEmpId(long empId) {
+		this.empId = empId;
+	}
 	public String getEmpName() {
 		return empName;
 	}
@@ -26,4 +36,10 @@ RuleAssEmpRoleUI(String empName, String roleName){
 	this.roleName=roleName;
 		
 	}
+public RuleAssEmpRoleUI(long empId, String roleName) {
+	super();
+	this.empId = empId;
+	this.roleName = roleName;
+}
+
 }

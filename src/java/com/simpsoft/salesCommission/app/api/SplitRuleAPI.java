@@ -2,6 +2,7 @@ package com.simpsoft.salesCommission.app.api;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -406,5 +407,30 @@ public class SplitRuleAPI {
 			session.close();
 		}
 		return clauseList;
+	}
+	
+	// get order line item for a line item split id
+	public OrderLineItems getOrderLineItem(long lineSplitId) {
+		OrderLineItems items=null;
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			String hql = "select ORDER_LNITM_ID from OrderLineItemsSplit where id =:id ";
+			Query query = session.createQuery(hql);
+			query.setParameter(":id", lineSplitId);
+			long lineId = query.executeUpdate();
+			logger.debug("LINE ITEM ID FOUND= "+lineId);
+			items=(OrderLineItems) session.get(OrderLineItems.class, lineId);
+			
+		}catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		
+		return items;
 	}
 }

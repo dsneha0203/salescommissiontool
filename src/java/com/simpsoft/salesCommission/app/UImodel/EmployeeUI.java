@@ -2,6 +2,7 @@ package com.simpsoft.salesCommission.app.UImodel;
 
 public class EmployeeUI {
 	
+	private long id;
 	private String employeeName;
 	private String currentManager;
 	
@@ -31,5 +32,20 @@ public class EmployeeUI {
 		
 		
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public EmployeeUI(long id) {
+		this.id = id;
+	}
+
+	
+	
 
 }

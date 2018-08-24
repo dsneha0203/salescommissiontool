@@ -109,15 +109,15 @@
 					<orderLineItem product="prod_1">
 						<quantity>5</quantity>
 						<rate>80000</rate>
-						<discountPercentage>4</discountPercentage>
-						<dutyPercentage>4</dutyPercentage>
+						<discountPercentage>6</discountPercentage>
+						<dutyPercentage>5</dutyPercentage>
 						<splitRule>Rule for getting commission on max sale of computer</splitRule>
 					</orderLineItem>
 					<orderLineItem product="prod_2">
 						<quantity>5</quantity>
 						<rate>20000</rate>
-						<discountPercentage>5</discountPercentage>
-						<dutyPercentage>3</dutyPercentage>
+						<discountPercentage>4</discountPercentage>
+						<dutyPercentage>2</dutyPercentage>
 						<splitRule>Rule for getting commission on max sale of smartphone</splitRule>
 					</orderLineItem>
 				</orderLineItems>

@@ -573,6 +573,35 @@ public class RuleAssignmentAPI {
 		return ruleAssignment;
 	}
 	
+	
+	public RuleAssignment searchAssignedRuleForEmployee(long empID) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		RuleAssignment ruleAssignment = null;
+		try {
+			tx = session.beginTransaction();
+			Criteria crit = session.createCriteria(RuleAssignment.class);
+			crit.add(Restrictions.isNotNull("employee"));
+			List assignmentList = crit.list();
+			for (Iterator iterator = assignmentList.iterator(); iterator.hasNext();) {
+
+				RuleAssignment assignment = (RuleAssignment) iterator.next();
+				if (empID == (assignment.getEmployee().getId())) {
+					ruleAssignment = assignment;
+					break;
+				}
+			}
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx != null)
+				tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return ruleAssignment;
+	}
+	
 	private List<RuleAssignment> searchAssignedRuleListForEmployee(String queryName) {
 		Session session = sessionFactory.openSession();
 		Transaction tx = null;

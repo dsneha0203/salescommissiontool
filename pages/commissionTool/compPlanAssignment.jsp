@@ -287,9 +287,7 @@ overflow: auto;
 								Selected Employee: <input type="text" name="EmployeeName"
 									id="text1" name="for_radio1[]" class="radio1" disabled
 									size="11" required value="${empNameChosen }" oninput="setEmpValue(this.value)"/>
-									<!--<c:forEach items="${empList}"
-													var="emp">value="${emp.employeeName }"</c:forEach> />-->
-								<input type="submit" value="check" id="check_emp" />
+									<input type="submit" value="check" id="check_emp" />
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Or</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							</form>
 						</td>

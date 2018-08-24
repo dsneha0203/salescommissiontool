@@ -14,4 +14,8 @@
 	</Condition>
 	<Condition conditionValue="same week day">
 	</Condition>
+	<Condition conditionValue="greater than equal to">
+	</Condition>
+	<Condition conditionValue="less than equal to">
+	</Condition>
 </Conditions>

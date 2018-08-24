@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -639,7 +640,7 @@ public class OrderAPI {
 					newOrderLineItem.setOrderLineItemsSplit(itemsSplits);
 					
 					
-//					newOrderLineItem.setSubtotal(orderLineItem.getSubtotal());
+					newOrderLineItem.setSubtotal(orderLineItem.getSubtotal());
 
 					newOrderLineItemList.add(newOrderLineItem);
 				}
@@ -803,6 +804,8 @@ public class OrderAPI {
 //									long subtotal = Integer.parseInt(elem2.getElementsByTagName("subtotal").item(0)
 //											.getChildNodes().item(0).getNodeValue());
 //									System.out.println("subtotal :" + subtotal);
+									
+									float subTotal = (1+(float)(dutyPercentage/100))*((1-(float)(discountPercentage/100))*(quantity*rate));
 
 									OrderLineItemsXML orderLineItem = new OrderLineItemsXML();
 									orderLineItem.setProduct(product);
@@ -811,7 +814,7 @@ public class OrderAPI {
 									orderLineItem.setDiscountPercentage(discountPercentage);
 									orderLineItem.setDutyPercentage(dutyPercentage);
 									orderLineItem.setSplitRule(splitRule);
-//									orderLineItem.setSubtotal(subtotal);
+									orderLineItem.setSubtotal(subTotal);
 									orderLineItemList.add(orderLineItem);
 
 								}
@@ -926,6 +929,21 @@ public class OrderAPI {
 			session.close();
 		}
 		return newOrderDetail;
+	}
+	
+	//get order detail from order line item id
+	public OrderDetail getOrderDetailFromLineItem(long lineItemId) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		tx = session.beginTransaction();
+		
+		String hql = "select Order_Id from OrderLineItems where id= :id ";
+		Query query = session.createQuery(hql);
+		query.setParameter(":id", lineItemId);
+		long orderDetailId = query.executeUpdate();
+		OrderDetail ordDetail = (OrderDetail) session.get(OrderDetail.class, orderDetailId);
+		return ordDetail;
+		
 	}
 	
 	public OrderLineItems getOrderLineItem(long lineItemID) {
